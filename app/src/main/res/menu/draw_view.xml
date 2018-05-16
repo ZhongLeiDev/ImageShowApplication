@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--指定单选-->
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/rect"
+            android:title="Home"/>
+        <item
+            android:id="@+id/nav_message"
+            android:icon="@drawable/rect"
+            android:title="Message"/>
+        <item
+            android:id="@+id/nav_friend"
+            android:icon="@drawable/rect"
+            android:title="Friends"/>
+        <item
+            android:id="@+id/nav_discussion"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="Discussion"/>
+    </group>
+    <item android:title="Sub items">
+        <menu>
+            <item
+                android:icon="@drawable/rect"
+                android:title="Sub item 1"/>
+            <item
+                android:icon="@drawable/rect"
+                android:title="Sub item 2"/>
+        </menu>
+    </item>
+</menu>
