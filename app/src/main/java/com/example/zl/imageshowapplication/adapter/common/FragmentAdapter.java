@@ -1,4 +1,4 @@
-package com.example.zl.imageshowapplication.adapter;
+package com.example.zl.imageshowapplication.adapter.common;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

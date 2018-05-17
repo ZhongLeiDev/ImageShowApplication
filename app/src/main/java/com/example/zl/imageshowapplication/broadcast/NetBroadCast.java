@@ -17,7 +17,7 @@ import static android.content.ContentValues.TAG;
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
 /**
- * Created by Administrator on 2018/5/15.
+ * Created by ZhongLeiDev on 2018/5/17.
  */
 
 public class NetBroadCast extends BroadcastReceiver implements MsgNotifier {

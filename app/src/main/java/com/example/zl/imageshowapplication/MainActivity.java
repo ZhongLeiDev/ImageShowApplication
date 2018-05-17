@@ -15,9 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.zl.imageshowapplication.adapter.FragmentAdapter;
-import com.example.zl.imageshowapplication.fragment.GeekWaterFallFragment;
-import com.example.zl.imageshowapplication.fragment.GeekWaterFallLoadMoreFragment;
+import com.example.zl.imageshowapplication.adapter.common.FragmentAdapter;
+import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallFragment;
+import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallLoadMoreFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,9 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+/**
+ * 入口 Activity
+ */
 public class MainActivity extends AppCompatActivity{
 
     private DrawerLayout mDrawerLayout;

@@ -19,7 +19,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import java.io.File;
 
 /**
- * Created by Administrator on 2018/4/9 0001.
+ * MainApplication
  */
 public class MainApplication extends Application {
 

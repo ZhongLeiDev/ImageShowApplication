@@ -1,4 +1,4 @@
-package com.example.zl.imageshowapplication.fragment;
+package com.example.zl.imageshowapplication.fragment.bcy;
 
 /**
  * Created by Administrator on 2018/5/17.

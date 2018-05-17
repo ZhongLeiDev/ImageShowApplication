@@ -1,4 +1,4 @@
-package com.example.zl.imageshowapplication.fragment;
+package com.example.zl.imageshowapplication.fragment.geek;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.activity.GeekListPagerImageViewActivity;
-import com.example.zl.imageshowapplication.adapter.GeekWaterFallLoadMoreAdapter;
+import com.example.zl.imageshowapplication.adapter.geek.GeekWaterFallLoadMoreAdapter;
 import com.example.zl.imageshowapplication.base.BaseFragment;
 import com.example.zl.imageshowapplication.bean.geek.GeekImgBean;
 import com.example.zl.imageshowapplication.bean.geek.GeekResult;

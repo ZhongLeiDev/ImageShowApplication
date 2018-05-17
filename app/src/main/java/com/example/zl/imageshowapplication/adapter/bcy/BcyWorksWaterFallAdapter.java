@@ -1,4 +1,4 @@
-package com.example.zl.imageshowapplication.adapter;
+package com.example.zl.imageshowapplication.adapter.bcy;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION;
 
 /**
- * Created by ZhongLeiDev 2018-05-17
+ * Created by ZhongLeiDev on 2018-05-17
  * BCY作品瀑布流显示Adapter
  *
  */

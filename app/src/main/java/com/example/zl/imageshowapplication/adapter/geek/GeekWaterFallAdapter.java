@@ -1,4 +1,4 @@
-package com.example.zl.imageshowapplication.adapter;
+package com.example.zl.imageshowapplication.adapter.geek;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.bean.geek.GeekImgBean;
-import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -26,7 +25,7 @@ import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION
  *
  *
  */
-public class GeekWaterFallLoadMoreAdapter extends RecyclerView.Adapter<GeekWaterFallLoadMoreAdapter.ViewHolder> {
+public class GeekWaterFallAdapter extends RecyclerView.Adapter<GeekWaterFallAdapter.ViewHolder> {
 
     private Context mContext;
     private List<GeekImgBean> mList = new ArrayList<>();
@@ -35,23 +34,17 @@ public class GeekWaterFallLoadMoreAdapter extends RecyclerView.Adapter<GeekWater
     /**自定义点击事件*/
     private OnMyItemClickListener listener;
 
-    /**加载更多的监听器*/
-    LoadMoreListener loadmorelistener;
-
     /**设置点击事件*/
     public void setOnMyItemClickListener(OnMyItemClickListener listener){
         this.listener = listener;
     }
 
-    public GeekWaterFallLoadMoreAdapter(Context context, LoadMoreListener loadMoreListener){
+    public GeekWaterFallAdapter(Context context){
         this.mContext = context;
-        this.loadmorelistener = loadMoreListener;
     }
 
     public void getRandomHeight(List<GeekImgBean> mList){
-        if (mHeights == null) {
-            mHeights = new ArrayList<>();
-        }
+        mHeights = new ArrayList<>();
         for(int i=0; i < mList.size();i++){
             //随机的获取一个范围为200-600直接的高度
             mHeights.add((int)(300+ Math.random()*400));
@@ -103,13 +96,6 @@ public class GeekWaterFallLoadMoreAdapter extends RecyclerView.Adapter<GeekWater
     @Override
     public int getItemCount() {
         return mList.size();
-    }
-
-    public void loadMore() {
-        if (loadmorelistener == null){
-            return;
-        }
-        loadmorelistener.loadMoreData();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

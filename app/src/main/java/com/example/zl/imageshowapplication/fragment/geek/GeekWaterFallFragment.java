@@ -1,4 +1,4 @@
-package com.example.zl.imageshowapplication.fragment;
+package com.example.zl.imageshowapplication.fragment.geek;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.activity.GeekListPagerImageViewActivity;
-import com.example.zl.imageshowapplication.adapter.GeekWaterFallAdapter;
+import com.example.zl.imageshowapplication.adapter.geek.GeekWaterFallAdapter;
 import com.example.zl.imageshowapplication.base.BaseFragment;
 import com.example.zl.imageshowapplication.bean.geek.GeekImgBean;
 import com.example.zl.imageshowapplication.bean.geek.GeekResult;
@@ -22,12 +22,9 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Administrator on 2018/3/15.

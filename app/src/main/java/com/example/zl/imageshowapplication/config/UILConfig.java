@@ -7,6 +7,10 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 import java.io.File;
 
+/**
+ * Created by ZhongLeiDev on 2018/5/17.
+ * UniversalImageLoader 配置类
+ */
 public class UILConfig {
 
     /**

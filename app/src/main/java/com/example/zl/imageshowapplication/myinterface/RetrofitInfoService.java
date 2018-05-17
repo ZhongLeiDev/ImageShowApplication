@@ -15,7 +15,7 @@ import rx.Observable;
 public interface RetrofitInfoService {
 
     /**
-     * 不使用 RxJava 的一般调用方法
+     * 不使用 RxJava 的一般调用方法(Geekl)
      * @param size
      * @param page
      * @return
@@ -27,7 +27,7 @@ public interface RetrofitInfoService {
     );
 
     /**
-     * 使用 RxJava 返回 Observable 对象
+     * 使用 RxJava 返回 Observable 对象(Geekl)
      * @param size
      * @param page
      * @return

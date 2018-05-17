@@ -22,7 +22,7 @@ import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION
 
 /**
  * Created by ZhongLeiDev on 2018-05-17.
- * BCY 类型的 Album 中的图片集合显示 Activity
+ * BCY 类型的 BcyAlbum 中的图片集合显示 Activity
  */
 
 public class BcyAlbumImageItemsViewActivity extends AppCompatActivity {
