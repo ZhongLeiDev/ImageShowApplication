@@ -8,10 +8,11 @@ import retrofit2.http.Path;
 import rx.Observable;
 
 /**
- * Created by Administrator on 2018/4/10.
+ * Created by ZhongLeiDev on 2018/4/10.
+ * Retrofit使用的相关方法调用接口
  */
 
-public interface InfoService {
+public interface RetrofitInfoService {
 
     /**
      * 不使用 RxJava 的一般调用方法
@@ -20,7 +21,7 @@ public interface InfoService {
      * @return
      */
     @GET("data/福利/{size}/{page}")
-    Call<GeekResult> getResult(
+    Call<GeekResult> getGeekResult(
             @Path("size") Integer size,
             @Path("page") Integer page
     );
@@ -32,7 +33,7 @@ public interface InfoService {
      * @return
      */
     @GET("data/福利/{size}/{page}")
-    Observable<GeekResult> getResultWithRx(
+    Observable<GeekResult> getGeekResultWithRx(
             @Path("size") Integer size,
             @Path("page") Integer page
     );

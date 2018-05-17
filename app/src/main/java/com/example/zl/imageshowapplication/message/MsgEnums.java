@@ -1,4 +1,4 @@
-package com.example.zl.imageshowapplication.Message;
+package com.example.zl.imageshowapplication.message;
 
 /**
  * Created by Administrator on 2018/5/15.

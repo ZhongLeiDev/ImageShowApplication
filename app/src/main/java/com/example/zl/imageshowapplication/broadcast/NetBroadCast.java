@@ -7,9 +7,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.example.zl.imageshowapplication.Message.BaseMessage;
-import com.example.zl.imageshowapplication.Message.MsgEnums;
-import com.example.zl.imageshowapplication.Message.MsgType;
+import com.example.zl.imageshowapplication.message.BaseMessage;
+import com.example.zl.imageshowapplication.message.MsgEnums;
+import com.example.zl.imageshowapplication.message.MsgType;
 import com.example.zl.imageshowapplication.myinterface.MsgNotifier;
 import com.example.zl.imageshowapplication.myinterface.MsgNotifyReceiver;
 

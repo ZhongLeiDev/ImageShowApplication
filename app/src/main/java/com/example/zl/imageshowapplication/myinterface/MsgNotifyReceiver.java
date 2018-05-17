@@ -1,6 +1,6 @@
 package com.example.zl.imageshowapplication.myinterface;
 
-import com.example.zl.imageshowapplication.Message.BaseMessage;
+import com.example.zl.imageshowapplication.message.BaseMessage;
 
 /**
  * Created by Administrator on 2018/5/15.

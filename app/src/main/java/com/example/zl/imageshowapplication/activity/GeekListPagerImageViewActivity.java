@@ -24,7 +24,7 @@ import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION
  * Created by zhangqie on 2017/6/20.
  */
 
-public class ViewPagerImageViewZQUI extends AppCompatActivity {
+public class GeekListPagerImageViewActivity extends AppCompatActivity {
 
 
     ViewPager viewPager;
@@ -53,12 +53,12 @@ public class ViewPagerImageViewZQUI extends AppCompatActivity {
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
                 //可以使用其他的ImageView 控件
-                TounChImageView tounChImageView=new TounChImageView(ViewPagerImageViewZQUI.this);
+                TounChImageView tounChImageView=new TounChImageView(GeekListPagerImageViewActivity.this);
 
 
                 /*---------------------------------UniversalImageLoader代替Picasso--------------------
                 try {
-                    Picasso.with(ViewPagerImageViewZQUI.this).load(mImgs[position])
+                    Picasso.with(GeekListPagerImageViewActivity.this).load(mImgs[position])
                             .placeholder(R.mipmap.img1)//默认显示的图片
                            // .resize(500,300)//控制图片高度，不添加则自适应
                             .error(R.mipmap.ic_launcher)//加载时出现错误显示的图片

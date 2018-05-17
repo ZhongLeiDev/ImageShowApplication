@@ -4,26 +4,26 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.zl.imageshowapplication.Message.BaseMessage;
 import com.example.zl.imageshowapplication.R;
-import com.example.zl.imageshowapplication.activity.ViewPagerImageViewZQUI;
+import com.example.zl.imageshowapplication.activity.GeekListPagerImageViewActivity;
 import com.example.zl.imageshowapplication.adapter.GeekWaterFallLoadMoreAdapter;
 import com.example.zl.imageshowapplication.base.BaseFragment;
 import com.example.zl.imageshowapplication.bean.geek.GeekImgBean;
 import com.example.zl.imageshowapplication.bean.geek.GeekResult;
 import com.example.zl.imageshowapplication.broadcast.NetBroadCast;
-import com.example.zl.imageshowapplication.myinterface.InfoService;
+import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
+import com.example.zl.imageshowapplication.message.BaseMessage;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.MsgNotifyReceiver;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
+import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
 import com.example.zl.imageshowapplication.utils.NetWorkUtils;
 
 import java.io.Serializable;
@@ -31,22 +31,17 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by Administrator on 2018/3/15.
+ * Created by ZhongLeiDev on 2018/3/15.
  */
 
 public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadMoreListener,MsgNotifyReceiver {
 
-    private static String url = "http://gank.io/api/";
-    private Retrofit retrofit;
-    private InfoService infoService;
+    private RetrofitInfoService geekInfoService = RetrofitFactory.getGeekRetroSingleInstance();
     private int currentPage = 0;
 
     @Bind(R.id.recycler_view)
@@ -56,22 +51,6 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
     private NetBroadCast mNetworkStateReceiver = new NetBroadCast();
     private boolean isNetWorkConnected = false;
     private boolean isFragmentyInit = false;
-
-    public InfoService getRetroSingleInstance() {
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-
-                    .client(new OkHttpClient())
-
-                    .baseUrl(url)
-
-                    .addConverterFactory(GsonConverterFactory.create())
-
-                    .build();
-        }
-        infoService = retrofit.create(InfoService.class);
-        return infoService;
-    }
 
     @Override
     protected int getLayoutId() {
@@ -104,7 +83,7 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
             public void myClick(View v, int pos) {
                 Log.i("GeekWaterFallFragment","URL->" + mAdapter.getList().get(pos).getUrl() + " is pressed!!!");
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), ViewPagerImageViewZQUI.class);
+                intent.setClass(getActivity(), GeekListPagerImageViewActivity.class);
                 intent.putExtra("data", (Serializable)mAdapter.getList());
                 intent.putExtra("position", pos);
                 startActivity(intent);
@@ -131,7 +110,7 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
 
     private void requestData() {
 
-        Call<GeekResult> call = getRetroSingleInstance().getResult(30, currentPage);
+        Call<GeekResult> call = geekInfoService.getGeekResult(30, currentPage);
         call.enqueue(new Callback<GeekResult>() {
 
             public void onResponse(Call<GeekResult> call, Response<GeekResult> response) {
@@ -142,15 +121,14 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
                     mAdapter.getRandomHeight(list);
                     mAdapter.notifyDataSetChanged();
                 } else {
-//                    Log.i("LoadMore","没有更多内容！");
-                    Toast.makeText(getActivity(),"没有更多内容！", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"没有更多内容！", Toast.LENGTH_LONG).show();
                 }
 
             }
 
             public void onFailure(Call<GeekResult> call, Throwable t) {
                 t.printStackTrace();
-
+                Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -162,10 +140,10 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
         if (isNetWorkConnected) {
            requestData();
            currentPage ++;
-            Toast.makeText(getActivity(),"正在加载更多！", Snackbar.LENGTH_LONG).show();
+            Toast.makeText(getActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
         } else {
 //            Log.i("LoadMore","网络连接错误！");
-            Toast.makeText(getActivity(),"网络连接错误！", Snackbar.LENGTH_LONG).show();
+            Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
         }
 
     }

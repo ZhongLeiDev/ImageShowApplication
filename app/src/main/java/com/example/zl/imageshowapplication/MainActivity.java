@@ -15,12 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.zl.imageshowapplication.Message.BaseMessage;
 import com.example.zl.imageshowapplication.adapter.FragmentAdapter;
 import com.example.zl.imageshowapplication.fragment.GeekWaterFallFragment;
 import com.example.zl.imageshowapplication.fragment.GeekWaterFallLoadMoreFragment;
-import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
-import com.example.zl.imageshowapplication.myinterface.MsgNotifyReceiver;
 
 import java.util.ArrayList;
 import java.util.List;

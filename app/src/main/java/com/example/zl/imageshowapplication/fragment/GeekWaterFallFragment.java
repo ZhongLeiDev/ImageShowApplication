@@ -8,12 +8,13 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.zl.imageshowapplication.R;
-import com.example.zl.imageshowapplication.activity.ViewPagerImageViewZQUI;
+import com.example.zl.imageshowapplication.activity.GeekListPagerImageViewActivity;
 import com.example.zl.imageshowapplication.adapter.GeekWaterFallAdapter;
 import com.example.zl.imageshowapplication.base.BaseFragment;
 import com.example.zl.imageshowapplication.bean.geek.GeekImgBean;
 import com.example.zl.imageshowapplication.bean.geek.GeekResult;
-import com.example.zl.imageshowapplication.myinterface.InfoService;
+import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
+import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 
 import java.io.Serializable;
@@ -34,30 +35,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GeekWaterFallFragment extends BaseFragment {
 
-    private static String url = "http://gank.io/api/";
-    private Retrofit retrofit;
-    private InfoService infoService;
+    private RetrofitInfoService geekInfoService = RetrofitFactory.getGeekRetroSingleInstance();
 
     @Bind(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
     private GeekWaterFallAdapter mAdapter;
-
-    public InfoService getRetroSingleInstance() {
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-
-                    .client(new OkHttpClient())
-
-                    .baseUrl(url)
-
-                    .addConverterFactory(GsonConverterFactory.create())
-
-                    .build();
-        }
-        infoService = retrofit.create(InfoService.class);
-        return infoService;
-    }
 
     @Override
     protected int getLayoutId() {
@@ -82,7 +65,7 @@ public class GeekWaterFallFragment extends BaseFragment {
             public void myClick(View v, int pos) {
                 Log.i("GeekWaterFallFragment","URL->" + mAdapter.getList().get(pos).getUrl() + " is pressed!!!");
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), ViewPagerImageViewZQUI.class);
+                intent.setClass(getActivity(), GeekListPagerImageViewActivity.class);
                 intent.putExtra("data", (Serializable)mAdapter.getList());
                 intent.putExtra("position", pos);
                 startActivity(intent);
@@ -99,7 +82,7 @@ public class GeekWaterFallFragment extends BaseFragment {
 
     private void initImgData() {
 
-        Call<GeekResult> call = getRetroSingleInstance().getResult(30, 1);
+        Call<GeekResult> call = geekInfoService.getGeekResult(30, 1);
         call.enqueue(new Callback<GeekResult>() {
 
             public void onResponse(Call<GeekResult> call, Response<GeekResult> response) {

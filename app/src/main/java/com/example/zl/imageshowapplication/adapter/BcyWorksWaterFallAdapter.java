@@ -22,11 +22,11 @@ import butterknife.ButterKnife;
 import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION;
 
 /**
- * Created by Administrator on 2016/5/31 0031.
- *
+ * Created by ZhongLeiDev 2018-05-17
+ * BCY作品瀑布流显示Adapter
  *
  */
-public class BcyWaterFallLoadMoreAdapter extends RecyclerView.Adapter<BcyWaterFallLoadMoreAdapter.ViewHolder> {
+public class BcyWorksWaterFallAdapter extends RecyclerView.Adapter<BcyWorksWaterFallAdapter.ViewHolder> {
 
     private Context mContext;
     private List<GeekImgBean> mList = new ArrayList<>();
@@ -43,7 +43,7 @@ public class BcyWaterFallLoadMoreAdapter extends RecyclerView.Adapter<BcyWaterFa
         this.listener = listener;
     }
 
-    public BcyWaterFallLoadMoreAdapter(Context context, LoadMoreListener loadMoreListener){
+    public BcyWorksWaterFallAdapter(Context context, LoadMoreListener loadMoreListener){
         this.mContext = context;
         this.loadmorelistener = loadMoreListener;
     }
