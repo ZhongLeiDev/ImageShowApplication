@@ -2,7 +2,7 @@ package com.example.zl.imageshowapplication.bean.bcy;
 
 /**
  * Created by ZhongLeiDev on 2018/5/17.
- * 相册封面和链接的类
+ * 相册封面和链接的类，用于直接解析页面返回内容的方式
  */
 public class BcyCoverAndUrl {
 
