@@ -2,7 +2,7 @@ package com.example.zl.imageshowapplication.bean.bcy;
 
 /**
  * Created by ZhongLeiDev on 2018/5/17.
- * BCY 的 BcyAlbum 类型
+ * BCY 的 BcyAlbum 类型，用于 BCY 的 Retrofit 方法
  */
 
 public class BcyAlbum {
