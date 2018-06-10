@@ -15,10 +15,14 @@ public class RetrofitFactory {
 
     /** Geek 访问 URL */
     private static final String GEEK_REQUEST_URL = "http://gank.io/api/";
+    /**Bcy访问URL*/
+    private static final String BCY_REQUEST_URL = "http://112.74.42.204:8080/coser/";
 
     private static RetrofitInfoService infoService;
     /** Geek 使用的 Retrofit 实例*/
     private static Retrofit geekRetrofit;
+    /**Bcy 使用的 Retrofit 实例*/
+    private static Retrofit bcyRetrofit;
 
     /**
      * 获取 GeekRetrofitInfoService 单例
@@ -37,6 +41,26 @@ public class RetrofitFactory {
                     .build();
         }
         infoService = geekRetrofit.create(RetrofitInfoService.class);
+        return infoService;
+    }
+
+    /**
+     * 获取 BcyRetrofitInfoService 单例
+     * @return
+     */
+    public static RetrofitInfoService getBcyRetroSingleInstance() {
+        if (bcyRetrofit == null) {
+            bcyRetrofit = new Retrofit.Builder()
+
+                    .client(new OkHttpClient())
+
+                    .baseUrl(BCY_REQUEST_URL)
+
+                    .addConverterFactory(GsonConverterFactory.create())
+
+                    .build();
+        }
+        infoService = bcyRetrofit.create(RetrofitInfoService.class);
         return infoService;
     }
 

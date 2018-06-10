@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.zl.imageshowapplication.adapter.common.FragmentAdapter;
+import com.example.zl.imageshowapplication.fragment.bcy.BcyPicturesWaterFallLoadMoreFragment;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallFragment;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallLoadMoreFragment;
 
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity{
         mTabLayout.addTab(mTabLayout.newTab().setTag(listStr.get(3)));
 
         List<Fragment> fragments = new ArrayList<Fragment>();
-        fragments.add(new GeekWaterFallFragment());
+        fragments.add(new BcyPicturesWaterFallLoadMoreFragment());
         fragments.add(new GeekWaterFallLoadMoreFragment());
         fragments.add(new GeekWaterFallFragment());
         fragments.add(new GeekWaterFallFragment());

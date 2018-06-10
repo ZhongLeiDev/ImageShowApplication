@@ -1,10 +1,15 @@
 package com.example.zl.imageshowapplication.myinterface;
 
+import com.example.zl.imageshowapplication.bean.bcy.retro.PictureInfo;
+import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.bean.geek.GeekResult;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -36,6 +41,16 @@ public interface RetrofitInfoService {
     Observable<GeekResult> getGeekResultWithRx(
             @Path("size") Integer size,
             @Path("page") Integer page
+    );
+
+    /**
+     * 获取 BcyPicture  随机推荐结果
+     * @param pageSize
+     * @return
+     */
+    @GET("pictureinfo/randompicture")
+    Call<ResultVO<List<PictureInfo>>> getBcyRandomPictures(
+        @Query("pageSize") Integer pageSize
     );
 
 }

@@ -1,4 +1,4 @@
-package com.example.zl.imageshowapplication.fragment.geek;
+package com.example.zl.imageshowapplication.fragment.bcy;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -11,14 +11,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.zl.imageshowapplication.R;
-import com.example.zl.imageshowapplication.activity.GeekListPagerImageViewActivity;
-import com.example.zl.imageshowapplication.adapter.geek.GeekWaterFallLoadMoreAdapter;
+import com.example.zl.imageshowapplication.activity.BcyPicturesListPagerImageViewActivity;
+import com.example.zl.imageshowapplication.adapter.bcy.BcyPicturesWaterFallLoadMoreAdapter;
 import com.example.zl.imageshowapplication.base.BaseFragment;
-import com.example.zl.imageshowapplication.bean.geek.GeekImgBean;
-import com.example.zl.imageshowapplication.bean.geek.GeekResult;
+import com.example.zl.imageshowapplication.bean.bcy.retro.PictureInfo;
+import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.broadcast.NetBroadCast;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.message.BaseMessage;
+import com.example.zl.imageshowapplication.myinterface.BcyLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.GeekLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.MsgNotifyReceiver;
@@ -39,15 +40,15 @@ import retrofit2.Response;
  * Created by ZhongLeiDev on 2018/3/15.
  */
 
-public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadMoreListener,MsgNotifyReceiver {
+public class BcyPicturesWaterFallLoadMoreFragment extends BaseFragment implements LoadMoreListener,MsgNotifyReceiver {
 
-    private RetrofitInfoService geekInfoService = RetrofitFactory.getGeekRetroSingleInstance();
+    private RetrofitInfoService bcyInfoService = RetrofitFactory.getBcyRetroSingleInstance();
     private int currentPage = 0;
 
     @Bind(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    private GeekWaterFallLoadMoreAdapter mAdapter;
+    private BcyPicturesWaterFallLoadMoreAdapter mAdapter;
     private NetBroadCast mNetworkStateReceiver = new NetBroadCast();
     private boolean isNetWorkConnected = false;
     private boolean isFragmentyInit = false;
@@ -74,16 +75,16 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
         mRecyclerView.setLayoutManager(new
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-        mRecyclerView.addOnScrollListener(new GeekLoadMoreScrollListener());
-        mAdapter = new GeekWaterFallLoadMoreAdapter(mActivity, this);
+        mRecyclerView.addOnScrollListener(new BcyLoadMoreScrollListener());
+        mAdapter = new BcyPicturesWaterFallLoadMoreAdapter(mActivity, this);
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnMyItemClickListener(new OnMyItemClickListener() {
             @Override
             public void myClick(View v, int pos) {
-                Log.i("GeekWaterFallFragment","URL->" + mAdapter.getList().get(pos).getUrl() + " is pressed!!!");
+                Log.i("BcyPictures","URL->" + mAdapter.getList().get(pos).getPictureUrl() + " is pressed!!!");
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), GeekListPagerImageViewActivity.class);
+                intent.setClass(getActivity(), BcyPicturesListPagerImageViewActivity.class);
                 intent.putExtra("data", (Serializable)mAdapter.getList());
                 intent.putExtra("position", pos);
                 startActivity(intent);
@@ -91,7 +92,7 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
 
             @Override
             public void mLongClick(View v, int pos) {
-                Log.i("GeekWaterFallFragment","URL->" + mAdapter.getList().get(pos).getUrl() + " is long pressed!!!");
+                Log.i("GeekWaterFallFragment","URL->" + mAdapter.getList().get(pos).getPictureUrl() + " is long pressed!!!");
             }
         });
 
@@ -110,11 +111,11 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
 
     private void requestData() {
 
-        Call<GeekResult> call = geekInfoService.getGeekResult(30, currentPage);
-        call.enqueue(new Callback<GeekResult>() {
+        Call<ResultVO<List<PictureInfo>>> call = bcyInfoService.getBcyRandomPictures(30);
+        call.enqueue(new Callback<ResultVO<List<PictureInfo>>>() {
 
-            public void onResponse(Call<GeekResult> call, Response<GeekResult> response) {
-                List<GeekImgBean> list = response.body().getResults();
+            public void onResponse(Call<ResultVO<List<PictureInfo>>> call, Response<ResultVO<List<PictureInfo>>> response) {
+                List<PictureInfo> list = response.body().getData();
                 System.out.println("LoadMoreCall->"+response.body());
                 if (list.size()>0) {
                     mAdapter.getList().addAll(list);
@@ -126,7 +127,7 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
 
             }
 
-            public void onFailure(Call<GeekResult> call, Throwable t) {
+            public void onFailure(Call<ResultVO<List<PictureInfo>>> call, Throwable t) {
                 t.printStackTrace();
                 Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
             }

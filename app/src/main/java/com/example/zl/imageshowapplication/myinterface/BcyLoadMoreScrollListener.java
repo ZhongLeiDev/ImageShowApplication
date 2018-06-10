@@ -3,20 +3,21 @@ package com.example.zl.imageshowapplication.myinterface;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
+import com.example.zl.imageshowapplication.adapter.bcy.BcyPicturesWaterFallLoadMoreAdapter;
 import com.example.zl.imageshowapplication.adapter.geek.GeekWaterFallLoadMoreAdapter;
 
 /**
  * Created by ZhongLeiDev on 2018/5/17.
  *  StaggeredGridLayoutManager 滚动监听器，用于判断是否滚动到最后
  */
-public class LoadMoreScrollListener extends RecyclerView.OnScrollListener {
+public class BcyLoadMoreScrollListener extends RecyclerView.OnScrollListener {
 
     boolean isSlidingToLast = false;
 
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
-        GeekWaterFallLoadMoreAdapter adapter = (GeekWaterFallLoadMoreAdapter)recyclerView.getAdapter();
+        BcyPicturesWaterFallLoadMoreAdapter adapter = (BcyPicturesWaterFallLoadMoreAdapter)recyclerView.getAdapter();
 
         // 当不滚动时
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
