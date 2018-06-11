@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.activity.BcyPicturesListPagerImageViewActivity;
+import com.example.zl.imageshowapplication.activity.ZoomPictureListProgressActivity;
 import com.example.zl.imageshowapplication.adapter.bcy.BcyPicturesWaterFallLoadMoreAdapter;
 import com.example.zl.imageshowapplication.base.BaseFragment;
 import com.example.zl.imageshowapplication.bean.bcy.retro.PictureInfo;
@@ -84,7 +85,8 @@ public class BcyPicturesWaterFallLoadMoreFragment extends BaseFragment implement
             public void myClick(View v, int pos) {
                 Log.i("BcyPictures","URL->" + mAdapter.getList().get(pos).getPictureUrl() + " is pressed!!!");
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), BcyPicturesListPagerImageViewActivity.class);
+//                intent.setClass(getActivity(), BcyPicturesListPagerImageViewActivity.class);
+                intent.setClass(getActivity(), ZoomPictureListProgressActivity.class);
                 intent.putExtra("data", (Serializable)mAdapter.getList());
                 intent.putExtra("position", pos);
                 startActivity(intent);
