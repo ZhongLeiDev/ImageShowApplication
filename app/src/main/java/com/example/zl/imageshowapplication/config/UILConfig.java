@@ -36,4 +36,14 @@ public class UILConfig {
             .cacheOnDisk(true)
             .build();
 
+    /**
+     * UML原图显示相关配置
+     */
+    public static DisplayImageOptions SHOW_ORI_OPTION = new DisplayImageOptions.Builder()
+            .cacheInMemory(true)
+            .showImageForEmptyUri(R.drawable.notfoundloading)
+            .showImageOnFail(R.drawable.errorloading)
+            .cacheOnDisk(true)
+            .build();
+
 }

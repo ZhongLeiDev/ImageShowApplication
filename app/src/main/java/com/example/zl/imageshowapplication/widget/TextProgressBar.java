@@ -42,7 +42,9 @@ public class TextProgressBar extends ProgressBar {
     @Override
     public synchronized void setProgress(int progress) {
         // TODO Auto-generated method stub
-        setText(progress);
+        if(progress != 0) { //初始状态的文字设置还是由用户指定setText(String str)
+            setText(progress);
+        }
         super.setProgress(progress);
 
     }
@@ -62,6 +64,7 @@ public class TextProgressBar extends ProgressBar {
     //初始化，画笔
     private void initText(){
         this.mPaint = new Paint();
+        this.mPaint.setTextSize(20);
         this.mPaint.setColor(Color.WHITE);
 
     }

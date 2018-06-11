@@ -9,9 +9,9 @@ import android.util.Log;
  * Created by ZhongLeiDev on 2018/5/15.
  */
 
-public class NetWorkUtils {
+public class NetWorkUtil {
 
-    private NetWorkUtils() {
+    private NetWorkUtil() {
 
     }
 

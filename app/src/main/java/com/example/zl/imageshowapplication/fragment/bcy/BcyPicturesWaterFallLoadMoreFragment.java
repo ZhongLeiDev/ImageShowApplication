@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.zl.imageshowapplication.R;
-import com.example.zl.imageshowapplication.activity.BcyPicturesListPagerImageViewActivity;
 import com.example.zl.imageshowapplication.activity.ZoomPictureListProgressActivity;
 import com.example.zl.imageshowapplication.adapter.bcy.BcyPicturesWaterFallLoadMoreAdapter;
 import com.example.zl.imageshowapplication.base.BaseFragment;
@@ -22,11 +21,10 @@ import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.Retrofi
 import com.example.zl.imageshowapplication.message.BaseMessage;
 import com.example.zl.imageshowapplication.myinterface.BcyLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
-import com.example.zl.imageshowapplication.myinterface.GeekLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.MsgNotifyReceiver;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
-import com.example.zl.imageshowapplication.utils.NetWorkUtils;
+import com.example.zl.imageshowapplication.utils.NetWorkUtil;
 
 import java.io.Serializable;
 import java.util.List;
@@ -98,7 +96,7 @@ public class BcyPicturesWaterFallLoadMoreFragment extends BaseFragment implement
             }
         });
 
-        if (NetWorkUtils.isNetworkAvailable(getActivity())) {
+        if (NetWorkUtil.isNetworkAvailable(getActivity())) {
             isFragmentyInit = true;
             requestData();
         }

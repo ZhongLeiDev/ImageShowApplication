@@ -24,7 +24,7 @@ import com.example.zl.imageshowapplication.myinterface.GeekLoadMoreScrollListene
 import com.example.zl.imageshowapplication.myinterface.MsgNotifyReceiver;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
-import com.example.zl.imageshowapplication.utils.NetWorkUtils;
+import com.example.zl.imageshowapplication.utils.NetWorkUtil;
 
 import java.io.Serializable;
 import java.util.List;
@@ -95,7 +95,7 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
             }
         });
 
-        if (NetWorkUtils.isNetworkAvailable(getActivity())) {
+        if (NetWorkUtil.isNetworkAvailable(getActivity())) {
             isFragmentyInit = true;
             requestData();
         }
