@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ImageTextLinearLayout">
+        <attr name="text_visible" format="boolean" />
+        <attr name="default_text" format="string" />
+        <attr name="default_text_color" format="color" />
+        <attr name="default_text_size"  format="dimension"/>
+        <attr name="default_background" format="reference|integer" />
+        <attr name="default_src" format="reference|integer" />
+    </declare-styleable>
+
+    <declare-styleable name="ImageTextRelativeLayout">
+        <attr name="text_visible_r" format="boolean" />
+        <attr name="default_text_r" format="string" />
+        <attr name="default_text_color_r" format="color" />
+        <attr name="default_text_size_r"  format="dimension"/>
+        <attr name="default_background_r" format="reference|integer" />
+        <attr name="default_src_r" format="reference|integer" />
+    </declare-styleable>
+</resources>

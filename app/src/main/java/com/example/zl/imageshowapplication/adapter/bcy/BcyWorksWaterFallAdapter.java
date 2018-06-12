@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.zl.imageshowapplication.R;
+import com.example.zl.imageshowapplication.bean.bcy.retro.AlbumInfo;
 import com.example.zl.imageshowapplication.bean.geek.GeekImgBean;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
@@ -29,7 +31,7 @@ import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION
 public class BcyWorksWaterFallAdapter extends RecyclerView.Adapter<BcyWorksWaterFallAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<GeekImgBean> mList = new ArrayList<>();
+    private List<AlbumInfo> mList = new ArrayList<>();
     private List<Integer> mHeights;
 
     /**自定义点击事件*/
@@ -48,7 +50,7 @@ public class BcyWorksWaterFallAdapter extends RecyclerView.Adapter<BcyWorksWater
         this.loadmorelistener = loadMoreListener;
     }
 
-    public void getRandomHeight(List<GeekImgBean> mList){
+    public void getRandomHeight(List<AlbumInfo> mList){
         if (mHeights == null) {
             mHeights = new ArrayList<>();
         }
@@ -62,7 +64,7 @@ public class BcyWorksWaterFallAdapter extends RecyclerView.Adapter<BcyWorksWater
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(mContext)
-                .inflate(R.layout.item_image_text, parent, false);
+                .inflate(R.layout.album_item_layout, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
         return viewHolder;
@@ -74,9 +76,10 @@ public class BcyWorksWaterFallAdapter extends RecyclerView.Adapter<BcyWorksWater
         layoutParams.height = mHeights.get(position);
         holder.itemView.setLayoutParams(layoutParams);
 
-        GeekImgBean bean = mList.get(position);
-        ImageLoader.getInstance().displayImage(bean.getUrl(),
+        AlbumInfo bean = mList.get(position);
+        ImageLoader.getInstance().displayImage(bean.getAlbumCover(),
                 holder.mImageView, NORMAL_OPTION);
+        holder.mTextView.setText(bean.getAlbumAuthor());//用作者名代替相册名
 
         //----------------------------设置点击事件-------------------------------
         if (listener!=null) {
@@ -114,8 +117,10 @@ public class BcyWorksWaterFallAdapter extends RecyclerView.Adapter<BcyWorksWater
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        @Bind(R.id.imageview)
+        @Bind(R.id.cpimageView2)
         ImageView mImageView;
+        @Bind(R.id.cptextView2)
+        TextView mTextView;
 
         public ViewHolder(View view){
             //需要设置super
@@ -124,7 +129,7 @@ public class BcyWorksWaterFallAdapter extends RecyclerView.Adapter<BcyWorksWater
         }
     }
 
-    public List<GeekImgBean> getList() {
+    public List<AlbumInfo> getList() {
         return mList;
     }
 

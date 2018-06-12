@@ -1,5 +1,6 @@
 package com.example.zl.imageshowapplication.myinterface;
 
+import com.example.zl.imageshowapplication.bean.bcy.retro.AlbumInfo;
 import com.example.zl.imageshowapplication.bean.bcy.retro.PictureInfo;
 import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.bean.geek.GeekResult;
@@ -44,13 +45,23 @@ public interface RetrofitInfoService {
     );
 
     /**
-     * 获取 BcyPicture  随机推荐结果
+     * 获取 BcyPicture 随机推荐结果
      * @param pageSize
      * @return
      */
     @GET("pictureinfo/randompicture")
     Call<ResultVO<List<PictureInfo>>> getBcyRandomPictures(
         @Query("pageSize") Integer pageSize
+    );
+
+    /**
+     * 获取 BcyAlbum 随机推荐结果
+     * @param pageSize
+     * @return
+     */
+    @GET()
+    Call<ResultVO<List<AlbumInfo>>> getBcyRandomAlbums(
+            @Query("pageSize") Integer pageSize
     );
 
 }

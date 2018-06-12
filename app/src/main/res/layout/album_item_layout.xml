@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:customview="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="4dp"
+    >
+
+    <com.example.zl.commoncomponent.ImageTextRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        customview:default_text_r="@string/default_text"
+        customview:default_text_color_r="@color/colorAccent"
+        customview:default_text_size_r="24dp"
+        customview:text_visible_r="false"
+        customview:default_src_r="@drawable/bg"
+        >
+
+    </com.example.zl.commoncomponent.ImageTextRelativeLayout>
+
+</android.support.v7.widget.CardView>
