@@ -9,6 +9,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -46,7 +47,7 @@ public interface RetrofitInfoService {
 
     /**
      * 获取 BcyPicture 随机推荐结果
-     * @param pageSize
+     * @param pageSize  结果条数
      * @return
      */
     @GET("pictureinfo/randompicture")
@@ -56,12 +57,27 @@ public interface RetrofitInfoService {
 
     /**
      * 获取 BcyAlbum 随机推荐结果
-     * @param pageSize
+     * @param pageSize  结果条数
      * @return
      */
-    @GET()
+    @GET("albuminfo/randomalbum")
     Call<ResultVO<List<AlbumInfo>>> getBcyRandomAlbums(
             @Query("pageSize") Integer pageSize
     );
+
+    /**
+     * Bcy 相册查找
+     * @param albumKey  关键字
+     * @param pageCount 页数
+     * @param pageSize  每页的结果条数
+     * @return
+     */
+    @POST("albuminfo/searchalbum")
+    Observable<ResultVO<List<AlbumInfo>>> searchBcyAlbumsWithRx(
+            @Query("albumKey") String albumKey,
+            @Query("pageCount") String pageCount,
+            @Query("pageSize") String pageSize
+    );
+
 
 }
