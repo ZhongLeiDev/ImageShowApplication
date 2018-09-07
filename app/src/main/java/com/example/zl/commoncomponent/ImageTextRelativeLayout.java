@@ -21,6 +21,14 @@ public class ImageTextRelativeLayout extends RelativeLayout {
     private ImageView imageView;
     private TextView textView;
 
+    public ImageTextRelativeLayout(Context context) {
+        super(context);
+    }
+
+    public ImageTextRelativeLayout(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
+
     public ImageTextRelativeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
 

@@ -19,7 +19,7 @@ import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.broadcast.NetBroadCast;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.message.BaseMessage;
-import com.example.zl.imageshowapplication.myinterface.BcyLoadMoreScrollListener;
+import com.example.zl.imageshowapplication.myinterface.BcyPicturesLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.MsgNotifyReceiver;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
@@ -74,7 +74,7 @@ public class BcyPicturesWaterFallLoadMoreFragment extends BaseFragment implement
         mRecyclerView.setLayoutManager(new
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-        mRecyclerView.addOnScrollListener(new BcyLoadMoreScrollListener());
+        mRecyclerView.addOnScrollListener(new BcyPicturesLoadMoreScrollListener());
         mAdapter = new BcyPicturesWaterFallLoadMoreAdapter(mActivity, this);
         mRecyclerView.setAdapter(mAdapter);
 

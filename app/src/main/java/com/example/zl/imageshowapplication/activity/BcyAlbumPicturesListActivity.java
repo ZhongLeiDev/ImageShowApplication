@@ -24,16 +24,17 @@ import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION
 /**
  * Created by ZhongLeiDev on 2018-05-17.
  * BCY 类型的 BcyAlbum 中的图片集合显示 Activity
+ * ListView显示一个相册中的所有图片
  */
 
-public class BcyAlbumImageItemsViewActivity extends AppCompatActivity {
+public class BcyAlbumPicturesListActivity extends AppCompatActivity {
 
     private List<PictureInfo> urlList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.viewpager_layout);
+        setContentView(R.layout.album_pictures_list);
 
 
         initView();

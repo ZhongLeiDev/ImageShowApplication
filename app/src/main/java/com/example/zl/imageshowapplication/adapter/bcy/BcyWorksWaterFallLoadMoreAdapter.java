@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.bean.bcy.retro.AlbumInfo;
-import com.example.zl.imageshowapplication.bean.geek.GeekImgBean;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -28,7 +27,7 @@ import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION
  * BCY作品瀑布流显示Adapter
  *
  */
-public class BcyWorksWaterFallAdapter extends RecyclerView.Adapter<BcyWorksWaterFallAdapter.ViewHolder> {
+public class BcyWorksWaterFallLoadMoreAdapter extends RecyclerView.Adapter<BcyWorksWaterFallLoadMoreAdapter.ViewHolder> {
 
     private Context mContext;
     private List<AlbumInfo> mList = new ArrayList<>();
@@ -45,7 +44,7 @@ public class BcyWorksWaterFallAdapter extends RecyclerView.Adapter<BcyWorksWater
         this.listener = listener;
     }
 
-    public BcyWorksWaterFallAdapter(Context context, LoadMoreListener loadMoreListener){
+    public BcyWorksWaterFallLoadMoreAdapter(Context context, LoadMoreListener loadMoreListener){
         this.mContext = context;
         this.loadmorelistener = loadMoreListener;
     }
@@ -56,7 +55,9 @@ public class BcyWorksWaterFallAdapter extends RecyclerView.Adapter<BcyWorksWater
         }
         for(int i=0; i < mList.size();i++){
             //随机的获取一个范围为200-600直接的高度
-            mHeights.add((int)(300+ Math.random()*400));
+//            mHeights.add((int)(300+ Math.random()*400));
+            //对于相册，将高度设置为固定值500,
+            mHeights.add(500);
         }
     }
 

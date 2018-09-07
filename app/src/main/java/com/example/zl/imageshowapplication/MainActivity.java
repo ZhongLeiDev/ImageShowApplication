@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import com.example.zl.imageshowapplication.adapter.common.FragmentAdapter;
 import com.example.zl.imageshowapplication.fragment.bcy.BcyPicturesWaterFallLoadMoreFragment;
+import com.example.zl.imageshowapplication.fragment.bcy.BcyWorksWaterFallLoadMoreFragment;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallFragment;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallLoadMoreFragment;
 
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity{
         List<String> listStr = new ArrayList<String>();
         listStr.add("主页");
         listStr.add("Geek");
-        listStr.add("HuaBan");
+        listStr.add("Works");
         listStr.add("Pivix");
 
         mTabLayout.addTab(mTabLayout.newTab().setTag(listStr.get(0)));
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity{
         List<Fragment> fragments = new ArrayList<Fragment>();
         fragments.add(new BcyPicturesWaterFallLoadMoreFragment());
         fragments.add(new GeekWaterFallLoadMoreFragment());
-        fragments.add(new GeekWaterFallFragment());
+        fragments.add(new BcyWorksWaterFallLoadMoreFragment());
         fragments.add(new GeekWaterFallFragment());
 
         mFragmentAdapter = new FragmentAdapter(

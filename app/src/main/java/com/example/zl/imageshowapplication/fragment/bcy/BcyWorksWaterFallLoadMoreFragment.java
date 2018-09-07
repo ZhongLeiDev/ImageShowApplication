@@ -1,6 +1,5 @@
 package com.example.zl.imageshowapplication.fragment.bcy;
 
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -11,22 +10,20 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.zl.imageshowapplication.R;
-import com.example.zl.imageshowapplication.activity.ZoomPictureListProgressActivity;
-import com.example.zl.imageshowapplication.adapter.bcy.BcyWorksWaterFallAdapter;
+import com.example.zl.imageshowapplication.adapter.bcy.BcyWorksWaterFallLoadMoreAdapter;
 import com.example.zl.imageshowapplication.base.BaseFragment;
 import com.example.zl.imageshowapplication.bean.bcy.retro.AlbumInfo;
 import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.broadcast.NetBroadCast;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.message.BaseMessage;
-import com.example.zl.imageshowapplication.myinterface.BcyLoadMoreScrollListener;
+import com.example.zl.imageshowapplication.myinterface.BcyWorksLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.MsgNotifyReceiver;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
 
-import java.io.Serializable;
 import java.util.List;
 
 import butterknife.Bind;
@@ -48,7 +45,7 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
     @Bind(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    private BcyWorksWaterFallAdapter mAdapter;
+    private BcyWorksWaterFallLoadMoreAdapter mAdapter;
     private NetBroadCast mNetworkStateReceiver = new NetBroadCast();
     private boolean isNetWorkConnected = false;
     private boolean isFragmentyInit = false;
@@ -75,20 +72,21 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
         mRecyclerView.setLayoutManager(new
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-        mRecyclerView.addOnScrollListener(new BcyLoadMoreScrollListener());
-        mAdapter = new BcyWorksWaterFallAdapter(mActivity, this);
+        mRecyclerView.addOnScrollListener(new BcyWorksLoadMoreScrollListener());
+        mAdapter = new BcyWorksWaterFallLoadMoreAdapter(mActivity, this);
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnMyItemClickListener(new OnMyItemClickListener() {
             @Override
             public void myClick(View v, int pos) {
-                Log.i("BcyPictures","URL->" + mAdapter.getList().get(pos).getAlbumCover() + " is pressed!!!");
-                Intent intent = new Intent();
-//                intent.setClass(getActivity(), BcyPicturesListPagerImageViewActivity.class);
-                intent.setClass(getActivity(), ZoomPictureListProgressActivity.class);
-                intent.putExtra("data", (Serializable)mAdapter.getList());
-                intent.putExtra("position", pos);
-                startActivity(intent);
+                /*相册需要跳转到相册内容显示Activity再跳转到图片放大显示Activity*/
+//                Log.i("BcyPictures","URL->" + mAdapter.getList().get(pos).getAlbumCover() + " is pressed!!!");
+//                Intent intent = new Intent();
+////                intent.setClass(getActivity(), BcyPicturesListPagerImageViewActivity.class);
+//                intent.setClass(getActivity(), ZoomPictureListProgressActivity.class);
+//                intent.putExtra("data", (Serializable)mAdapter.getList());
+//                intent.putExtra("position", pos);
+//                startActivity(intent);
             }
 
             @Override
