@@ -1,5 +1,6 @@
 package com.example.zl.imageshowapplication.fragment.bcy;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.zl.imageshowapplication.R;
+import com.example.zl.imageshowapplication.activity.BcyAlbumPicturesListActivity;
 import com.example.zl.imageshowapplication.adapter.bcy.BcyWorksWaterFallLoadMoreAdapter;
 import com.example.zl.imageshowapplication.base.BaseFragment;
 import com.example.zl.imageshowapplication.bean.bcy.retro.AlbumInfo;
@@ -24,6 +26,7 @@ import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.Bind;
@@ -80,13 +83,11 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
             @Override
             public void myClick(View v, int pos) {
                 /*相册需要跳转到相册内容显示Activity再跳转到图片放大显示Activity*/
-//                Log.i("BcyPictures","URL->" + mAdapter.getList().get(pos).getAlbumCover() + " is pressed!!!");
-//                Intent intent = new Intent();
-////                intent.setClass(getActivity(), BcyPicturesListPagerImageViewActivity.class);
-//                intent.setClass(getActivity(), ZoomPictureListProgressActivity.class);
-//                intent.putExtra("data", (Serializable)mAdapter.getList());
-//                intent.putExtra("position", pos);
-//                startActivity(intent);
+                Log.i("BcyPictures","URL->" + mAdapter.getList().get(pos).getAlbumCover() + " is pressed!!!");
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), BcyAlbumPicturesListActivity.class);
+                intent.putExtra("data", (Serializable)mAdapter.getList().get(pos).getAlbumId());
+                startActivity(intent);
             }
 
             @Override

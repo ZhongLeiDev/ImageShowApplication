@@ -37,6 +37,10 @@
         <activity
             android:name=".activity.ZoomPictureListProgressActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.BcyAlbumPicturesListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SingleImgShowActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
