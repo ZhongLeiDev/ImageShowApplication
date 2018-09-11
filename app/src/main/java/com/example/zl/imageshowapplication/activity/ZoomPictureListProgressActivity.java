@@ -32,6 +32,8 @@ import static com.example.zl.imageshowapplication.config.UILConfig.SHOW_ORI_OPTI
 
 /**
  * Created by ZhongLeiDev on 2018/6/11.
+ * 滑动相册显示Activity
+ *
  */
 
 public class ZoomPictureListProgressActivity extends AppCompatActivity {
@@ -96,7 +98,7 @@ public class ZoomPictureListProgressActivity extends AppCompatActivity {
             }
         });
         mImageViews = new ImageView[urlList.size()];
-        viewPager = (ViewPager) findViewById(R.id.img_viewpager);
+        viewPager = findViewById(R.id.img_viewpager);
         viewPager.setAdapter(new PagerAdapter() {
 
             @Override
@@ -176,7 +178,7 @@ public class ZoomPictureListProgressActivity extends AppCompatActivity {
             }
         });
 
-        btnDownload = (Button)findViewById(R.id.btnDownload);
+        btnDownload = findViewById(R.id.btnDownload);
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

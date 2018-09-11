@@ -22,6 +22,8 @@ import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION
 
 /**
  * Created by zhangqie on 2017/6/20.
+ * Geek滑动相册显示Activity
+ *
  */
 
 public class GeekListPagerImageViewActivity extends AppCompatActivity {
@@ -47,7 +49,7 @@ public class GeekListPagerImageViewActivity extends AppCompatActivity {
 
     private void initView(){
         mImageViews= new ImageView[urlList.size()];
-        viewPager= (ViewPager) findViewById(R.id.img_viewpager);
+        viewPager= findViewById(R.id.img_viewpager);
         viewPager.setAdapter(new PagerAdapter() {
 
             @Override

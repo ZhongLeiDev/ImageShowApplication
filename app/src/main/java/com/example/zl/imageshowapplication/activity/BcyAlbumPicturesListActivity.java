@@ -1,5 +1,6 @@
 package com.example.zl.imageshowapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
@@ -24,6 +25,7 @@ import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
 import com.example.zl.imageshowapplication.widget.TounChImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +72,10 @@ public class BcyAlbumPicturesListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i("ItemClicked","picUrl->" + mAdapter.getPictureInfoList().get(position).getPictureUrl());
+                Intent intent = new Intent();
+                intent.setClass(BcyAlbumPicturesListActivity.this, SingleImgShowActivity.class);
+                intent.putExtra("data", mAdapter.getPictureInfoList().get(position));
+                startActivity(intent);
             }
         });
 

@@ -95,7 +95,11 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
             }
         });
 
-        if (NetWorkUtil.isNetworkAvailable(getActivity())) {
+        boolean isNetworkAvailable = NetWorkUtil.isNetworkAvailable(getActivity());
+
+        Log.i("GeekWaterFall","NetWorkStatus->" + isNetworkAvailable);
+
+        if (isNetworkAvailable) {
             isFragmentyInit = true;
             requestData();
         }
@@ -109,6 +113,8 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
     }
 
     private void requestData() {
+
+        Log.i("GeekWaterFall", "GeekStartRequestData...");
 
         Call<GeekResult> call = geekInfoService.getGeekResult(30, currentPage);
         call.enqueue(new Callback<GeekResult>() {
@@ -140,7 +146,7 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
         if (isNetWorkConnected) {
            requestData();
            currentPage ++;
-            Toast.makeText(getActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
+           Toast.makeText(getActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
         } else {
 //            Log.i("LoadMore","网络连接错误！");
             Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
@@ -155,7 +161,7 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
                 switch (msg.getMsg()) {
                     case NET_WIFI_CONNECTED:
                         isNetWorkConnected = true;
-                        Log.i("MainActivity","NET_WIFI_CONNECTED！");
+                        Log.i("GeekWaterFall","NET_WIFI_CONNECTED！");
                         if (!isFragmentyInit) {
                            requestData();
                         }
@@ -163,12 +169,12 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
                     case NET_MOBILE_CONNECTED:
                         isNetWorkConnected = true;
                         Toast.makeText(getActivity(),msg.getExtramsg(),Toast.LENGTH_SHORT).show();
-                        Log.i("MainActivity","NET_MOBILE_CONNECTED！");
+                        Log.i("GeekWaterFall","NET_MOBILE_CONNECTED！");
                         break;
                     case NET_DISCONNECTED:
                         isNetWorkConnected = false;
                         Toast.makeText(getActivity(),msg.getExtramsg(),Toast.LENGTH_SHORT).show();
-                        Log.i("MainActivity","NET_DISCONNECTED！");
+                        Log.i("GeekWaterFall","NET_DISCONNECTED！");
                         break;
                 }
                 break;

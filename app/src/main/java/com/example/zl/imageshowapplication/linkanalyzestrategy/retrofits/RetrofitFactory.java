@@ -1,8 +1,14 @@
 package com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits;
 
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
+import com.example.zl.imageshowapplication.utils.okhttputil.OkHttpUtils;
 
+import java.util.Collections;
+
+import okhttp3.CipherSuite;
+import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
+import okhttp3.TlsVersion;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -14,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitFactory {
 
     /** Geek 访问 URL */
-    private static final String GEEK_REQUEST_URL = "http://gank.io/api/";
+    private static final String GEEK_REQUEST_URL = "https://gank.io/api/";
     /**Bcy访问URL*/
     private static final String BCY_REQUEST_URL = "http://112.74.42.204:8080/coser/";
 
@@ -30,9 +36,10 @@ public class RetrofitFactory {
      */
     public static RetrofitInfoService getGeekRetroSingleInstance() {
         if (geekRetrofit == null) {
+
             geekRetrofit = new Retrofit.Builder()
 
-                    .client(new OkHttpClient())
+                    .client(OkHttpUtils.getOkHttpClient().getBuild())
 
                     .baseUrl(GEEK_REQUEST_URL)
 
