@@ -106,33 +106,8 @@ public class ZoomPictureListProgressActivity extends AppCompatActivity {
                 //可以使用其他的ImageView 控件
                 TounChImageView tounChImageView = new TounChImageView(ZoomPictureListProgressActivity.this);
 
-                /*---------------------------------UniversalImageLoader代替Picasso--------------------
-                try {
-                    Picasso.with(GeekListPagerImageViewActivity.this).load(mImgs[position])
-                            .placeholder(R.mipmap.img1)//默认显示的图片
-                           // .resize(500,300)//控制图片高度，不添加则自适应
-                            .error(R.mipmap.ic_launcher)//加载时出现错误显示的图片
-                            .into(tounChImageView);
-                } catch (Exception e) {
-
-                }
-                -------------------------------------------------------------------------------------------*/
-
                 ImageLoader.getInstance().displayImage(urlList.get(position).getPictureUrl(),
                         tounChImageView, NORMAL_OPTION);
-
-//                ImageLoader.getInstance().displayImage(urlList.get(position).getPictureOrigurl(), //显示原图
-//                        tounChImageView, NORMAL_OPTION);
-
-                //单击返回
-                /*
-                tounChImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
-                */
 
                 container.addView(tounChImageView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 mImageViews[position] = tounChImageView;
@@ -159,7 +134,6 @@ public class ZoomPictureListProgressActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                Log.i("ZoomPicture", "position=" + position + ", imgviewposition=" + imageviewposition);
                 if (position!=imageviewposition) {
                     progressBar.setText("点击加载原图");
                     progressBar.setProgress(0);

@@ -19,12 +19,16 @@ import com.example.zl.imageshowapplication.bean.geek.GeekResult;
 import com.example.zl.imageshowapplication.broadcast.NetBroadCast;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.message.BaseMessage;
+import com.example.zl.imageshowapplication.message.MsgEnums;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.GeekLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.MsgNotifyReceiver;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
+
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import java.io.Serializable;
 import java.util.List;
@@ -37,9 +41,12 @@ import retrofit2.Response;
 
 /**
  * Created by ZhongLeiDev on 2018/3/15.
+ * Geek图片瀑布流显示
  */
 
-public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadMoreListener,MsgNotifyReceiver {
+public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadMoreListener {
+
+    private static final String TAG = "GeekFragment";
 
     private RetrofitInfoService geekInfoService = RetrofitFactory.getGeekRetroSingleInstance();
     private int currentPage = 0;
@@ -48,9 +55,7 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
     RecyclerView mRecyclerView;
 
     private GeekWaterFallLoadMoreAdapter mAdapter;
-    private NetBroadCast mNetworkStateReceiver = new NetBroadCast();
     private boolean isNetWorkConnected = false;
-    private boolean isFragmentyInit = false;
 
     @Override
     protected int getLayoutId() {
@@ -65,11 +70,8 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
     @Override
     protected void initData() {
 
-        //注册网络状态监听广播
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        getActivity().registerReceiver(mNetworkStateReceiver, filter);
-        mNetworkStateReceiver.setNotifyReceiver(this);
+        //注册EventBus接收网络状态改变广播通知
+        EventBus.getDefault().register(this);
 
         mRecyclerView.setLayoutManager(new
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
@@ -81,7 +83,7 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
         mAdapter.setOnMyItemClickListener(new OnMyItemClickListener() {
             @Override
             public void myClick(View v, int pos) {
-                Log.i("GeekWaterFallFragment","URL->" + mAdapter.getList().get(pos).getUrl() + " is pressed!!!");
+                Log.i(TAG,"URL->" + mAdapter.getList().get(pos).getUrl() + " is pressed!!!");
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), GeekListPagerImageViewActivity.class);
                 intent.putExtra("data", (Serializable)mAdapter.getList());
@@ -91,16 +93,15 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
 
             @Override
             public void mLongClick(View v, int pos) {
-                Log.i("GeekWaterFallFragment","URL->" + mAdapter.getList().get(pos).getUrl() + " is long pressed!!!");
+                Log.i(TAG,"URL->" + mAdapter.getList().get(pos).getUrl() + " is long pressed!!!");
             }
         });
 
         boolean isNetworkAvailable = NetWorkUtil.isNetworkAvailable(getActivity());
 
-        Log.i("GeekWaterFall","NetWorkStatus->" + isNetworkAvailable);
+        Log.i(TAG,"NetWorkStatus->" + isNetworkAvailable);
 
         if (isNetworkAvailable) {
-            isFragmentyInit = true;
             requestData();
         }
 
@@ -109,12 +110,24 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().unregisterReceiver(mNetworkStateReceiver);
+        //取消注册EventBus
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscriber(tag = "net_status")
+    private void updateNetStatusWithTag(BaseMessage msg) {  //处理 EventBus 传输过来的事件
+        Log.i(TAG, "NetWorkStatusChanged!msg = " + msg.getExtramsg());
+        if (msg.getMsg() == MsgEnums.NET_WIFI_CONNECTED || msg.getMsg() == MsgEnums.NET_MOBILE_CONNECTED) {
+            isNetWorkConnected = true;
+        } else {
+            isNetWorkConnected = false;
+        }
+        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
     }
 
     private void requestData() {
 
-        Log.i("GeekWaterFall", "GeekStartRequestData...");
+        Log.i(TAG, "GeekStartRequestData...");
 
         Call<GeekResult> call = geekInfoService.getGeekResult(30, currentPage);
         call.enqueue(new Callback<GeekResult>() {
@@ -148,36 +161,8 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
            currentPage ++;
            Toast.makeText(getActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
         } else {
-//            Log.i("LoadMore","网络连接错误！");
             Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
         }
 
-    }
-
-    @Override
-    public void handleMsg(BaseMessage msg) {
-        switch (msg.getMsgType()) {
-            case NET:
-                switch (msg.getMsg()) {
-                    case NET_WIFI_CONNECTED:
-                        isNetWorkConnected = true;
-                        Log.i("GeekWaterFall","NET_WIFI_CONNECTED！");
-                        if (!isFragmentyInit) {
-                           requestData();
-                        }
-                        break;
-                    case NET_MOBILE_CONNECTED:
-                        isNetWorkConnected = true;
-                        Toast.makeText(getActivity(),msg.getExtramsg(),Toast.LENGTH_SHORT).show();
-                        Log.i("GeekWaterFall","NET_MOBILE_CONNECTED！");
-                        break;
-                    case NET_DISCONNECTED:
-                        isNetWorkConnected = false;
-                        Toast.makeText(getActivity(),msg.getExtramsg(),Toast.LENGTH_SHORT).show();
-                        Log.i("GeekWaterFall","NET_DISCONNECTED！");
-                        break;
-                }
-                break;
-        }
     }
 }

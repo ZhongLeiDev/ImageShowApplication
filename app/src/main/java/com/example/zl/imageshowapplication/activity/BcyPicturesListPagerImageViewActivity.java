@@ -27,10 +27,8 @@ import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION
 
 public class BcyPicturesListPagerImageViewActivity extends AppCompatActivity {
 
-
     ViewPager viewPager;
     int currentpos = 0;
-
 
     private List<PictureInfo> urlList = new ArrayList<>();
 
@@ -56,24 +54,8 @@ public class BcyPicturesListPagerImageViewActivity extends AppCompatActivity {
                 //可以使用其他的ImageView 控件
                 TounChImageView tounChImageView=new TounChImageView(BcyPicturesListPagerImageViewActivity.this);
 
-
-                /*---------------------------------UniversalImageLoader代替Picasso--------------------
-                try {
-                    Picasso.with(GeekListPagerImageViewActivity.this).load(mImgs[position])
-                            .placeholder(R.mipmap.img1)//默认显示的图片
-                           // .resize(500,300)//控制图片高度，不添加则自适应
-                            .error(R.mipmap.ic_launcher)//加载时出现错误显示的图片
-                            .into(tounChImageView);
-                } catch (Exception e) {
-
-                }
-                -------------------------------------------------------------------------------------------*/
-
                 ImageLoader.getInstance().displayImage(urlList.get(position).getPictureUrl(),
                         tounChImageView, NORMAL_OPTION);
-
-//                ImageLoader.getInstance().displayImage(urlList.get(position).getPictureOrigurl(), //显示原图
-//                        tounChImageView, NORMAL_OPTION);
 
                 //单击返回
                 tounChImageView.setOnClickListener(new View.OnClickListener() {

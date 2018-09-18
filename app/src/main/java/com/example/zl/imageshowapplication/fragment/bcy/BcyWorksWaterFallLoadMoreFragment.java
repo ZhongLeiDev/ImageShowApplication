@@ -19,12 +19,16 @@ import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.broadcast.NetBroadCast;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.message.BaseMessage;
+import com.example.zl.imageshowapplication.message.MsgEnums;
 import com.example.zl.imageshowapplication.myinterface.BcyWorksLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.MsgNotifyReceiver;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
+
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import java.io.Serializable;
 import java.util.List;
@@ -40,18 +44,17 @@ import retrofit2.Response;
  * BCY 作品瀑布流显示 Fragment
  */
 
-public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements LoadMoreListener,MsgNotifyReceiver {
+public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements LoadMoreListener {
+
+    private static final String TAG = "BcyWorksFragment";
 
     private RetrofitInfoService bcyInfoService = RetrofitFactory.getBcyRetroSingleInstance();
-    private int currentPage = 0;
 
     @Bind(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
     private BcyWorksWaterFallLoadMoreAdapter mAdapter;
-    private NetBroadCast mNetworkStateReceiver = new NetBroadCast();
     private boolean isNetWorkConnected = false;
-    private boolean isFragmentyInit = false;
 
     @Override
     protected int getLayoutId() {
@@ -66,11 +69,8 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
     @Override
     protected void initData() {
 
-        //注册网络状态监听广播
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        getActivity().registerReceiver(mNetworkStateReceiver, filter);
-        mNetworkStateReceiver.setNotifyReceiver(this);
+        //注册EventBus接收网络状态改变广播通知
+        EventBus.getDefault().register(this);
 
         mRecyclerView.setLayoutManager(new
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
@@ -83,7 +83,7 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
             @Override
             public void myClick(View v, int pos) {
                 /*相册需要跳转到相册内容显示Activity再跳转到图片放大显示Activity*/
-                Log.i("BcyPictures","URL->" + mAdapter.getList().get(pos).getAlbumCover() + " is pressed!!!");
+                Log.i(TAG,"URL->" + mAdapter.getList().get(pos).getAlbumCover() + " is pressed!!!");
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), BcyAlbumPicturesListActivity.class);
                 intent.putExtra("data", (Serializable)mAdapter.getList().get(pos).getAlbumId());
@@ -92,12 +92,11 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
 
             @Override
             public void mLongClick(View v, int pos) {
-                Log.i("BcyWorksFragment","URL->" + mAdapter.getList().get(pos).getAlbumCover() + " is long pressed!!!");
+                Log.i(TAG,"URL->" + mAdapter.getList().get(pos).getAlbumCover() + " is long pressed!!!");
             }
         });
 
         if (NetWorkUtil.isNetworkAvailable(getActivity())) {
-            isFragmentyInit = true;
             requestData();
         }
 
@@ -106,7 +105,19 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().unregisterReceiver(mNetworkStateReceiver);
+        //取消注册EventBus
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscriber(tag = "net_status")
+    private void updateNetStatusWithTag(BaseMessage msg) {  //处理 EventBus 传输过来的事件
+        Log.i(TAG, "NetWorkStatusChanged!msg = " + msg.getExtramsg());
+        if (msg.getMsg() == MsgEnums.NET_WIFI_CONNECTED || msg.getMsg() == MsgEnums.NET_MOBILE_CONNECTED) {
+            isNetWorkConnected = true;
+        } else {
+            isNetWorkConnected = false;
+        }
+        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
     }
 
     private void requestData() {
@@ -140,40 +151,11 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
 
         if (isNetWorkConnected) {
             requestData();
-            currentPage ++;
             Toast.makeText(getActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
         } else {
-//            Log.i("LoadMore","网络连接错误！");
             Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
         }
 
-    }
-
-    @Override
-    public void handleMsg(BaseMessage msg) {
-        switch (msg.getMsgType()) {
-            case NET:
-                switch (msg.getMsg()) {
-                    case NET_WIFI_CONNECTED:
-                        isNetWorkConnected = true;
-                        Log.i("MainActivity","NET_WIFI_CONNECTED！");
-                        if (!isFragmentyInit) {
-                            requestData();
-                        }
-                        break;
-                    case NET_MOBILE_CONNECTED:
-                        isNetWorkConnected = true;
-                        Toast.makeText(getActivity(),msg.getExtramsg(),Toast.LENGTH_SHORT).show();
-                        Log.i("MainActivity","NET_MOBILE_CONNECTED！");
-                        break;
-                    case NET_DISCONNECTED:
-                        isNetWorkConnected = false;
-                        Toast.makeText(getActivity(),msg.getExtramsg(),Toast.LENGTH_SHORT).show();
-                        Log.i("MainActivity","NET_DISCONNECTED！");
-                        break;
-                }
-                break;
-        }
     }
 
 }

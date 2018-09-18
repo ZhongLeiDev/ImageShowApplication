@@ -2,10 +2,12 @@ package com.example.zl.imageshowapplication;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
 import com.example.zl.imageshowapplication.config.UILConfig;
+import com.example.zl.service.NetworkStatusService;
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.MemoryCache;
@@ -27,6 +29,8 @@ public class MainApplication extends Application {
         super.onCreate();
         createDiskCache();
         initImageLoader(getApplicationContext());
+        //开启网络状态监听Service
+        startService(new Intent(getApplicationContext(), NetworkStatusService.class));
     }
 
     /**
