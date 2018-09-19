@@ -24,7 +24,7 @@ import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION
 
 /**
  * Created by ZhongLeiDev on 2018-05-17
- * BCY作品瀑布流显示Adapter
+ * BCY 作品相册瀑布流显示 Adapter
  *
  */
 public class BcyWorksWaterFallLoadMoreAdapter extends RecyclerView.Adapter<BcyWorksWaterFallLoadMoreAdapter.ViewHolder> {

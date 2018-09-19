@@ -18,6 +18,7 @@ import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION
 
 /**
  * Created by ZhongLeiDev on 2018/9/7.
+ * BCY 单个相册里面包含的所有图片显示 Adapter
  */
 
 public class BcyAlbumPicturesListAdapter extends BaseAdapter {

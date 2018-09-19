@@ -1,5 +1,7 @@
 package com.example.zl.imageshowapplication;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,15 +14,27 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.zl.enums.AlbumFragmentType;
+import com.example.zl.enums.PictureFragmentType;
+import com.example.zl.imageshowapplication.activity.searchresult.SearchResultActivity;
 import com.example.zl.imageshowapplication.adapter.common.FragmentAdapter;
-import com.example.zl.imageshowapplication.fragment.bcy.BcyPicturesWaterFallLoadMoreFragment;
+import com.example.zl.imageshowapplication.base.BaseAlbumInfoFragment;
+import com.example.zl.imageshowapplication.base.BasePictureInfoFragment;
 import com.example.zl.imageshowapplication.fragment.bcy.BcyWorksWaterFallLoadMoreFragment;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallFragment;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallLoadMoreFragment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +49,16 @@ public class MainActivity extends AppCompatActivity{
     private DrawerLayout mDrawerLayout;
     private FragmentAdapter mFragmentAdapter;
 
-    @Bind(R.id.toolbar)
+    @Bind(R.id.main_toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.tablayout)
+    @Bind(R.id.main_tab_layout)
     TabLayout mTabLayout;
-    @Bind(R.id.viewpager)
+    @Bind(R.id.main_viewpager)
     ViewPager mViewPager;
+    @Bind(R.id.main_edt_search)
+    EditText mEditTextSearch;
+    @Bind(R.id.main_image_backdrop)
+    ImageView mImageBackdrop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +73,8 @@ public class MainActivity extends AppCompatActivity{
         setSupportActionBar(mToolbar);
 
         initData();
+
+        initSearchView();
 
         final ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.menu3);  //设置 ActionBar 的 Home 键
@@ -77,6 +97,49 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    private void initSearchView() {
+        mEditTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH && mEditTextSearch.getText().toString().length()!=0) {
+                    startSearchActivity(mEditTextSearch.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
+        mEditTextSearch.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        /*extView.setCompoundDrawables(Drawable left, Drawable top, Drawable right, Drawable bottom)*/
+                        Drawable drawableRight = mEditTextSearch.getCompoundDrawables()[2];
+                        if (drawableRight != null
+                                && event.getRawX() <= (mEditTextSearch.getRight() + drawableRight.getBounds().width())
+                                && mEditTextSearch.getText().toString().length()!=0) {
+                            startSearchActivity(mEditTextSearch.getText().toString());
+                            return true;
+                        }
+
+                        break;
+                }
+                return false;
+            }
+        });
+    }
+
+    /**
+     * 开启搜索Activity
+     * @param searchTag 查询条件
+     */
+    private void startSearchActivity(String searchTag) {
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, SearchResultActivity.class);
+        intent.putExtra("data", (Serializable)searchTag);
+        startActivity(intent);
+    }
+
     private void initData(){
 
         List<String> listStr = new ArrayList<String>();
@@ -91,9 +154,11 @@ public class MainActivity extends AppCompatActivity{
         mTabLayout.addTab(mTabLayout.newTab().setTag(listStr.get(3)));
 
         List<Fragment> fragments = new ArrayList<Fragment>();
-        fragments.add(new BcyPicturesWaterFallLoadMoreFragment());
+//        fragments.add(new BcyPicturesWaterFallLoadMoreFragment());
+        fragments.add(BasePictureInfoFragment.newInstance(PictureFragmentType.PICTURE_FRAGMENT_RANDOM,"empty"));
         fragments.add(new GeekWaterFallLoadMoreFragment());
-        fragments.add(new BcyWorksWaterFallLoadMoreFragment());
+//        fragments.add(new BcyWorksWaterFallLoadMoreFragment());
+        fragments.add(BaseAlbumInfoFragment.newInstance(AlbumFragmentType.ALBUM_FRAGMENT_RANDOM,"empty"));
         fragments.add(new GeekWaterFallFragment());
 
         mFragmentAdapter = new FragmentAdapter(

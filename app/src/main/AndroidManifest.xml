@@ -41,6 +41,10 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.SingleImgShowActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.searchresult.SearchResultActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.BcyAlbumsListActivity"
+            android:screenOrientation="portrait"/>
         <service android:name="com.example.zl.service.NetworkStatusService"/>
     </application>
 

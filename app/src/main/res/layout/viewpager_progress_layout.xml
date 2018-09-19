@@ -17,7 +17,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp">
 
-        <com.example.zl.imageshowapplication.widget.TextProgressBar
+        <com.example.zl.commoncomponent.TextProgressBar
             android:id="@+id/progressBar"
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="180dp"

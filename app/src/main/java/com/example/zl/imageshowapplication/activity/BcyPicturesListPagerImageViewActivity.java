@@ -23,6 +23,7 @@ import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION
 
 /**
  * Created by ZhongLeiDev on 2018/6/10.
+ * BCY 滑动相册显示 Activity
  */
 
 public class BcyPicturesListPagerImageViewActivity extends AppCompatActivity {

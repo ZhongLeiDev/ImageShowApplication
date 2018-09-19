@@ -47,12 +47,26 @@ public interface RetrofitInfoService {
 
     /**
      * 获取 BcyPicture 随机推荐结果
-     * @param pageSize  结果条数
+     * @param pageSize  每页显示的结果条数
      * @return
      */
     @GET("pictureinfo/randompicture")
     Call<ResultVO<List<PictureInfo>>> getBcyRandomPictures(
         @Query("pageSize") Integer pageSize
+    );
+
+    /**
+     * 获取 BcyPicture 搜索结果
+     * @param searchTag 查询的条件
+     * @param pageCount 结果页数
+     * @param pageSize 每页显示的条数
+     * @return
+     */
+    @GET()
+    Call<ResultVO<List<PictureInfo>>> getBcySearchPictures(
+            @Query("searchTag") String searchTag,
+            @Query("pageCount") Integer pageCount,
+            @Query("pageSize") Integer pageSize
     );
 
     /**
@@ -62,6 +76,19 @@ public interface RetrofitInfoService {
      */
     @GET("albuminfo/randomalbum")
     Call<ResultVO<List<AlbumInfo>>> getBcyRandomAlbums(
+            @Query("pageSize") Integer pageSize
+    );
+
+    /**
+     * 获取 BcyAlbum 查询结果
+     * @param searchTag 查询的条件
+     * @param pageCount 结果页数
+     * @param pageSize 每页显示的条数
+     * @return
+     */
+    Call<ResultVO<List<AlbumInfo>>> getBcySearchAlbums(
+            @Query("searchTag") String searchTag,
+            @Query("pageCount") Integer pageCount,
             @Query("pageSize") Integer pageSize
     );
 

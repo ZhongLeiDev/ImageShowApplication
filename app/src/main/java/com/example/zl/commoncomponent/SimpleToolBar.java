@@ -1,4 +1,4 @@
-package com.example.zl.imageshowapplication.widget;
+package com.example.zl.commoncomponent;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -14,7 +14,7 @@ import com.example.zl.imageshowapplication.R;
 
 /**
  * Created by ZhongLeiDev on 2018/9/18.
- * 自定义通用的工具栏
+ * 自定义通用的顶端工具栏
  */
 
 public class SimpleToolBar extends Toolbar {
@@ -33,22 +33,23 @@ public class SimpleToolBar extends Toolbar {
     private TextView mTxtRightTitle;
 
     public SimpleToolBar(Context context) {
-        super(context);
+        this(context,null);
     }
 
     public SimpleToolBar(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs,0);
     }
 
     public SimpleToolBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context);
     }
 
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.activity_normal_toolbar, this);
-        mTxtLeftTitle = (TextView) findViewById(R.id.txt_left_title);
-        mTxtMiddleTitle = (TextView) findViewById(R.id.txt_main_title);
-        mTxtRightTitle = (TextView) findViewById(R.id.txt_right_title);
+        mTxtLeftTitle = findViewById(R.id.txt_left_title);
+        mTxtMiddleTitle = findViewById(R.id.txt_main_title);
+        mTxtRightTitle = findViewById(R.id.txt_right_title);
     }
 
 

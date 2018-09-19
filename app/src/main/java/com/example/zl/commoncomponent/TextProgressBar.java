@@ -1,4 +1,4 @@
-package com.example.zl.imageshowapplication.widget;
+package com.example.zl.commoncomponent;
 
 import android.content.Context;
 import android.graphics.Canvas;

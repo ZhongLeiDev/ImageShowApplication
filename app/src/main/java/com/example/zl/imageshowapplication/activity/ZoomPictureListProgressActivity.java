@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.bean.bcy.retro.PictureInfo;
 import com.example.zl.imageshowapplication.utils.FileDownloadUtil;
-import com.example.zl.imageshowapplication.widget.TextProgressBar;
+import com.example.zl.commoncomponent.TextProgressBar;
 import com.example.zl.imageshowapplication.widget.TounChImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;

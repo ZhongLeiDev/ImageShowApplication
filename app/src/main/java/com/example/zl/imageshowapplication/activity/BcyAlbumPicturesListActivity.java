@@ -45,7 +45,6 @@ import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION
 public class BcyAlbumPicturesListActivity extends AppCompatActivity {
 
     private BcyAlbumPicturesListAdapter mAdapter;
-//    @Bind(R.id.album_pictures_list)
     private ListView piclistView;
     /**从上层传过来的相册Id，用于根据相册Id查询相册图片列表*/
     private String albumId;
