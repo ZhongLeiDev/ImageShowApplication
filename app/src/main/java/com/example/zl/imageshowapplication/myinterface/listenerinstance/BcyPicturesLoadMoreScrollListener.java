@@ -1,4 +1,4 @@
-package com.example.zl.imageshowapplication.myinterface;
+package com.example.zl.imageshowapplication.myinterface.listenerinstance;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;

@@ -17,7 +17,7 @@ import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.message.BaseMessage;
 import com.example.zl.imageshowapplication.message.MsgEnums;
-import com.example.zl.imageshowapplication.myinterface.BcyWorksLoadMoreScrollListener;
+import com.example.zl.imageshowapplication.myinterface.listenerinstance.BcyWorksLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
@@ -155,6 +155,7 @@ public class BaseAlbumInfoFragment extends BaseFragment implements LoadMoreListe
                 call = bcyInfoService.getBcySearchAlbums(tag,currentpage,30);
                 break;
             case ALBUM_FRAGMENT_SEARCH_BY_DESC:
+                call = bcyInfoService.getBcySearchAlbums(tag,currentpage,30);
                 break;
             case ALBUM_FRAGMENT_SEARCH_BY_COSERID:
                 break;
@@ -163,14 +164,18 @@ public class BaseAlbumInfoFragment extends BaseFragment implements LoadMoreListe
         call.enqueue(new Callback<ResultVO<List<AlbumInfo>>>() {
 
             public void onResponse(Call<ResultVO<List<AlbumInfo>>> call, Response<ResultVO<List<AlbumInfo>>> response) {
-                List<AlbumInfo> list = response.body().getData();
-                System.out.println("LoadMoreCall->"+response.body());
-                if (list.size()>0) {
-                    mAdapter.getList().addAll(list);
-                    mAdapter.getRandomHeight(list);
-                    mAdapter.notifyDataSetChanged();
+                if (response.body() != null) {
+                    List<AlbumInfo> list = response.body().getData();
+                    System.out.println("LoadMoreCall->" + response.body());
+                    if (list.size() > 0) {
+                        mAdapter.getList().addAll(list);
+                        mAdapter.getRandomHeight(list);
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(getActivity(), "没有更多内容！", Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    Toast.makeText(getActivity(),"没有更多内容！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "error:返回内容为空！", Toast.LENGTH_LONG).show();
                 }
 
             }

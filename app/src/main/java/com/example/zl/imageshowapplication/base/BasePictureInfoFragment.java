@@ -17,7 +17,7 @@ import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.message.BaseMessage;
 import com.example.zl.imageshowapplication.message.MsgEnums;
-import com.example.zl.imageshowapplication.myinterface.BcyPicturesLoadMoreScrollListener;
+import com.example.zl.imageshowapplication.myinterface.listenerinstance.BcyPicturesLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
@@ -162,14 +162,18 @@ public class BasePictureInfoFragment extends BaseFragment implements LoadMoreLis
         call.enqueue(new Callback<ResultVO<List<PictureInfo>>>() {
 
             public void onResponse(Call<ResultVO<List<PictureInfo>>> call, Response<ResultVO<List<PictureInfo>>> response) {
-                List<PictureInfo> list = response.body().getData();
-                System.out.println("LoadMoreCall->"+response.body());
-                if (list.size()>0) {
-                    mAdapter.getList().addAll(list);
-                    mAdapter.getRandomHeight(list);
-                    mAdapter.notifyDataSetChanged();
+                if (response.body() != null) {
+                    List<PictureInfo> list = response.body().getData();
+                    System.out.println("LoadMoreCall->" + response.body());
+                    if (list.size() > 0) {
+                        mAdapter.getList().addAll(list);
+                        mAdapter.getRandomHeight(list);
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(getActivity(), "没有更多内容！", Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    Toast.makeText(getActivity(),"没有更多内容！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "error:返回内容为空！", Toast.LENGTH_LONG).show();
                 }
 
             }

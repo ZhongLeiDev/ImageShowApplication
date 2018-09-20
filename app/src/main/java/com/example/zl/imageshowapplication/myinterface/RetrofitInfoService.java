@@ -1,6 +1,7 @@
 package com.example.zl.imageshowapplication.myinterface;
 
 import com.example.zl.imageshowapplication.bean.bcy.retro.AlbumInfo;
+import com.example.zl.imageshowapplication.bean.bcy.retro.CoserInfo;
 import com.example.zl.imageshowapplication.bean.bcy.retro.PictureInfo;
 import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.bean.geek.GeekResult;
@@ -62,7 +63,7 @@ public interface RetrofitInfoService {
      * @param pageSize 每页显示的条数
      * @return
      */
-    @GET()
+    @GET("pictureinfo/")
     Call<ResultVO<List<PictureInfo>>> getBcySearchPictures(
             @Query("searchTag") String searchTag,
             @Query("pageCount") Integer pageCount,
@@ -86,11 +87,37 @@ public interface RetrofitInfoService {
      * @param pageSize 每页显示的条数
      * @return
      */
+    @GET("albuminfo/")
     Call<ResultVO<List<AlbumInfo>>> getBcySearchAlbums(
             @Query("searchTag") String searchTag,
             @Query("pageCount") Integer pageCount,
             @Query("pageSize") Integer pageSize
     );
+
+    /**
+     * 获取 BcyCoser 随机推荐结果
+     * @param pageSize
+     * @return
+     */
+    @GET("coserinfo/")
+    Call<ResultVO<List<CoserInfo>>> getBcyRandomCosers(
+            @Query("pageSize") Integer pageSize
+    );
+
+    /**
+     * 获取 BcyCoser 查询结果
+     * @param searchTag 查询的条件
+     * @param pageCount 结果页数
+     * @param pageSize 每页显示的条数
+     * @return
+     */
+    @GET("coserinfo/")
+    Call<ResultVO<List<CoserInfo>>> getBcySearchCosers(
+            @Query("searchTag") String searchTag,
+            @Query("pageCount") Integer pageCount,
+            @Query("pageSize") Integer pageSize
+    );
+
 
     /**
      * Bcy 相册查找

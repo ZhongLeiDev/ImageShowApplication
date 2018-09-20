@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity{
         mViewPager.setAdapter(mFragmentAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setTabsFromPagerAdapter(mFragmentAdapter);
+//        mTabLayout.setTabsFromPagerAdapter(mFragmentAdapter);
 
     }
 

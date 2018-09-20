@@ -1,5 +1,6 @@
 package com.example.zl.commoncomponent;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -50,6 +51,14 @@ public class SimpleToolBar extends Toolbar {
         mTxtLeftTitle = findViewById(R.id.txt_left_title);
         mTxtMiddleTitle = findViewById(R.id.txt_main_title);
         mTxtRightTitle = findViewById(R.id.txt_right_title);
+
+        setLeftTitleClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((Activity)getContext()).finish();  //实现返回键功能
+            }
+        });
+
     }
 
 

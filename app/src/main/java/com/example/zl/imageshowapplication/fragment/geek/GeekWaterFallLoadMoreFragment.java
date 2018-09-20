@@ -1,8 +1,6 @@
 package com.example.zl.imageshowapplication.fragment.geek;
 
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -16,13 +14,11 @@ import com.example.zl.imageshowapplication.adapter.geek.GeekWaterFallLoadMoreAda
 import com.example.zl.imageshowapplication.base.BaseFragment;
 import com.example.zl.imageshowapplication.bean.geek.GeekImgBean;
 import com.example.zl.imageshowapplication.bean.geek.GeekResult;
-import com.example.zl.imageshowapplication.broadcast.NetBroadCast;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.message.BaseMessage;
 import com.example.zl.imageshowapplication.message.MsgEnums;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
-import com.example.zl.imageshowapplication.myinterface.GeekLoadMoreScrollListener;
-import com.example.zl.imageshowapplication.myinterface.MsgNotifyReceiver;
+import com.example.zl.imageshowapplication.myinterface.listenerinstance.GeekLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
