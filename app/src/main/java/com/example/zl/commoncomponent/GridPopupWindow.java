@@ -82,7 +82,7 @@ public class GridPopupWindow {
 
         popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-
+        popupWindow.setAnimationStyle(R.style.popupwindow_anim);
         popupWindow.setTouchable(true);
 
 

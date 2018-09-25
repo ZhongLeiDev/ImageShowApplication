@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ import com.example.zl.imageshowapplication.base.BasePictureInfoFragment;
 import com.example.zl.imageshowapplication.fragment.bcy.BcyWorksWaterFallLoadMoreFragment;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallFragment;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallLoadMoreFragment;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ import butterknife.ButterKnife;
 /**
  * 入口 Activity
  */
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener{
 
     private DrawerLayout mDrawerLayout;
     private FragmentAdapter mFragmentAdapter;
@@ -97,6 +99,15 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        /*Activity退出后清除缓存*/
+        ImageLoader.getInstance().clearDiskCache();
+        ImageLoader.getInstance().clearMemoryCache();
+        Log.i("MainActivity", "OnDestroy...");
+    }
+
     private void initSearchView() {
         mEditTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -108,25 +119,7 @@ public class MainActivity extends AppCompatActivity{
                 return false;
             }
         });
-        mEditTextSearch.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_UP:
-                        /*extView.setCompoundDrawables(Drawable left, Drawable top, Drawable right, Drawable bottom)*/
-                        Drawable drawableRight = mEditTextSearch.getCompoundDrawables()[2];
-                        if (drawableRight != null
-                                && event.getRawX() <= (mEditTextSearch.getRight() + drawableRight.getBounds().width())
-                                && mEditTextSearch.getText().toString().length()!=0) {
-                            startSearchActivity(mEditTextSearch.getText().toString());
-                            return true;
-                        }
-                        break;
-                }
-                return false;
-            }
-        });
+        mEditTextSearch.setOnTouchListener(this);
 
     }
 
@@ -193,5 +186,23 @@ public class MainActivity extends AppCompatActivity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_UP:
+                /*extView.setCompoundDrawables(Drawable left, Drawable top, Drawable right, Drawable bottom)*/
+                Drawable drawableRight = mEditTextSearch.getCompoundDrawables()[2];
+                if (drawableRight != null
+                        && event.getRawX() <= (mEditTextSearch.getRight() + drawableRight.getBounds().width())
+                        && mEditTextSearch.getText().toString().length()!=0) {
+                    startSearchActivity(mEditTextSearch.getText().toString());
+                    v.performClick();
+                    return true;
+                }
+                break;
+        }
+        return false;
     }
 }
