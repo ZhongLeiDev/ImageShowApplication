@@ -164,7 +164,7 @@ public class RandomSinglePictureShowActivity extends AppCompatActivity {
                         break;
                 }
 
-                popupWindow.popupDismiss();
+//                popupWindow.popupDismiss();
 
             }
         });
