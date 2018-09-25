@@ -5,4 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="btnwhite1">#FFFFFF</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="pop_cancel_color">#e85844</color>
 </resources>

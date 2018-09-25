@@ -1,5 +1,6 @@
 package com.example.zl.imageshowapplication.activity.searchresult;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import com.example.zl.enums.AlbumFragmentType;
 import com.example.zl.enums.AuthorFragmentType;
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.commoncomponent.SimpleToolBar;
+import com.example.zl.imageshowapplication.activity.RandomSinglePictureShowActivity;
 import com.example.zl.imageshowapplication.adapter.common.FragmentAdapter;
 import com.example.zl.imageshowapplication.base.BaseAlbumInfoFragment;
 import com.example.zl.imageshowapplication.base.BaseCoserInfoFragment;
@@ -67,7 +69,7 @@ public class SearchResultActivity extends AppCompatActivity {
         mToolBar.setRightTitleClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(SearchResultActivity.this, RandomSinglePictureShowActivity.class));
             }
         });
 

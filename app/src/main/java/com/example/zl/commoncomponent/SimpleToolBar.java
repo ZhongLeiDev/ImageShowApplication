@@ -61,6 +61,14 @@ public class SimpleToolBar extends Toolbar {
 
     }
 
+    /**
+     * 获取右侧 TextView,用于自定义
+     * @return
+     */
+    public TextView getmTxtRightTitle() {
+        return mTxtRightTitle;
+    }
+
 
     //设置中间title的内容
     public void setMainTitle(String text) {
@@ -117,6 +125,25 @@ public class SimpleToolBar extends Toolbar {
     //设置title右边点击事件
     public void setRightTitleClickListener(OnClickListener onClickListener){
         mTxtRightTitle.setOnClickListener(onClickListener);
+    }
+
+    /**
+     * 为右方标题设置图标
+     * @param left 标题左方图标
+     * @param top 标题上方图标
+     * @param right 标题右方图标
+     * @param bottom 标题下方图标
+     */
+    public void setRightTitleDrawables(Drawable left, Drawable top, Drawable right, Drawable bottom) {
+        mTxtRightTitle.setCompoundDrawables(left, top, right, bottom);
+    }
+
+    /**
+     * 为右方标题设置触摸监听器
+     * @param onTouchListener 监听器实例
+     */
+    public void setRightTitleOnTouchListener(OnTouchListener onTouchListener) {
+        mTxtRightTitle.setOnTouchListener(onTouchListener);
     }
 
 }

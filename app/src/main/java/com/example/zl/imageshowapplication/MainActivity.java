@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         mEditTextSearch.setOnTouchListener(new View.OnTouchListener() {
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -121,12 +122,12 @@ public class MainActivity extends AppCompatActivity{
                             startSearchActivity(mEditTextSearch.getText().toString());
                             return true;
                         }
-
                         break;
                 }
                 return false;
             }
         });
+
     }
 
     /**

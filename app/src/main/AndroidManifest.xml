@@ -45,6 +45,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.BcyAlbumsListActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.RandomSinglePictureShowActivity"
+            android:screenOrientation="portrait"/>
         <service android:name="com.example.zl.service.NetworkStatusService"/>
     </application>
 
