@@ -5,6 +5,8 @@ import com.example.zl.imageshowapplication.bean.bcy.retro.CoserInfo;
 import com.example.zl.imageshowapplication.bean.bcy.retro.PictureInfo;
 import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.bean.geek.GeekResult;
+import com.example.zl.imageshowapplication.bean.huaban.devided.DevidedJsonRootBean;
+import com.example.zl.imageshowapplication.bean.huaban.search.SearchJsonRootBean;
 
 import java.util.List;
 
@@ -133,5 +135,80 @@ public interface RetrofitInfoService {
             @Query("pageSize") String pageSize
     );
 
+    /**
+     * HuaBan Anim 推荐
+     * @param limit 数量限制
+     * @return
+     */
+    @GET("favorite%2Fanime")
+    Observable<DevidedJsonRootBean> getAnimFromHuaBanWithRx(
+            @Query("limit") int limit
+    );
+
+    /**
+     * HuaBan Quotes 推荐
+     * @param limit 数量限制
+     * @return
+     */
+    @GET("favorite%2Fquotes")
+    Observable<DevidedJsonRootBean> getQuotesFromHuaBanWithRx(
+            @Query("limit") int limit
+    );
+
+    /**
+     * HuaBan Photography 推荐
+     * @param limit 数量限制
+     * @return
+     */
+    @GET("favorite%2Fphotography")
+    Observable<DevidedJsonRootBean> getPhotographyFromHuaBanWithRx(
+            @Query("limit") int limit
+    );
+
+    /**
+     * HuaBan TravelPlaces 推荐
+     * @param limit 数量限制
+     * @return
+     */
+    @GET("favorite%2Ftravel_places")
+    Observable<DevidedJsonRootBean> getTravelplacesFromHuaBanWithRx(
+            @Query("limit") int limit
+    );
+
+    /**
+     * HuaBan Beauty 推荐
+     * @param limit 数量限制
+     * @return
+     */
+    @GET("favorite%2Fbeauty")
+    Observable<DevidedJsonRootBean> getBeautyFromHuaBanWithRx(
+            @Query("limit") int limit
+    );
+
+    /**
+     * HuaBan Illustration 推荐
+     * @param limit 数量限制
+     * @return
+     */
+    @GET("favorite%2Fillustration")
+    Observable<DevidedJsonRootBean> getIllustrationFromHuaBanWithRx(
+            @Query("limit") int limit
+    );
+
+    /**
+     * HuaBan 关键词查询结果
+     * @param keyWord 查询关键词
+     * @param pageSize 每页的结果条数
+     * @param pageCount 查询第几页的结果
+     * @param sortType 排序方式
+     * @return
+     */
+    @GET("search")
+    Observable<SearchJsonRootBean> getSearchResultFromHuaBanWithRx(
+            @Query("q") String keyWord,
+            @Query("per_page") int pageSize,
+            @Query("page") int pageCount,
+            @Query("sort") String sortType
+    );
 
 }

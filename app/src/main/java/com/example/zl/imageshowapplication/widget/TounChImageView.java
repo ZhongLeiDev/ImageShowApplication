@@ -330,7 +330,7 @@ public class TounChImageView extends android.support.v7.widget.AppCompatImageVie
         }
 
         /**
-         * Set zoom to the specified scale. Image will be centered by default.
+         * Set zoom to the specified scale. SearchImage will be centered by default.
          * @param scale
          */
         public void setZoom(float scale) {
@@ -338,7 +338,7 @@ public class TounChImageView extends android.support.v7.widget.AppCompatImageVie
         }
 
         /**
-         * Set zoom to the specified scale. Image will be centered around the point
+         * Set zoom to the specified scale. SearchImage will be centered around the point
          * (focusX, focusY). These floats range from 0 to 1 and denote the focus point
          * as a fraction from the left and top of the view. For example, the top left
          * corner of the image would be (0, 0). And the bottom right corner would be (1, 1).
@@ -351,7 +351,7 @@ public class TounChImageView extends android.support.v7.widget.AppCompatImageVie
         }
 
         /**
-         * Set zoom to the specified scale. Image will be centered around the point
+         * Set zoom to the specified scale. SearchImage will be centered around the point
          * (focusX, focusY). These floats range from 0 to 1 and denote the focus point
          * as a fraction from the left and top of the view. For example, the top left
          * corner of the image would be (0, 0). And the bottom right corner would be (1, 1).
@@ -844,7 +844,7 @@ public class TounChImageView extends android.support.v7.widget.AppCompatImageVie
                 setImageMatrix(matrix);
 
                 //
-                // User-defined OnTouchListener
+                // DevidedUser-defined OnTouchListener
                 //
                 if(userTouchListener != null) {
                     userTouchListener.onTouch(v, event);

@@ -26,10 +26,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.zl.enums.AlbumFragmentType;
+import com.example.zl.enums.HuaBanFragmentType;
 import com.example.zl.enums.PictureFragmentType;
 import com.example.zl.imageshowapplication.activity.searchresult.SearchResultActivity;
 import com.example.zl.imageshowapplication.adapter.common.FragmentAdapter;
 import com.example.zl.imageshowapplication.base.BaseAlbumInfoFragment;
+import com.example.zl.imageshowapplication.base.BaseHuaBanImageFragment;
 import com.example.zl.imageshowapplication.base.BasePictureInfoFragment;
 import com.example.zl.imageshowapplication.fragment.bcy.BcyWorksWaterFallLoadMoreFragment;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallFragment;
@@ -140,12 +142,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         listStr.add("主页");
         listStr.add("Geek");
         listStr.add("Works");
-        listStr.add("Pivix");
+        listStr.add("HuaBan1");
+        listStr.add("HuaBan2");
+        listStr.add("HuaBan3");
 
         mTabLayout.addTab(mTabLayout.newTab().setTag(listStr.get(0)));
         mTabLayout.addTab(mTabLayout.newTab().setTag(listStr.get(1)));
         mTabLayout.addTab(mTabLayout.newTab().setTag(listStr.get(2)));
         mTabLayout.addTab(mTabLayout.newTab().setTag(listStr.get(3)));
+        mTabLayout.addTab(mTabLayout.newTab().setTag(listStr.get(4)));
+        mTabLayout.addTab(mTabLayout.newTab().setTag(listStr.get(5)));
 
         List<Fragment> fragments = new ArrayList<Fragment>();
 //        fragments.add(new BcyPicturesWaterFallLoadMoreFragment());
@@ -153,7 +159,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         fragments.add(new GeekWaterFallLoadMoreFragment());
 //        fragments.add(new BcyWorksWaterFallLoadMoreFragment());
         fragments.add(BaseAlbumInfoFragment.newInstance(AlbumFragmentType.ALBUM_FRAGMENT_RANDOM,"empty"));
-        fragments.add(new GeekWaterFallFragment());
+        fragments.add(BaseHuaBanImageFragment.newInstance(HuaBanFragmentType.HUABAN_FRAGMENT_ILLUSTRATION,"empty"));
+        fragments.add(BaseHuaBanImageFragment.newInstance(HuaBanFragmentType.HUABAN_FRAGMENT_ANIM,"empty"));
+        fragments.add(BaseHuaBanImageFragment.newInstance(HuaBanFragmentType.HUABAN_FRAGMENT_BEAUTY,"empty"));
 
         mFragmentAdapter = new FragmentAdapter(
                 getSupportFragmentManager(), fragments,listStr);

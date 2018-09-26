@@ -10,6 +10,7 @@ import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 import okhttp3.TlsVersion;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -21,14 +22,18 @@ public class RetrofitFactory {
 
     /** Geek 访问 URL */
     private static final String GEEK_REQUEST_URL = "https://gank.io/api/";
-    /**Bcy访问URL*/
+    /** Bcy 访问 URL*/
     private static final String BCY_REQUEST_URL = "http://112.74.42.204:8080/coser/";
+    /** HuaBan 访问 URL*/
+    private static final String HUABAN_REQUEST_URL = "http://api.huaban.com/";
 
     private static RetrofitInfoService infoService;
     /** Geek 使用的 Retrofit 实例*/
     private static Retrofit geekRetrofit;
-    /**Bcy 使用的 Retrofit 实例*/
+    /** Bcy 使用的 Retrofit 实例*/
     private static Retrofit bcyRetrofit;
+    /** HuaBan 使用的 Retrofit 实例*/
+    private static Retrofit huabanRetrofit;
 
     /**
      * 获取 GeekRetrofitInfoService 单例
@@ -68,6 +73,28 @@ public class RetrofitFactory {
                     .build();
         }
         infoService = bcyRetrofit.create(RetrofitInfoService.class);
+        return infoService;
+    }
+
+    /**
+     * 获取 HuaBanRetrofitInfoService 单例
+     * @return
+     */
+    public static RetrofitInfoService getHuaBanRetroSingleInstance() {
+        if (huabanRetrofit == null) {
+            huabanRetrofit = new Retrofit.Builder()
+
+                    .client(new OkHttpClient())
+
+                    .baseUrl(HUABAN_REQUEST_URL)
+
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) //添加对 RxJava 的支持
+
+                    .addConverterFactory(GsonConverterFactory.create())
+
+                    .build();
+        }
+        infoService = huabanRetrofit.create(RetrofitInfoService.class);
         return infoService;
     }
 

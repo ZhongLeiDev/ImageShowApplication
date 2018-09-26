@@ -11,6 +11,7 @@ import java.nio.file.Files;
 
 /**
  * Created by ZhongLeiDev on 2018/6/11.
+ * 图片下载工具
  */
 
 public class FileDownloadUtil {

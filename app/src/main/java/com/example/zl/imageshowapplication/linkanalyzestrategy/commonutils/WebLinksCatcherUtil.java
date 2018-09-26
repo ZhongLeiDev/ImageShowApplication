@@ -67,7 +67,7 @@ public class WebLinksCatcherUtil {
 //            conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
 //            conn.setRequestProperty("(Request-Line)", "GET /coser/detail/22300/1306028 HTTP/1.1");
 //            conn.setRequestProperty("Host", "bcy.net");
-//            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0");
+//            conn.setRequestProperty("DevidedUser-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0");
 //            conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 //            conn.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3");
 //            conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
@@ -102,7 +102,7 @@ public class WebLinksCatcherUtil {
         HttpsURLConnection conn = (HttpsURLConnection) console.openConnection();
         conn.setSSLSocketFactory(sc.getSocketFactory());
         conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
-        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0");
+        conn.setRequestProperty("DevidedUser-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0");
         conn.setDoInput(true);
         conn.setConnectTimeout(40000);
         conn.setReadTimeout(40000);
@@ -129,7 +129,7 @@ public class WebLinksCatcherUtil {
     private static byte[] httpGetByteWithoutSSL(String url) throws IOException {
         URL console = new URL(url);
         HttpURLConnection conn = (HttpURLConnection) console.openConnection();
-        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0");
+        conn.setRequestProperty("DevidedUser-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0");
         conn.setDoInput(true);
         conn.setConnectTimeout(40000);
         conn.setReadTimeout(40000);

@@ -8,7 +8,7 @@ import com.example.zl.imageshowapplication.adapter.geek.GeekWaterFallLoadMoreAda
 
 /**
  * Created by ZhongLeiDev on 2018/5/17.
- *  StaggeredGridLayoutManager 滚动监听器，用于判断是否滚动到最后
+ * StaggeredGridLayoutManager 滚动监听器，用于判断是否滚动到最后
  */
 public class BcyPicturesLoadMoreScrollListener extends RecyclerView.OnScrollListener {
 
