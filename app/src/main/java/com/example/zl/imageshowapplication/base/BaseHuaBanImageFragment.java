@@ -1,7 +1,6 @@
 package com.example.zl.imageshowapplication.base;
 
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -12,12 +11,10 @@ import com.example.zl.enums.HuaBanFragmentType;
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.adapter.huaban.HuaBanImageWaterFallLoadMoreAdapter;
 import com.example.zl.imageshowapplication.bean.huaban.transobj.HBImageBean;
-import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.message.BaseMessage;
 import com.example.zl.imageshowapplication.message.MsgEnums;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
-import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
 import com.example.zl.imageshowapplication.myinterface.listenerinstance.HuaBanLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
 import com.example.zl.mvp.huaban.presenter.HuaBanPresenter;

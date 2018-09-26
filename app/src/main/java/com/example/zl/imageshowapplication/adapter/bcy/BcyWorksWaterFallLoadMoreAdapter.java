@@ -57,7 +57,7 @@ public class BcyWorksWaterFallLoadMoreAdapter extends RecyclerView.Adapter<BcyWo
             //随机的获取一个范围为200-600直接的高度
 //            mHeights.add((int)(300+ Math.random()*400));
             //对于相册，将高度设置为固定值500,
-            mHeights.add(500);
+            mHeights.add(800);
         }
     }
 
