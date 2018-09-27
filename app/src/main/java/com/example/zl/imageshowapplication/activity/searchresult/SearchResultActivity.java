@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by ZhongLeiDev on 2018/9/18.
- * 搜索结果显示Activity
+ * BCY 搜索结果显示 Activity
  */
 
 public class SearchResultActivity extends AppCompatActivity {

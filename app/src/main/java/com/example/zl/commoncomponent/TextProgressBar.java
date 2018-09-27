@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 
 /**
  * Created by ZhongLeiDev on 2018/6/11.
+ * 自定义带文字说明的进度条
  */
 
 public class TextProgressBar extends ProgressBar {

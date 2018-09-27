@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.example.zl.enums.AlbumFragmentType;
 import com.example.zl.enums.HuaBanFragmentType;
 import com.example.zl.enums.PictureFragmentType;
+import com.example.zl.imageshowapplication.activity.searchresult.HuaBanSearchResultActivity;
 import com.example.zl.imageshowapplication.activity.searchresult.SearchResultActivity;
 import com.example.zl.imageshowapplication.adapter.common.FragmentAdapter;
 import com.example.zl.imageshowapplication.base.BaseAlbumInfoFragment;
@@ -126,12 +127,23 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     /**
-     * 开启搜索Activity
+     * 开启 BCY 搜索 Activity
      * @param searchTag 查询条件
      */
     private void startSearchActivity(String searchTag) {
         Intent intent = new Intent();
         intent.setClass(MainActivity.this, SearchResultActivity.class);
+        intent.putExtra("data", (Serializable)searchTag);
+        startActivity(intent);
+    }
+
+    /**
+     * 开启 HuaBan 搜索 Activity
+     * @param searchTag 查询条件
+     */
+    private void startHuaBanSearchActivity(String searchTag) {
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, HuaBanSearchResultActivity.class);
         intent.putExtra("data", (Serializable)searchTag);
         startActivity(intent);
     }
@@ -205,7 +217,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (drawableRight != null
                         && event.getRawX() <= (mEditTextSearch.getRight() + drawableRight.getBounds().width())
                         && mEditTextSearch.getText().toString().length()!=0) {
-                    startSearchActivity(mEditTextSearch.getText().toString());
+                    if (mTabLayout.getSelectedTabPosition()<3) {
+                        startSearchActivity(mEditTextSearch.getText().toString());
+                    } else {
+                        startHuaBanSearchActivity(mEditTextSearch.getText().toString());
+                    }
                     v.performClick();
                     return true;
                 }

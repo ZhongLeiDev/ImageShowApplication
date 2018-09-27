@@ -15,6 +15,7 @@ import com.example.zl.imageshowapplication.R;
 
 /**
  * Created by Administrator on 2018/4/11.
+ * 自定义 layout
  */
 
 public class ImageTextLinearLayout extends LinearLayout {
@@ -26,8 +27,8 @@ public class ImageTextLinearLayout extends LinearLayout {
         super(context, attrs);
 
         LayoutInflater.from(context).inflate(R.layout.imagetextlinearlayout, this, true);
-        imageView = (ImageView)findViewById(R.id.cpimageView);
-        textView = (TextView)findViewById(R.id.cptextView);
+        imageView = findViewById(R.id.cpimageView);
+        textView = findViewById(R.id.cptextView);
 
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.ImageTextLinearLayout);
         if (attributes != null) {

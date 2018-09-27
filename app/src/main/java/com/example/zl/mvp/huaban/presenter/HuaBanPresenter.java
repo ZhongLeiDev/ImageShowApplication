@@ -66,7 +66,7 @@ public class HuaBanPresenter {
                         public HBImageBean call(SearchPins searchPins) {
                             HBImageBean bean = new HBImageBean();
                             bean.setBoard_id(searchPins.getBoard_id());
-                            bean.setUrl("http://img.hb.aicdn.com/" + searchPins.getFile().getKey() + ".jpg");
+                            bean.setUrl("http://img.hb.aicdn.com/" + searchPins.getFile().getKey());
                             bean.setTheme(searchPins.getFile().getTheme());
                             bean.setHeight(searchPins.getFile().getHeight());
                             bean.setWidth(searchPins.getFile().getWidth());

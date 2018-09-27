@@ -1,7 +1,7 @@
 package com.example.zl.imageshowapplication.base;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -10,14 +10,13 @@ import android.widget.Toast;
 
 import com.example.zl.enums.HuaBanFragmentType;
 import com.example.zl.imageshowapplication.R;
+import com.example.zl.imageshowapplication.activity.HuaBanSingleImgShowActivity;
 import com.example.zl.imageshowapplication.adapter.huaban.HuaBanImageWaterFallLoadMoreAdapter;
 import com.example.zl.imageshowapplication.bean.huaban.transobj.HBImageBean;
-import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.message.BaseMessage;
 import com.example.zl.imageshowapplication.message.MsgEnums;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
-import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
 import com.example.zl.imageshowapplication.myinterface.listenerinstance.HuaBanLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
 import com.example.zl.mvp.huaban.presenter.HuaBanPresenter;
@@ -25,6 +24,8 @@ import com.example.zl.mvp.huaban.view.HuanBanView;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
+
+import java.io.Serializable;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -127,7 +128,11 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
         mAdapter.setOnMyItemClickListener(new OnMyItemClickListener() {
             @Override
             public void myClick(View v, int pos) {
-                Toast.makeText(getActivity(), mAdapter.getList().get(pos).getTheme(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), mAdapter.getList().get(pos).getTheme(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), HuaBanSingleImgShowActivity.class);
+                intent.putExtra("data", (Serializable)mAdapter.getList().get(pos));
+                startActivity(intent);
             }
 
             @Override

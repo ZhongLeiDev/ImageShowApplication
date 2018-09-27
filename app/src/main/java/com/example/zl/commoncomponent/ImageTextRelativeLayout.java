@@ -14,6 +14,7 @@ import com.example.zl.imageshowapplication.R;
 
 /**
  * Created by Administrator on 2018/4/11.
+ * 自定义 layout
  */
 
 public class ImageTextRelativeLayout extends RelativeLayout {
@@ -33,8 +34,8 @@ public class ImageTextRelativeLayout extends RelativeLayout {
         super(context, attrs);
 
         LayoutInflater.from(context).inflate(R.layout.imagetextrelativelayout, this, true);
-        imageView = (ImageView)findViewById(R.id.cpimageView2);
-        textView = (TextView)findViewById(R.id.cptextView2);
+        imageView = findViewById(R.id.cpimageView2);
+        textView = findViewById(R.id.cptextView2);
 
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.ImageTextRelativeLayout);
         if (attributes != null) {
