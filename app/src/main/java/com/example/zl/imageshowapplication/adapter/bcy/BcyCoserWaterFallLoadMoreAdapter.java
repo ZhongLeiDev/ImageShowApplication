@@ -56,7 +56,7 @@ public class BcyCoserWaterFallLoadMoreAdapter extends RecyclerView.Adapter<BcyCo
         }
         for(int i=0; i < mList.size();i++){
             //对于CoserInfo，将高度设置为固定值250,
-            mHeights.add(250);
+            mHeights.add(450);
         }
     }
 
