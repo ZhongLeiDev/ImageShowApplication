@@ -22,10 +22,8 @@ import com.example.zl.imageshowapplication.utils.NetWorkUtil;
 import com.example.zl.mvp.huaban.presenter.HuaBanPresenter;
 import com.example.zl.mvp.huaban.view.HuanBanView;
 
-import org.simple.eventbus.EventBus;
-import org.simple.eventbus.Subscriber;
-
-import java.io.Serializable;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -90,6 +88,7 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
 
     @Override
     public void loadMoreData() {
+        Log.i(TAG,"Start Load More ... ！");
         if (isNetWorkConnected) {
             currentpage ++;//查询下一页
             requestData(searchTag, currentpage);
@@ -131,7 +130,7 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
 //                Toast.makeText(getActivity(), mAdapter.getList().get(pos).getTheme(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), HuaBanSingleImgShowActivity.class);
-                intent.putExtra("data", (Serializable)mAdapter.getList().get(pos));
+                intent.putExtra("data", mAdapter.getList().get(pos));
                 startActivity(intent);
             }
 
@@ -157,8 +156,8 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
         EventBus.getDefault().unregister(this);
     }
 
-    @Subscriber(tag = "net_status")
-    private void updateNetStatusWithTag(BaseMessage msg) {  //处理 EventBus 传输过来的事件
+    @Subscribe(sticky = true)   // sticky = true,设置粘性事件,后注册的接收器也能够接收到注册之前的最后一个事件
+    public void updateNetStatusWithTag(BaseMessage msg) {  //处理 EventBus 传输过来的事件
         Log.i(TAG, "NetWorkStatusChanged!msg = " + msg.getExtramsg());
         if (msg.getMsg() == MsgEnums.NET_WIFI_CONNECTED || msg.getMsg() == MsgEnums.NET_MOBILE_CONNECTED) {
             isNetWorkConnected = true;

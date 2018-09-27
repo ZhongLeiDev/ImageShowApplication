@@ -1,11 +1,13 @@
 package com.example.zl.imageshowapplication.bean.huaban.transobj;
 
+import java.io.Serializable;
+
 /**
  * Created by ZhongLeiDev on 2018/9/26.
- * HuaBan image 转换类
+ * HuaBan image 转换类(可序列化)
  */
 
-public class HBImageBean {
+public class HBImageBean implements Serializable{
 
     private long board_id;
     private String url;

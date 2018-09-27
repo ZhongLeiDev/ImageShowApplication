@@ -1,7 +1,9 @@
 package com.example.zl.imageshowapplication.myinterface.listenerinstance;
 
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 
 import com.example.zl.imageshowapplication.adapter.huaban.HuaBanImageWaterFallLoadMoreAdapter;
 
@@ -16,21 +18,38 @@ public class HuaBanLoadMoreScrollListener extends RecyclerView.OnScrollListener{
 
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-        StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
-        HuaBanImageWaterFallLoadMoreAdapter adapter = (HuaBanImageWaterFallLoadMoreAdapter) recyclerView.getAdapter();
+        final StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
+        final HuaBanImageWaterFallLoadMoreAdapter adapter = (HuaBanImageWaterFallLoadMoreAdapter) recyclerView.getAdapter();
 
         // 当不滚动时
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-            //获取最后一个完全显示的ItemPosition
-            int[] lastVisiblePositions = manager.findLastVisibleItemPositions(new int[manager.getSpanCount()]);
-            int lastVisiblePos = getMaxElem(lastVisiblePositions);
-            int totalItemCount = manager.getItemCount();
 
-            // 判断是否滚动到底部
-            if (lastVisiblePos == (totalItemCount -1) && isSlidingToLast) {
-                //加载更多功能的代码
-                adapter.loadMore();
-            }
+            handle(manager,adapter);
+
+        }
+    }
+
+    /**
+     * 滚动处理方法
+     * @param manager
+     * @param adapter
+     */
+    private void handle(StaggeredGridLayoutManager manager, HuaBanImageWaterFallLoadMoreAdapter adapter) {
+        //获取最后一个完全显示的ItemPosition
+        int[] lastVisiblePositions = manager.findLastVisibleItemPositions(new int[manager.getSpanCount()]);
+        int lastVisiblePos = getMaxElem(lastVisiblePositions);
+        int totalItemCount = manager.getItemCount();
+
+        Log.i("HuaBanloadMoreListener", "spanCount->" + manager.getSpanCount() +
+                ", lastPos->" + lastVisiblePos +
+                ", totalItemCount->" + totalItemCount +
+                ", slidingToLast->" + isSlidingToLast);
+
+        // 判断是否滚动到底部,[totalItemCount-3]这个值是经验值,因为最后的可见元素位置编号与元素总数量一般
+        //都是不一样的
+        if (lastVisiblePos  >= (totalItemCount - 3) && isSlidingToLast) {
+            //加载更多功能的代码
+            adapter.loadMore();
         }
     }
 

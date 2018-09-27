@@ -33,6 +33,7 @@ public class MainApplication extends Application {
         startService(new Intent(getApplicationContext(), NetworkStatusService.class));
     }
 
+
     /**
      *
      * 开源Imageloder的全局配置

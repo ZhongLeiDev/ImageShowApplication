@@ -23,8 +23,8 @@ import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
 
-import org.simple.eventbus.EventBus;
-import org.simple.eventbus.Subscriber;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.Serializable;
 import java.util.List;
@@ -105,8 +105,8 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
         EventBus.getDefault().unregister(this);
     }
 
-    @Subscriber(tag = "net_status")
-    private void updateNetStatusWithTag(BaseMessage msg) {  //处理 EventBus 传输过来的事件
+    @Subscribe(sticky = true)
+    public void updateNetStatusWithTag(BaseMessage msg) {  //处理 EventBus 传输过来的事件
         Log.i(TAG, "NetWorkStatusChanged!msg = " + msg.getExtramsg());
         if (msg.getMsg() == MsgEnums.NET_WIFI_CONNECTED || msg.getMsg() == MsgEnums.NET_MOBILE_CONNECTED) {
             isNetWorkConnected = true;

@@ -29,7 +29,7 @@ public class SearchColors {
 
     @Override
     public String toString() {
-        return "DevidedColors{" +
+        return "SearchColors{" +
                 "color=" + color +
                 ", ratio=" + ratio +
                 '}';

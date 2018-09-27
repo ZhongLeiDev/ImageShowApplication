@@ -94,7 +94,7 @@ public class SearchJsonRootBean {
 
     @Override
     public String toString() {
-        return "DevidedJsonRootBean{" +
+        return "SearchJsonRootBean{" +
                 "query=" + query +
                 ", pin_count=" + pin_count +
                 ", board_count=" + board_count +

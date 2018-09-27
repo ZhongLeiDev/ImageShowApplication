@@ -16,7 +16,7 @@ public class SearchUser {
     private String urlname;
     private long created_at;
     private SearchAvatar avatar;
-    private String extra;
+    private Search_user_extra extra;
     public void setUser_id(long user_id) {
          this.user_id = user_id;
      }
@@ -52,16 +52,16 @@ public class SearchUser {
          return avatar;
      }
 
-    public void setExtra(String extra) {
+    public void setExtra(Search_user_extra extra) {
          this.extra = extra;
      }
-     public String getExtra() {
+     public Search_user_extra getExtra() {
          return extra;
      }
 
     @Override
     public String toString() {
-        return "DevidedUser{" +
+        return "SearchUser{" +
                 "user_id=" + user_id +
                 ", username='" + username + '\'' +
                 ", urlname='" + urlname + '\'' +

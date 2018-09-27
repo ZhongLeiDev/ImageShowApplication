@@ -7,18 +7,17 @@ import android.net.ConnectivityManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.example.zl.imageshowapplication.broadcast.NetBroadCast;
 import com.example.zl.imageshowapplication.message.BaseMessage;
 import com.example.zl.imageshowapplication.message.MsgEnums;
 import com.example.zl.imageshowapplication.message.MsgType;
 import com.example.zl.imageshowapplication.myinterface.MsgNotifyReceiver;
 
-import org.simple.eventbus.EventBus;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by ZhongLeiDev on 2018/9/18.
+ * 网络状态监听服务
  */
 
 public class NetworkStatusService extends Service implements MsgNotifyReceiver{
@@ -56,15 +55,15 @@ public class NetworkStatusService extends Service implements MsgNotifyReceiver{
                 switch (msg.getMsg()) {
                     case NET_WIFI_CONNECTED:    //wifi连接
                         Log.i("NetWorkService","NET_WIFI_CONNECTED！");
-                        EventBus.getDefault().post(new BaseMessage(MsgType.NET, MsgEnums.NET_WIFI_CONNECTED, "WiFi已连接！"), "net_status");
+                        EventBus.getDefault().postSticky(new BaseMessage(MsgType.NET, MsgEnums.NET_WIFI_CONNECTED, "WiFi已连接！"));
                         break;
                     case NET_MOBILE_CONNECTED:  //移动网络连接
                         Log.i("NetWorkService","NET_MOBILE_CONNECTED！");
-                        EventBus.getDefault().post(new BaseMessage(MsgType.NET, MsgEnums.NET_MOBILE_CONNECTED, "已连接移动网络，注意流量使用！"), "net_status");
+                        EventBus.getDefault().postSticky(new BaseMessage(MsgType.NET, MsgEnums.NET_MOBILE_CONNECTED, "已连接移动网络，注意流量使用！"));
                         break;
                     case NET_DISCONNECTED:  //网络断开
                         Log.i("NetWorkService","NET_DISCONNECTED！");
-                        EventBus.getDefault().post(new BaseMessage(MsgType.NET, MsgEnums.NET_DISCONNECTED, "网络已断开！"), "net_status");
+                        EventBus.getDefault().postSticky(new BaseMessage(MsgType.NET, MsgEnums.NET_DISCONNECTED, "网络已断开！"));
                         break;
                 }
                 break;

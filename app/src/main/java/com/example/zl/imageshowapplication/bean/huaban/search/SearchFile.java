@@ -94,7 +94,7 @@ public class SearchFile {
 
     @Override
     public String toString() {
-        return "DevidedFile{" +
+        return "SearchFile{" +
                 "id=" + id +
                 ", farm='" + farm + '\'' +
                 ", bucket='" + bucket + '\'' +

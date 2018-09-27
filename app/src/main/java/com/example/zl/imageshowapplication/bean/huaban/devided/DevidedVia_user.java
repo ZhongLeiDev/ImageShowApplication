@@ -16,7 +16,7 @@ public class DevidedVia_user {
     private String urlname;
     private long created_at;
     private DevidedAvatar avatar;
-    private DevideVia_user_extra extra;
+    private DevidedVia_user_extra extra;
     public void setUser_id(long user_id) {
          this.user_id = user_id;
      }
@@ -52,10 +52,10 @@ public class DevidedVia_user {
          return avatar;
      }
 
-    public void setExtra(DevideVia_user_extra extra) {
+    public void setExtra(DevidedVia_user_extra extra) {
          this.extra = extra;
      }
-     public DevideVia_user_extra getExtra() {
+     public DevidedVia_user_extra getExtra() {
          return extra;
      }
 

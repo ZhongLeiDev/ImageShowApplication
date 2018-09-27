@@ -22,7 +22,7 @@ public class SearchText_meta {
 
     @Override
     public String toString() {
-        return "DevidedText_meta{" +
+        return "SearchText_meta{" +
                 "tags=" + tags +
                 '}';
     }

@@ -125,7 +125,7 @@ public class SearchBoard {
 
     @Override
     public String toString() {
-        return "DevidedBoard{" +
+        return "SearchBoard{" +
                 "board_id=" + board_id +
                 ", user_id=" + user_id +
                 ", title='" + title + '\'' +

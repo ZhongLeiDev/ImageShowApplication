@@ -77,7 +77,7 @@ public class SearchAvatar {
 
     @Override
     public String toString() {
-        return "DevidedAvatar{" +
+        return "SearchAvatar{" +
                 "id=" + id +
                 ", farm='" + farm + '\'' +
                 ", bucket='" + bucket + '\'' +

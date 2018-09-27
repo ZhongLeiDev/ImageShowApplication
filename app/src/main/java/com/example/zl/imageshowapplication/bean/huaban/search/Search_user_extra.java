@@ -1,11 +1,11 @@
-package com.example.zl.imageshowapplication.bean.huaban.devided;
+package com.example.zl.imageshowapplication.bean.huaban.search;
 
 /**
- * Created by ZhongLeiDev on 2018/9/26.
+ * Created by ZhongLeiDev on 2018/9/27.
  * String 2 Class
  */
 
-public class DevideVia_user_extra {
+public class Search_user_extra {
 
     String is_museuser;
 
@@ -17,10 +17,9 @@ public class DevideVia_user_extra {
         this.is_museuser = is_museuser;
     }
 
-
     @Override
     public String toString() {
-        return "DevideVia_user_extra{" +
+        return "Search_user_extra{" +
                 "is_museuser='" + is_museuser + '\'' +
                 '}';
     }
