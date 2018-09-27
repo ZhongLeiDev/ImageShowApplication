@@ -148,7 +148,7 @@ public class BaseCoserInfoFragment extends BaseFragment implements LoadMoreListe
                     System.out.println("LoadMoreCall->" + response.body());
                     if (list.size() > 0) {
                         mAdapter.getCoserInfoList().addAll(list);
-                        mAdapter.getRandomHeight(list);
+//                        mAdapter.getRandomHeight(list);
                         mAdapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(getActivity(), "没有更多内容！", Toast.LENGTH_LONG).show();
@@ -193,7 +193,7 @@ public class BaseCoserInfoFragment extends BaseFragment implements LoadMoreListe
         } else {
             isNetWorkConnected = false;
         }
-        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
     }
 
 }

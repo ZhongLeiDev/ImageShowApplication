@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         customview:default_text_r="@string/default_text"
         customview:default_text_color_r="@color/colorWhite"
-        customview:default_text_size_r="8dp"
+        customview:default_text_size_r="12dp"
         customview:text_visible_r="true"
         customview:default_src_r="@drawable/bg"
         >

@@ -49,15 +49,15 @@ public class BcyPicturesWaterFallLoadMoreAdapter extends RecyclerView.Adapter<Bc
         this.loadmorelistener = loadMoreListener;
     }
 
-    public void getRandomHeight(List<PictureInfo> mList){
-        if (mHeights == null) {
-            mHeights = new ArrayList<>();
-        }
-        for(int i=0; i < mList.size();i++){
-            //随机的获取一个范围为200-600直接的高度
-            mHeights.add((int)(300+ Math.random()*400));
-        }
-    }
+//    public void getRandomHeight(List<PictureInfo> mList){
+//        if (mHeights == null) {
+//            mHeights = new ArrayList<>();
+//        }
+//        for(int i=0; i < mList.size();i++){
+//            //随机的获取一个范围为200-600直接的高度
+//            mHeights.add((int)(300+ Math.random()*400));
+//        }
+//    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -71,9 +71,9 @@ public class BcyPicturesWaterFallLoadMoreAdapter extends RecyclerView.Adapter<Bc
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-        layoutParams.height = mHeights.get(position);
-        holder.itemView.setLayoutParams(layoutParams);
+//        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
+//        layoutParams.height = mHeights.get(position);
+//        holder.itemView.setLayoutParams(layoutParams);
 
         PictureInfo bean = mList.get(position);
         ImageLoader.getInstance().displayImage(bean.getPictureUrl(),

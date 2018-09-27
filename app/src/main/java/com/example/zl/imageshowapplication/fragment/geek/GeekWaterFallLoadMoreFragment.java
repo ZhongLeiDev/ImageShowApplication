@@ -118,7 +118,7 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
         } else {
             isNetWorkConnected = false;
         }
-        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
     }
 
     private void requestData() {
@@ -133,7 +133,7 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
                 System.out.println("LoadMoreCall->"+response.body());
                 if (list.size()>0) {
                     mAdapter.getList().addAll(list);
-                    mAdapter.getRandomHeight(list);
+//                    mAdapter.getRandomHeight(list);
                     mAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getActivity(),"没有更多内容！", Toast.LENGTH_LONG).show();

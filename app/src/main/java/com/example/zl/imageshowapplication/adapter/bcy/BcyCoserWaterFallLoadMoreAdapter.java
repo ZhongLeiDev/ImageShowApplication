@@ -32,7 +32,7 @@ public class BcyCoserWaterFallLoadMoreAdapter extends RecyclerView.Adapter<BcyCo
 
     private Context mContext;
     private List<CoserInfo> coserInfoList = new ArrayList<>();
-    private List<Integer> mHeights;
+//    private List<Integer> mHeights;
 
     /**自定义点击事件*/
     private OnMyItemClickListener listener;
@@ -50,15 +50,15 @@ public class BcyCoserWaterFallLoadMoreAdapter extends RecyclerView.Adapter<BcyCo
         this.mloadmorelistener = loadMoreListener;
     }
 
-    public void getRandomHeight(List<CoserInfo> mList){
-        if (mHeights == null) {
-            mHeights = new ArrayList<>();
-        }
-        for(int i=0; i < mList.size();i++){
-            //对于CoserInfo，将高度设置为固定值250,
-            mHeights.add(450);
-        }
-    }
+//    public void getRandomHeight(List<CoserInfo> mList){
+//        if (mHeights == null) {
+//            mHeights = new ArrayList<>();
+//        }
+//        for(int i=0; i < mList.size();i++){
+//            //对于CoserInfo，将高度设置为固定值250,
+//            mHeights.add(450);
+//        }
+//    }
 
     @NonNull
     @Override
@@ -72,9 +72,9 @@ public class BcyCoserWaterFallLoadMoreAdapter extends RecyclerView.Adapter<BcyCo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-        layoutParams.height = mHeights.get(position);
-        holder.itemView.setLayoutParams(layoutParams);
+//        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
+//        layoutParams.height = mHeights.get(position);
+//        holder.itemView.setLayoutParams(layoutParams);
 
         CoserInfo bean = coserInfoList.get(position);
         ImageLoader.getInstance().displayImage(bean.getCoserAvatar(),

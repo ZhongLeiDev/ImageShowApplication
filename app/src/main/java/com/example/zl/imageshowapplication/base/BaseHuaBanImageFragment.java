@@ -164,7 +164,7 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
         } else {
             isNetWorkConnected = false;
         }
-        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
     }
 
     private void requestData(String tag, int currentpage) {

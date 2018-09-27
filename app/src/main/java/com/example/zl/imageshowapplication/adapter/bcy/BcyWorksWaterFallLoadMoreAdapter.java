@@ -31,7 +31,7 @@ public class BcyWorksWaterFallLoadMoreAdapter extends RecyclerView.Adapter<BcyWo
 
     private Context mContext;
     private List<AlbumInfo> mList = new ArrayList<>();
-    private List<Integer> mHeights;
+//    private List<Integer> mHeights;
 
     /**自定义点击事件*/
     private OnMyItemClickListener listener;
@@ -49,17 +49,17 @@ public class BcyWorksWaterFallLoadMoreAdapter extends RecyclerView.Adapter<BcyWo
         this.loadmorelistener = loadMoreListener;
     }
 
-    public void getRandomHeight(List<AlbumInfo> mList){
-        if (mHeights == null) {
-            mHeights = new ArrayList<>();
-        }
-        for(int i=0; i < mList.size();i++){
-            //随机的获取一个范围为200-600直接的高度
-//            mHeights.add((int)(300+ Math.random()*400));
-            //对于相册，将高度设置为固定值500,
-            mHeights.add(800);
-        }
-    }
+//    public void getRandomHeight(List<AlbumInfo> mList){
+//        if (mHeights == null) {
+//            mHeights = new ArrayList<>();
+//        }
+//        for(int i=0; i < mList.size();i++){
+//            //随机的获取一个范围为200-600直接的高度
+////            mHeights.add((int)(300+ Math.random()*400));
+//            //对于相册，将高度设置为固定值500,
+//            mHeights.add(800);
+//        }
+//    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -73,9 +73,9 @@ public class BcyWorksWaterFallLoadMoreAdapter extends RecyclerView.Adapter<BcyWo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-        layoutParams.height = mHeights.get(position);
-        holder.itemView.setLayoutParams(layoutParams);
+//        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
+//        layoutParams.height = mHeights.get(position);
+//        holder.itemView.setLayoutParams(layoutParams);
 
         AlbumInfo bean = mList.get(position);
         ImageLoader.getInstance().displayImage(bean.getAlbumCover(),

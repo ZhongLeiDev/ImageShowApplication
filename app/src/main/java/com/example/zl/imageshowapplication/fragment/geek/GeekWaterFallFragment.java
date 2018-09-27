@@ -86,7 +86,7 @@ public class GeekWaterFallFragment extends BaseFragment {
                 List<GeekImgBean> list = response.body().getResults();
                 System.out.println("call->"+response.body());
                 mAdapter.getList().addAll(list);
-                mAdapter.getRandomHeight(list);
+//                mAdapter.getRandomHeight(list);
                 mAdapter.notifyDataSetChanged();
 
             }
