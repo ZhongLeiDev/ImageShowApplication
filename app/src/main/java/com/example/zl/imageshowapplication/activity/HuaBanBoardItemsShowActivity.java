@@ -1,10 +1,9 @@
-package com.example.zl.imageshowapplication.activity.searchresult;
+package com.example.zl.imageshowapplication.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Window;
 import android.widget.LinearLayout;
 
@@ -13,26 +12,23 @@ import com.example.zl.enums.HuaBanFragmentType;
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.base.BaseHuaBanImageFragment;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by ZhongLeiDev on 2018/9/27.
- * HuaBan 查询显示 Activity
+ * Created by ZhongLeiDev on 2018/9/28.
+ * HuaBan 画板内容显示 Activity
  */
 
-public class HuaBanSearchResultActivity extends AppCompatActivity {
+public class HuaBanBoardItemsShowActivity extends AppCompatActivity {
 
-    private static final String TAG = "HuaBanSearch";
+    private static final String TAG = "HuaBanBoard";
     @Bind(R.id.huaban_search_simple_toolbar)
     SimpleToolBar toolBar;
     @Bind(R.id.huaban_search_container)
     LinearLayout layout;
 
-    private String searchTag;
+    private long boardId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,28 +38,21 @@ public class HuaBanSearchResultActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        searchTag = (String)getIntent().getSerializableExtra("data");
+        boardId = getIntent().getLongExtra("data",0);
 
-        Log.i(TAG, "SearchTag->" + searchTag);
-
-        try {
-            String title = URLDecoder.decode(searchTag,"utf-8");
-            toolBar.setMainTitle(title);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        initView(searchTag);
+        initView(boardId);
 
     }
 
-    private void initView(String tag) {
+    private void initView(long boardId) {
+
+        toolBar.setMainTitle("画板");
 
         FragmentManager fragmentManager = getSupportFragmentManager();  //getSupportedFragmentManager才是v4版本的方法
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         BaseHuaBanImageFragment fragment = BaseHuaBanImageFragment.newInstance(
-                HuaBanFragmentType.HUABAN_FRAGMENT_SEARCH,tag,0);
+                HuaBanFragmentType.HUA_BAN_FRAGMENT_BOARD,"empty",boardId);
         transaction.add(R.id.huaban_search_container,fragment);
 
         transaction.commit();

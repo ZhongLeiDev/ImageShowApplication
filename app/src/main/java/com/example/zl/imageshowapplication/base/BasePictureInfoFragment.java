@@ -103,8 +103,8 @@ public class BasePictureInfoFragment extends BaseFragment implements LoadMoreLis
             public void myClick(View v, int pos) {
                 Log.i(TAG,"URL->" + mAdapter.getList().get(pos).getPictureUrl() + " is pressed!!!");
                 Intent intent = new Intent();
-//                intent.setClass(getActivity(), BcyPicturesListPagerImageViewActivity.class);
-                intent.setClass(getActivity(), ZoomPictureListProgressActivity.class);
+//                intent.setClass(getSafeActivity(), BcyPicturesListPagerImageViewActivity.class);
+                intent.setClass(getSafeActivity(), ZoomPictureListProgressActivity.class);
                 intent.putExtra("data", (Serializable)mAdapter.getList());
                 intent.putExtra("position", pos);
                 startActivity(intent);
@@ -119,7 +119,7 @@ public class BasePictureInfoFragment extends BaseFragment implements LoadMoreLis
         fragmentType = (PictureFragmentType) getArguments().getSerializable(ARG_PARAM1);
         searchTag = getArguments().getString(ARG_PARAM2);
 
-        if (NetWorkUtil.isNetworkAvailable(getActivity())) {
+        if (NetWorkUtil.isNetworkAvailable(getSafeActivity())) {
             requestData(searchTag,currentpage);
         }
 
@@ -140,7 +140,7 @@ public class BasePictureInfoFragment extends BaseFragment implements LoadMoreLis
         } else {
             isNetWorkConnected = false;
         }
-//        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getSafeActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
     }
 
     private void requestData(String tag, int currentpage) {
@@ -169,17 +169,17 @@ public class BasePictureInfoFragment extends BaseFragment implements LoadMoreLis
 //                        mAdapter.getRandomHeight(list);
                         mAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(getActivity(), "没有更多内容！", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getSafeActivity(), "没有更多内容！", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(getActivity(), "error:返回内容为空！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getSafeActivity(), "error:返回内容为空！", Toast.LENGTH_LONG).show();
                 }
 
             }
 
             public void onFailure(Call<ResultVO<List<PictureInfo>>> call, Throwable t) {
                 t.printStackTrace();
-                Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
+                Toast.makeText(getSafeActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -191,9 +191,9 @@ public class BasePictureInfoFragment extends BaseFragment implements LoadMoreLis
         if (isNetWorkConnected) {
             currentpage ++;//查询下一页
             requestData(searchTag, currentpage);
-            Toast.makeText(getActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getSafeActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getSafeActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
         }
 
     }

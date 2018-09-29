@@ -24,7 +24,7 @@ public class SearchBoard {
     private long updated_at;
     private int deleting;
     private int is_private;
-    private String extra;
+    private Search_board_extra extra;
     public void setBoard_id(long board_id) {
          this.board_id = board_id;
      }
@@ -116,10 +116,10 @@ public class SearchBoard {
          return is_private;
      }
 
-    public void setExtra(String extra) {
+    public void setExtra(Search_board_extra extra) {
          this.extra = extra;
      }
-     public String getExtra() {
+     public Search_board_extra getExtra() {
          return extra;
      }
 

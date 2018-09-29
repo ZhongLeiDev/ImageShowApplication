@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.example.zl.enums.FooterShowType;
 import com.example.zl.enums.HuaBanFragmentType;
 import com.example.zl.imageshowapplication.R;
+import com.example.zl.imageshowapplication.activity.HuaBanBoardItemsShowActivity;
 import com.example.zl.imageshowapplication.activity.HuaBanSingleImgShowActivity;
 import com.example.zl.imageshowapplication.adapter.huaban.HuaBanImageWaterFallLoadMoreAdapter;
 import com.example.zl.imageshowapplication.bean.huaban.transobj.HBImageBean;
@@ -44,14 +48,17 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
 
     private boolean isNetWorkConnected = false;
     private int currentpage = 0;
+    private long lastPinId = 0;
 
     // Fragment 传参参数名
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
 
     //参数值
     private HuaBanFragmentType fragmentType;
     private String searchTag;
+    private long boardId;
 
     /** HuaBan Image 处理逻辑 Presenter 类*/
     private HuaBanPresenter huaBanPresenter;
@@ -61,25 +68,58 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
         public void onNext(HBImageBean bean) {
             mAdapter.getList().add(bean);
             mAdapter.notifyDataSetChanged();
+            lastPinId = bean.getPin_id();   //存储最后一 PIN 的 pinId
         }
 
         @Override
         public void onError(String error) {
-            Toast.makeText(getActivity(), error,Toast.LENGTH_SHORT).show();
+            setState(FooterShowType.ERROR);
+//            Toast.makeText(getSafeActivity(), error,Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onCompleted(String complete) {
-            Toast.makeText(getActivity(), complete,Toast.LENGTH_SHORT).show();
+            setState(FooterShowType.NORMAL);    //加载完成，正常显示
+//            Toast.makeText(getSafeActivity(), complete,Toast.LENGTH_SHORT).show();
         }
     };
 
-    public static BaseHuaBanImageFragment newInstance(HuaBanFragmentType type, String tag) {
+    /**加载更多模块初始显示状态为数据正常显示状态*/
+    protected FooterShowType mState = FooterShowType.NORMAL;
+
+    /**设置底部加载更多的样式*/
+    protected void setState(FooterShowType type) {
+        mState = type;
+        getSafeActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                changeAdapterState();
+            }
+        });
+    }
+
+    /**改变底部加载更多模块的样式*/
+    protected void changeAdapterState() {
+        if (mAdapter != null && mAdapter.mFooterHolder != null) {
+            mAdapter.mFooterHolder.setData(mState);
+        }
+
+    }
+
+    /**
+     * 获取 BaseHuaBanImageFragment 实例
+     * @param type Fragment 类型
+     * @param tag 查询条件【针对 HuaBanFragmentType.HUABAN_FRAGMENT_SEARCH, 其它类型可以填任意值】
+     * @param boardId 查询画册 ID 【HuaBanFragmentType.HUABAN_FRAGMENT_BOARD, 其它类型可填任意值】
+     * @return
+     */
+    public static BaseHuaBanImageFragment newInstance(HuaBanFragmentType type, String tag, long boardId) {
 
         BaseHuaBanImageFragment fragment = new BaseHuaBanImageFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1,type);
         args.putString(ARG_PARAM2,tag);
+        args.putLong(ARG_PARAM3,boardId);
         fragment.setArguments(args);
         return fragment;
 
@@ -91,10 +131,12 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
         Log.i(TAG,"Start Load More ... ！");
         if (isNetWorkConnected) {
             currentpage ++;//查询下一页
-            requestData(searchTag, currentpage);
-            Toast.makeText(getActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
+            dataLoadMore();
+            setState(FooterShowType.LOADING);   //加载更多
+//            Toast.makeText(getSafeActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
+            setState(FooterShowType.ERROR);
+            Toast.makeText(getSafeActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -111,13 +153,12 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
     @Override
     protected void initData() {
 
-        huaBanPresenter = new HuaBanPresenter(getActivity());
+        huaBanPresenter = new HuaBanPresenter(getSafeActivity());
         huaBanPresenter.onCreate();
         huaBanPresenter.attachView(huanBanView);
 
         //注册EventBus接收网络状态改变广播通知
         EventBus.getDefault().register(this);
-
         mRecyclerView.setLayoutManager(new
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.addOnScrollListener(new HuaBanLoadMoreScrollListener());
@@ -127,24 +168,25 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
         mAdapter.setOnMyItemClickListener(new OnMyItemClickListener() {
             @Override
             public void myClick(View v, int pos) {
-//                Toast.makeText(getActivity(), mAdapter.getList().get(pos).getTheme(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getSafeActivity(), mAdapter.getList().get(pos).getTheme(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), HuaBanSingleImgShowActivity.class);
+                intent.setClass(getSafeActivity(), HuaBanSingleImgShowActivity.class);
                 intent.putExtra("data", mAdapter.getList().get(pos));
                 startActivity(intent);
             }
 
             @Override
             public void mLongClick(View v, int pos) {
-
+                showPopupMenu(v,pos);
             }
         });
 
         fragmentType = (HuaBanFragmentType) getArguments().getSerializable(ARG_PARAM1);
         searchTag = getArguments().getString(ARG_PARAM2);
+        boardId = getArguments().getLong(ARG_PARAM3);
 
-        if (NetWorkUtil.isNetworkAvailable(getActivity())) {
-            requestData(searchTag,currentpage);
+        if (NetWorkUtil.isNetworkAvailable(getSafeActivity())) {
+            dataLoadInit();
         }
 
     }
@@ -164,11 +206,66 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
         } else {
             isNetWorkConnected = false;
         }
-//        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getSafeActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
     }
 
-    private void requestData(String tag, int currentpage) {
-        huaBanPresenter.getHuaBanImageResource(fragmentType,tag,currentpage);
+    /**
+     * 初始化数据加载
+     */
+    private void dataLoadInit() {
+        huaBanPresenter.getHuaBanImageResource(fragmentType,searchTag,boardId);
+    }
+
+    /**
+     * 加载更多
+     */
+    private void dataLoadMore() {
+        huaBanPresenter.getHuaBanImageResource_LoadMore(fragmentType,boardId,lastPinId,searchTag,currentpage);
+    }
+
+    /**
+     * 显示 PopupMenu
+     * @param view 显示的位置
+     */
+    private void showPopupMenu(View view, final int position) {
+
+        PopupMenu popupMenu = new PopupMenu(getSafeActivity(),view);
+        popupMenu.getMenuInflater().inflate(R.menu.huaban_menu,popupMenu.getMenu());
+        popupMenu.show();
+
+        switch (fragmentType) { //配置在不同的 Fragment 显示不同的选项
+            case HUA_BAN_FRAGMENT_BOARD:
+                popupMenu.getMenu().findItem(R.id.huaban_go_board).setVisible(false);
+                break;
+            default:
+                break;
+        }
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.huaban_go_board:
+                        Intent intent = new Intent();
+                        intent.setClass(getSafeActivity(), HuaBanBoardItemsShowActivity.class);
+                        intent.putExtra("data", mAdapter.getList().get(position).getBoard_id());
+                        startActivity(intent);
+                        break;
+                    case R.id.huaban_collect:
+                        break;
+                }
+                return true;
+            }
+        });
+
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                // 控件消失时的事件
+            }
+        });
+
     }
 
 }

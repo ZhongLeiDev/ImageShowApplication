@@ -73,7 +73,7 @@ public class BcyPicturesWaterFallLoadMoreFragment extends BaseFragment implement
         //注册网络状态监听广播
 //        IntentFilter filter = new IntentFilter();
 //        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-//        getActivity().registerReceiver(mNetworkStateReceiver, filter);
+//        getSafeActivity().registerReceiver(mNetworkStateReceiver, filter);
 //        mNetworkStateReceiver.setNotifyReceiver(this);
 
         mRecyclerView.setLayoutManager(new
@@ -88,8 +88,8 @@ public class BcyPicturesWaterFallLoadMoreFragment extends BaseFragment implement
             public void myClick(View v, int pos) {
                 Log.i(TAG,"URL->" + mAdapter.getList().get(pos).getPictureUrl() + " is pressed!!!");
                 Intent intent = new Intent();
-//                intent.setClass(getActivity(), BcyPicturesListPagerImageViewActivity.class);
-                intent.setClass(getActivity(), ZoomPictureListProgressActivity.class);
+//                intent.setClass(getSafeActivity(), BcyPicturesListPagerImageViewActivity.class);
+                intent.setClass(getSafeActivity(), ZoomPictureListProgressActivity.class);
                 intent.putExtra("data", (Serializable)mAdapter.getList());
                 intent.putExtra("position", pos);
                 startActivity(intent);
@@ -101,7 +101,7 @@ public class BcyPicturesWaterFallLoadMoreFragment extends BaseFragment implement
             }
         });
 
-        if (NetWorkUtil.isNetworkAvailable(getActivity())) {
+        if (NetWorkUtil.isNetworkAvailable(getSafeActivity())) {
 //            isFragmentyInit = true;
             requestData();
         }
@@ -111,7 +111,7 @@ public class BcyPicturesWaterFallLoadMoreFragment extends BaseFragment implement
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        getActivity().unregisterReceiver(mNetworkStateReceiver);
+//        getSafeActivity().unregisterReceiver(mNetworkStateReceiver);
         //取消注册EventBus
         EventBus.getDefault().unregister(this);
     }
@@ -124,7 +124,7 @@ public class BcyPicturesWaterFallLoadMoreFragment extends BaseFragment implement
         } else {
             isNetWorkConnected = false;
         }
-//        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getSafeActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
     }
 
     private void requestData() {
@@ -140,14 +140,14 @@ public class BcyPicturesWaterFallLoadMoreFragment extends BaseFragment implement
 //                    mAdapter.getRandomHeight(list);
                     mAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getActivity(),"没有更多内容！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getSafeActivity(),"没有更多内容！", Toast.LENGTH_LONG).show();
                 }
 
             }
 
             public void onFailure(Call<ResultVO<List<PictureInfo>>> call, Throwable t) {
                 t.printStackTrace();
-                Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
+                Toast.makeText(getSafeActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -158,9 +158,9 @@ public class BcyPicturesWaterFallLoadMoreFragment extends BaseFragment implement
 
         if (isNetWorkConnected) {
            requestData();
-            Toast.makeText(getActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getSafeActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getSafeActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -179,12 +179,12 @@ public class BcyPicturesWaterFallLoadMoreFragment extends BaseFragment implement
 //                        break;
 //                    case NET_MOBILE_CONNECTED:
 //                        isNetWorkConnected = true;
-//                        Toast.makeText(getActivity(),msg.getExtramsg(),Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getSafeActivity(),msg.getExtramsg(),Toast.LENGTH_SHORT).show();
 //                        Log.i(TAG,"NET_MOBILE_CONNECTED！");
 //                        break;
 //                    case NET_DISCONNECTED:
 //                        isNetWorkConnected = false;
-//                        Toast.makeText(getActivity(),msg.getExtramsg(),Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getSafeActivity(),msg.getExtramsg(),Toast.LENGTH_SHORT).show();
 //                        Log.i(TAG,"NET_DISCONNECTED！");
 //                        break;
 //                }

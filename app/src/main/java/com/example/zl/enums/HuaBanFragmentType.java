@@ -19,6 +19,8 @@ public enum HuaBanFragmentType {
     /**BEAUTY 推荐显示*/
     HUABAN_FRAGMENT_BEAUTY,
     /**ILLUSTRATION 推荐显示*/
-    HUABAN_FRAGMENT_ILLUSTRATION
+    HUABAN_FRAGMENT_ILLUSTRATION,
+    /**BOARD 画板显示*/
+    HUA_BAN_FRAGMENT_BOARD
 
 }

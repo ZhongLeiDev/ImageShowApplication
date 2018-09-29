@@ -1,6 +1,7 @@
 package com.example.zl.imageshowapplication.base;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,9 +26,9 @@ public abstract class BaseFragment extends Fragment {
      * @param context
      */
     @Override
-    public void onAttach(Activity context) {
+    public void onAttach(Context context) {
         super.onAttach(context);
-        this.mActivity = context;
+        this.mActivity = (Activity)context;
     }
 
     @Nullable
@@ -65,5 +66,13 @@ public abstract class BaseFragment extends Fragment {
      * 执行数据的加载
      */
     protected abstract void initData();
+
+    /**
+     * 获取 mActivity 代替 getActivity ,避免可能出现空指针的异常
+     * @return
+     */
+    protected Activity getSafeActivity() {
+        return mActivity;
+    }
 
 }

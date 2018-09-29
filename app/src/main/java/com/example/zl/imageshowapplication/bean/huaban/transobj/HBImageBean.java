@@ -9,12 +9,20 @@ import java.io.Serializable;
 
 public class HBImageBean implements Serializable{
 
+    private long pin_id;
     private long board_id;
     private String url;
     private int width;
     private int height;
     private String theme;
 
+    public long getPin_id() {
+        return pin_id;
+    }
+
+    public void setPin_id(long pin_id) {
+        this.pin_id = pin_id;
+    }
 
     public long getBoard_id() {
         return board_id;
@@ -56,11 +64,11 @@ public class HBImageBean implements Serializable{
         this.theme = theme;
     }
 
-
     @Override
     public String toString() {
         return "HBImageBean{" +
-                "board_id=" + board_id +
+                "pin_id=" + pin_id +
+                ", board_id=" + board_id +
                 ", url='" + url + '\'' +
                 ", width=" + width +
                 ", height=" + height +

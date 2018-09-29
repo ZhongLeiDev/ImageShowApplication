@@ -28,6 +28,7 @@ import retrofit2.Response;
 
 /**
  * Created by Administrator on 2018/3/15.
+ * Geek 瀑布流 fragment
  */
 
 public class GeekWaterFallFragment extends BaseFragment {
@@ -62,7 +63,7 @@ public class GeekWaterFallFragment extends BaseFragment {
             public void myClick(View v, int pos) {
                 Log.i("GeekWaterFallFragment","URL->" + mAdapter.getList().get(pos).getUrl() + " is pressed!!!");
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), GeekListPagerImageViewActivity.class);
+                intent.setClass(getSafeActivity(), GeekListPagerImageViewActivity.class);
                 intent.putExtra("data", (Serializable)mAdapter.getList());
                 intent.putExtra("position", pos);
                 startActivity(intent);

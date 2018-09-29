@@ -103,7 +103,7 @@ public class BaseCoserInfoFragment extends BaseFragment implements LoadMoreListe
                 /*作者需要跳转到作者作品列表显示Activity再跳转到作品内容显示Activity*/
                 Log.i(TAG,"URL->" + mAdapter.getCoserInfoList().get(pos).getCoserName() + " is pressed!!!");
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), BcyAlbumsListActivity.class);
+                intent.setClass(getSafeActivity(), BcyAlbumsListActivity.class);
                 intent.putExtra("data", (Serializable)mAdapter.getCoserInfoList().get(pos).getCoserId());
                 startActivity(intent);
             }
@@ -117,7 +117,7 @@ public class BaseCoserInfoFragment extends BaseFragment implements LoadMoreListe
         fragmentType = (AuthorFragmentType) getArguments().getSerializable(ARG_PARAM1);
         searchTag = getArguments().getString(ARG_PARAM2);
 
-        if (NetWorkUtil.isNetworkAvailable(getActivity())) {
+        if (NetWorkUtil.isNetworkAvailable(getSafeActivity())) {
             requestData(searchTag, currentpage);
         }
 
@@ -151,17 +151,17 @@ public class BaseCoserInfoFragment extends BaseFragment implements LoadMoreListe
 //                        mAdapter.getRandomHeight(list);
                         mAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(getActivity(), "没有更多内容！", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getSafeActivity(), "没有更多内容！", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(getActivity(), "error:返回内容为空！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getSafeActivity(), "error:返回内容为空！", Toast.LENGTH_LONG).show();
                 }
 
             }
 
             public void onFailure(Call<ResultVO<List<CoserInfo>>> call, Throwable t) {
                 t.printStackTrace();
-                Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
+                Toast.makeText(getSafeActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -172,9 +172,9 @@ public class BaseCoserInfoFragment extends BaseFragment implements LoadMoreListe
     public void loadMoreData() {
         if (isNetWorkConnected) {
             requestData(searchTag, currentpage);
-            Toast.makeText(getActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getSafeActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getSafeActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -193,7 +193,7 @@ public class BaseCoserInfoFragment extends BaseFragment implements LoadMoreListe
         } else {
             isNetWorkConnected = false;
         }
-//        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getSafeActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
     }
 
 }

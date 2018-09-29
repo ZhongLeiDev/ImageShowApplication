@@ -105,7 +105,7 @@ public class BaseAlbumInfoFragment extends BaseFragment implements LoadMoreListe
                 /*相册需要跳转到相册内容显示Activity再跳转到图片放大显示Activity*/
                 Log.i(TAG,"URL->" + mAdapter.getList().get(pos).getAlbumCover() + " is pressed!!!");
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), BcyAlbumPicturesListActivity.class);
+                intent.setClass(getSafeActivity(), BcyAlbumPicturesListActivity.class);
                 intent.putExtra("data", (Serializable)mAdapter.getList().get(pos).getAlbumId());
                 startActivity(intent);
             }
@@ -119,7 +119,7 @@ public class BaseAlbumInfoFragment extends BaseFragment implements LoadMoreListe
         fragmentType = (AlbumFragmentType) getArguments().getSerializable(ARG_PARAM1);
         searchTag = getArguments().getString(ARG_PARAM2);
 
-        if (NetWorkUtil.isNetworkAvailable(getActivity())) {
+        if (NetWorkUtil.isNetworkAvailable(getSafeActivity())) {
             requestData(searchTag, currentpage);
         }
 
@@ -140,7 +140,7 @@ public class BaseAlbumInfoFragment extends BaseFragment implements LoadMoreListe
         } else {
             isNetWorkConnected = false;
         }
-//        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getSafeActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
     }
 
     private void requestData(String tag, int currentpage) {
@@ -172,17 +172,17 @@ public class BaseAlbumInfoFragment extends BaseFragment implements LoadMoreListe
 //                        mAdapter.getRandomHeight(list);
                         mAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(getActivity(), "没有更多内容！", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getSafeActivity(), "没有更多内容！", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(getActivity(), "error:返回内容为空！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getSafeActivity(), "error:返回内容为空！", Toast.LENGTH_LONG).show();
                 }
 
             }
 
             public void onFailure(Call<ResultVO<List<AlbumInfo>>> call, Throwable t) {
                 t.printStackTrace();
-                Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
+                Toast.makeText(getSafeActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -193,9 +193,9 @@ public class BaseAlbumInfoFragment extends BaseFragment implements LoadMoreListe
 
         if (isNetWorkConnected) {
             requestData(searchTag, currentpage);
-            Toast.makeText(getActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getSafeActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getSafeActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
         }
 
     }

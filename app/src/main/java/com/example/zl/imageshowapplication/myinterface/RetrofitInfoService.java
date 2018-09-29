@@ -6,6 +6,7 @@ import com.example.zl.imageshowapplication.bean.bcy.retro.PictureInfo;
 import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.bean.geek.GeekResult;
 import com.example.zl.imageshowapplication.bean.huaban.devided.DevidedJsonRootBean;
+import com.example.zl.imageshowapplication.bean.huaban.loadmore.LoadMorePins;
 import com.example.zl.imageshowapplication.bean.huaban.search.SearchJsonRootBean;
 
 import java.util.List;
@@ -146,6 +147,18 @@ public interface RetrofitInfoService {
     );
 
     /**
+     * HuaBan Anim 推荐,加载更多
+     * @param limit 数量限制
+     * @param lastPinId 最后一 PIN 的 PinId
+     * @return
+     */
+    @GET("favorite%2Fanime")
+    Observable<LoadMorePins> getAnimFromHuaBanWithRx_More(
+            @Query("limit") int limit,
+            @Query("max") long lastPinId
+    );
+
+    /**
      * HuaBan Quotes 推荐
      * @param limit 数量限制
      * @return
@@ -153,6 +166,18 @@ public interface RetrofitInfoService {
     @GET("favorite%2Fquotes")
     Observable<DevidedJsonRootBean> getQuotesFromHuaBanWithRx(
             @Query("limit") int limit
+    );
+
+    /**
+     * HuaBan Quotes 推荐,加载更多
+     * @param limit 数量限制
+     * @param lastPinId 最后一 PIN 的 PinId
+     * @return
+     */
+    @GET("favorite%2Fquotes")
+    Observable<LoadMorePins> getQuotesFromHuaBanWithRx_More(
+            @Query("limit") int limit,
+            @Query("max") long lastPinId
     );
 
     /**
@@ -166,6 +191,18 @@ public interface RetrofitInfoService {
     );
 
     /**
+     * HuaBan Photography 推荐,加载更多
+     * @param limit 数量限制
+     * @param lastPinId 最后一 PIN 的 PinId
+     * @return
+     */
+    @GET("favorite%2Fphotography")
+    Observable<LoadMorePins> getPhotographyFromHuaBanWithRx_More(
+            @Query("limit") int limit,
+            @Query("max") long lastPinId
+    );
+
+    /**
      * HuaBan TravelPlaces 推荐
      * @param limit 数量限制
      * @return
@@ -173,6 +210,18 @@ public interface RetrofitInfoService {
     @GET("favorite%2Ftravel_places")
     Observable<DevidedJsonRootBean> getTravelplacesFromHuaBanWithRx(
             @Query("limit") int limit
+    );
+
+    /**
+     * HuaBan TravelPlaces 推荐,加载更多
+     * @param limit 数量限制
+     * @param lastPinId 最后一 PIN 的 PinId
+     * @return
+     */
+    @GET("favorite%2Ftravel_places")
+    Observable<LoadMorePins> getTravelplacesFromHuaBanWithRx_More(
+            @Query("limit") int limit,
+            @Query("max") long lastPinId
     );
 
     /**
@@ -186,6 +235,18 @@ public interface RetrofitInfoService {
     );
 
     /**
+     * HuaBan Beauty 推荐,加载更多
+     * @param limit 数量限制
+     * @param lastPinId 最后一 PIN 的 PinId
+     * @return
+     */
+    @GET("favorite%2Fbeauty")
+    Observable<LoadMorePins> getBeautyFromHuaBanWithRx_More(
+            @Query("limit") int limit,
+            @Query("max") long lastPinId
+    );
+
+    /**
      * HuaBan Illustration 推荐
      * @param limit 数量限制
      * @return
@@ -193,6 +254,44 @@ public interface RetrofitInfoService {
     @GET("favorite%2Fillustration")
     Observable<DevidedJsonRootBean> getIllustrationFromHuaBanWithRx(
             @Query("limit") int limit
+    );
+
+    /**
+     * HuaBan Illustration 推荐,加载更多
+     * @param limit 数量限制
+     * @param lastPinId 最后一 PIN 的 PinId
+     * @return
+     */
+    @GET("favorite%2Fillustration")
+    Observable<LoadMorePins> getIllustrationFromHuaBanWithRx_More(
+            @Query("limit") int limit,
+            @Query("max") long lastPinId
+    );
+
+    /**
+     * 根据 BoardId 查询到的 Pins
+     * @param boardId 待查询的 Board 的 ID
+     * @param limit 数量限制
+     * @return
+     */
+    @GET("boards/{boardId}/pins")
+    Observable<LoadMorePins> getBoardPinsFromHuaBanWithRx(
+            @Path("boardId") long boardId,
+            @Query("limit") int limit
+    );
+
+    /**
+     * HuaBan 根据 BoardId 查询到的 Pins,加载更多
+     * @param boardId 待查询的 Board 的 ID
+     * @param limit 数量限制
+     * @param lastPinId 最后一 PIN 的 PinId
+     * @return
+     */
+    @GET("boards/{boardId}/pins")
+    Observable<LoadMorePins> getBoardPinsFromHuaBanWithRx_More(
+            @Path("boardId") long boardId,
+            @Query("limit") int limit,
+            @Query("max") long lastPinId
     );
 
     /**
@@ -205,7 +304,7 @@ public interface RetrofitInfoService {
      */
     @GET("search")
     Observable<SearchJsonRootBean> getSearchResultFromHuaBanWithRx(
-            @Query("q") String keyWord,
+            @Query(value = "q",encoded = true) String keyWord,
             @Query("per_page") int pageSize,
             @Query("page") int pageCount,
             @Query("sort") String sortType

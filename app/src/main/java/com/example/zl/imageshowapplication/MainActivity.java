@@ -40,6 +40,8 @@ import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallLoadMoreFr
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,8 @@ import butterknife.ButterKnife;
  * 入口 Activity
  */
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener{
+
+    private static final String TAG = "MainActivity";
 
     private DrawerLayout mDrawerLayout;
     private FragmentAdapter mFragmentAdapter;
@@ -171,9 +175,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         fragments.add(new GeekWaterFallLoadMoreFragment());
 //        fragments.add(new BcyWorksWaterFallLoadMoreFragment());
         fragments.add(BaseAlbumInfoFragment.newInstance(AlbumFragmentType.ALBUM_FRAGMENT_RANDOM,"empty"));
-        fragments.add(BaseHuaBanImageFragment.newInstance(HuaBanFragmentType.HUABAN_FRAGMENT_ILLUSTRATION,"empty"));
-        fragments.add(BaseHuaBanImageFragment.newInstance(HuaBanFragmentType.HUABAN_FRAGMENT_ANIM,"empty"));
-        fragments.add(BaseHuaBanImageFragment.newInstance(HuaBanFragmentType.HUABAN_FRAGMENT_BEAUTY,"empty"));
+        fragments.add(BaseHuaBanImageFragment.newInstance(HuaBanFragmentType.HUABAN_FRAGMENT_ILLUSTRATION,"empty",0));
+        fragments.add(BaseHuaBanImageFragment.newInstance(HuaBanFragmentType.HUABAN_FRAGMENT_ANIM,"empty",0));
+        fragments.add(BaseHuaBanImageFragment.newInstance(HuaBanFragmentType.HUABAN_FRAGMENT_BEAUTY,"empty",0));
 
         mFragmentAdapter = new FragmentAdapter(
                 getSupportFragmentManager(), fragments,listStr);
@@ -215,12 +219,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 /*extView.setCompoundDrawables(Drawable left, Drawable top, Drawable right, Drawable bottom)*/
                 Drawable drawableRight = mEditTextSearch.getCompoundDrawables()[2];
                 if (drawableRight != null
-                        && event.getRawX() <= (mEditTextSearch.getRight() + drawableRight.getBounds().width())
+                        && event.getRawX() <= mEditTextSearch.getRight()
+                        && event.getRawX() >= (mEditTextSearch.getRight() - drawableRight.getBounds().width())
                         && mEditTextSearch.getText().toString().length()!=0) {
+                    Log.i(TAG,"SelectedTabPosition->" + mTabLayout.getSelectedTabPosition());
                     if (mTabLayout.getSelectedTabPosition()<3) {
                         startSearchActivity(mEditTextSearch.getText().toString());
                     } else {
-                        startHuaBanSearchActivity(mEditTextSearch.getText().toString());
+                        //对搜索关键字进行 URLEncode
+                        try {
+                            String key = URLEncoder.encode(mEditTextSearch.getText().toString(),"utf-8");
+                            startHuaBanSearchActivity(key);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
                     }
                     v.performClick();
                     return true;

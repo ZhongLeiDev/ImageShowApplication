@@ -51,6 +51,9 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.searchresult.HuaBanSearchResultActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.HuaBanBoardItemsShowActivity"
+            android:screenOrientation="portrait"/>
+
         <service android:name="com.example.zl.service.NetworkStatusService"/>
     </application>
 

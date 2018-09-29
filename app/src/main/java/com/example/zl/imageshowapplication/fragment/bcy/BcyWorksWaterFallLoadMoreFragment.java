@@ -81,7 +81,7 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
                 /*相册需要跳转到相册内容显示Activity再跳转到图片放大显示Activity*/
                 Log.i(TAG,"URL->" + mAdapter.getList().get(pos).getAlbumCover() + " is pressed!!!");
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), BcyAlbumPicturesListActivity.class);
+                intent.setClass(getSafeActivity(), BcyAlbumPicturesListActivity.class);
                 intent.putExtra("data", (Serializable)mAdapter.getList().get(pos).getAlbumId());
                 startActivity(intent);
             }
@@ -92,7 +92,7 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
             }
         });
 
-        if (NetWorkUtil.isNetworkAvailable(getActivity())) {
+        if (NetWorkUtil.isNetworkAvailable(getSafeActivity())) {
             requestData();
         }
 
@@ -113,7 +113,7 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
         } else {
             isNetWorkConnected = false;
         }
-//        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getSafeActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
     }
 
     private void requestData() {
@@ -129,14 +129,14 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
 //                    mAdapter.getRandomHeight(list);
                     mAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getActivity(),"没有更多内容！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getSafeActivity(),"没有更多内容！", Toast.LENGTH_LONG).show();
                 }
 
             }
 
             public void onFailure(Call<ResultVO<List<AlbumInfo>>> call, Throwable t) {
                 t.printStackTrace();
-                Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
+                Toast.makeText(getSafeActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -147,9 +147,9 @@ public class BcyWorksWaterFallLoadMoreFragment extends BaseFragment implements L
 
         if (isNetWorkConnected) {
             requestData();
-            Toast.makeText(getActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getSafeActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getSafeActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
         }
 
     }

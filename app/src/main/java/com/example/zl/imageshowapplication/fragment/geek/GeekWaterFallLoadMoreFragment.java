@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.example.zl.imageshowapplication.R;
@@ -21,6 +23,7 @@ import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.listenerinstance.GeekLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
+import com.example.zl.imageshowapplication.utils.FileDownloadUtil;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -81,7 +84,7 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
             public void myClick(View v, int pos) {
                 Log.i(TAG,"URL->" + mAdapter.getList().get(pos).getUrl() + " is pressed!!!");
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), GeekListPagerImageViewActivity.class);
+                intent.setClass(getSafeActivity(), GeekListPagerImageViewActivity.class);
                 intent.putExtra("data", (Serializable)mAdapter.getList());
                 intent.putExtra("position", pos);
                 startActivity(intent);
@@ -89,11 +92,12 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
 
             @Override
             public void mLongClick(View v, int pos) {
+                showPopupMenu(v,pos);
                 Log.i(TAG,"URL->" + mAdapter.getList().get(pos).getUrl() + " is long pressed!!!");
             }
         });
 
-        boolean isNetworkAvailable = NetWorkUtil.isNetworkAvailable(getActivity());
+        boolean isNetworkAvailable = NetWorkUtil.isNetworkAvailable(getSafeActivity());
 
         Log.i(TAG,"NetWorkStatus->" + isNetworkAvailable);
 
@@ -118,7 +122,7 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
         } else {
             isNetWorkConnected = false;
         }
-//        Toast.makeText(getActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getSafeActivity(), msg.getExtramsg(),Toast.LENGTH_SHORT).show();
     }
 
     private void requestData() {
@@ -136,18 +140,14 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
 //                    mAdapter.getRandomHeight(list);
                     mAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getActivity(),"没有更多内容！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getSafeActivity(),"没有更多内容！", Toast.LENGTH_LONG).show();
                 }
 
             }
 
             public void onFailure(Call<GeekResult> call, Throwable t) {
                 t.printStackTrace();
-                if (getActivity() != null) {
-                    Toast.makeText(getActivity(), "网络连接错误！", Toast.LENGTH_LONG).show();
-                } else {
-                    Log.i(TAG, "网络连接错误！");
-                }
+                Toast.makeText(getSafeActivity(), "网络连接错误！", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -159,10 +159,35 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
         if (isNetWorkConnected) {
            requestData();
            currentPage ++;
-           Toast.makeText(getActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
+           Toast.makeText(getSafeActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getSafeActivity(),"网络连接错误！", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private void showPopupMenu(View view, final int position) {
+
+        PopupMenu popupMenu = new PopupMenu(getSafeActivity(), view);
+        popupMenu.getMenuInflater().inflate(R.menu.geek_menu, popupMenu.getMenu());
+        popupMenu.show();
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.geek_download:
+                        if (FileDownloadUtil.downloadPicture(String.valueOf(mAdapter.getList().get(position).getUrl().hashCode()))) {
+                            Toast.makeText(getSafeActivity(),"图片下载成功！", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getSafeActivity(),"error:下载失败！", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case R.id.geek_collect:
+                        break;
+                }
+                return true;
+            }
+        });
     }
 }
