@@ -21,6 +21,8 @@ public class HuaBanLoadMoreScrollListener extends RecyclerView.OnScrollListener{
         final StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
         final HuaBanImageWaterFallLoadMoreAdapter adapter = (HuaBanImageWaterFallLoadMoreAdapter) recyclerView.getAdapter();
 
+        Log.i("HuaBanloadMoreListener","Scrolling...");
+
         // 当不滚动时
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
 

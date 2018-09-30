@@ -59,15 +59,33 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
     private HuaBanFragmentType fragmentType;
     private String searchTag;
     private long boardId;
+    /**元素数量，如果两次查询完成之后元素数量不变，则可以判断为没有更多数据状态*/
+    private long itemCount = 0;
+    /**数据是否初始化*/
+    private boolean isInited = false;
 
     /** HuaBan Image 处理逻辑 Presenter 类*/
     private HuaBanPresenter huaBanPresenter;
+
+    /**错误事件监听器*/
+    private View.OnClickListener onErrorListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (isInited) {
+                dataLoadMore();
+            } else {
+                dataLoadInit();
+            }
+        }
+    };
+
     /** HuaBan Image 显示逻辑 View 类*/
     private HuanBanView huanBanView = new HuanBanView() {
         @Override
         public void onNext(HBImageBean bean) {
             mAdapter.getList().add(bean);
-            mAdapter.notifyDataSetChanged();
+//            mAdapter.notifyDataSetChanged();  //全局刷新
+            mAdapter.notifyItemChanged(mAdapter.getItemCount()-2,0);//局部刷新
             lastPinId = bean.getPin_id();   //存储最后一 PIN 的 pinId
         }
 
@@ -79,8 +97,15 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
 
         @Override
         public void onCompleted(String complete) {
-            setState(FooterShowType.NORMAL);    //加载完成，正常显示
-//            Toast.makeText(getSafeActivity(), complete,Toast.LENGTH_SHORT).show();
+            if (!isInited) {
+                isInited = true;
+            }
+            if (mAdapter.getItemCount() != itemCount) {
+                setState(FooterShowType.NORMAL);    //加载完成，正常显示
+            } else {
+                setState(FooterShowType.END);   //没有更多数据
+            }
+            itemCount = mAdapter.getItemCount();
         }
     };
 
@@ -132,7 +157,6 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
         if (isNetWorkConnected) {
             currentpage ++;//查询下一页
             dataLoadMore();
-            setState(FooterShowType.LOADING);   //加载更多
 //            Toast.makeText(getSafeActivity(),"正在加载更多！", Toast.LENGTH_LONG).show();
         } else {
             setState(FooterShowType.ERROR);
@@ -162,7 +186,7 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
         mRecyclerView.setLayoutManager(new
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.addOnScrollListener(new HuaBanLoadMoreScrollListener());
-        mAdapter = new HuaBanImageWaterFallLoadMoreAdapter(mActivity, this);
+        mAdapter = new HuaBanImageWaterFallLoadMoreAdapter(mActivity, this, onErrorListener);
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnMyItemClickListener(new OnMyItemClickListener() {
@@ -213,6 +237,7 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
      * 初始化数据加载
      */
     private void dataLoadInit() {
+        setState(FooterShowType.LOADING);   //加载更多
         huaBanPresenter.getHuaBanImageResource(fragmentType,searchTag,boardId);
     }
 
@@ -220,6 +245,7 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
      * 加载更多
      */
     private void dataLoadMore() {
+        setState(FooterShowType.LOADING);   //加载更多
         huaBanPresenter.getHuaBanImageResource_LoadMore(fragmentType,boardId,lastPinId,searchTag,currentpage);
     }
 

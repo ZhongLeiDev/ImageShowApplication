@@ -58,6 +58,16 @@ public class FooterHolder  extends RecyclerView.ViewHolder{
                 break;
         }
 
+        Log.i(TAG, "FooterShowType->" + type + " end.");
+
+    }
+
+    /**
+     * 设置加载出错时的操作
+     * @param clickListener 事件监听
+     */
+    public void setOnErrorHandle(View.OnClickListener clickListener) {
+        mErrorViewstub.setOnClickListener(clickListener);
     }
 
 }

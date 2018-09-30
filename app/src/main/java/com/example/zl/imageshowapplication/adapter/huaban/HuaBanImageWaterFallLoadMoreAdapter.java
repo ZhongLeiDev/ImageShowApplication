@@ -41,6 +41,8 @@ public class HuaBanImageWaterFallLoadMoreAdapter extends RecyclerView.Adapter<Re
 
     private LoadMoreListener loadMoreListener;
 
+    private View.OnClickListener onErrorClick;
+
     /*----------------加载更多模块----------------*/
     private final int NORMALLAYOUT = 0;
     private final int FOOTERLAYOUT = 1;
@@ -50,9 +52,17 @@ public class HuaBanImageWaterFallLoadMoreAdapter extends RecyclerView.Adapter<Re
         this.listener = listener;
     }
 
-    public HuaBanImageWaterFallLoadMoreAdapter(Context ctx, LoadMoreListener lmListener) {
+    /**
+     * 构造函数
+     * @param ctx 上下文
+     * @param lmListener 加载更多监听器
+     * @param onErrorClickListener 错误事件监听器
+     */
+    public HuaBanImageWaterFallLoadMoreAdapter(Context ctx, LoadMoreListener lmListener,
+                                               View.OnClickListener onErrorClickListener) {
         mContext = ctx;
         loadMoreListener = lmListener;
+        onErrorClick = onErrorClickListener;
         screen_width = CommonUtil.getScreenSize(mContext).x;
         scrren_height = CommonUtil.getScreenSize(mContext).y;
     }
@@ -78,6 +88,7 @@ public class HuaBanImageWaterFallLoadMoreAdapter extends RecyclerView.Adapter<Re
             view = LayoutInflater.from(mContext)
                     .inflate(R.layout.footer_loadmore_layout, parent, false);
             mFooterHolder = new FooterHolder(view);
+            mFooterHolder.setOnErrorHandle(onErrorClick);
             return mFooterHolder;
         }
     }
