@@ -3,30 +3,32 @@
     <!--指定单选-->
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/rect"
-            android:title="Home"/>
+            android:id="@+id/nav_collection"
+            android:icon="@drawable/nav_collection"
+            android:title="@string/nav_collection"/>
         <item
-            android:id="@+id/nav_message"
-            android:icon="@drawable/rect"
-            android:title="Message"/>
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/nav_setting"
+            android:title="@string/nav_setting"/>
         <item
-            android:id="@+id/nav_friend"
-            android:icon="@drawable/rect"
-            android:title="Friends"/>
+            android:id="@+id/nav_night"
+            android:icon="@drawable/nav_night"
+            android:title="@string/nav_night"/>
         <item
-            android:id="@+id/nav_discussion"
-            android:icon="@drawable/ic_launcher_background"
-            android:title="Discussion"/>
+            android:id="@+id/nav_tools"
+            android:icon="@drawable/nav_tools"
+            android:title="@string/nav_tools"/>
     </group>
-    <item android:title="Sub items">
+    <item android:title="@string/nav_other">
         <menu>
             <item
-                android:icon="@drawable/rect"
-                android:title="Sub item 1"/>
+                android:id="@+id/nav_feedback"
+                android:icon="@drawable/nav_feedback"
+                android:title="@string/nav_feedback"/>
             <item
-                android:icon="@drawable/rect"
-                android:title="Sub item 2"/>
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/nav_logout"
+                android:title="@string/nav_logout"/>
         </menu>
     </item>
 </menu>

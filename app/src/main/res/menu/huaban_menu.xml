@@ -11,4 +11,19 @@
         android:icon="@mipmap/ic_launcher"
         android:title="@string/collect"/>
 
+    <item
+        android:id="@+id/huaban_collect_board"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/collect_board"/>
+
+    <item
+        android:id="@+id/bcy_collect_coser"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/collect_coser"/>
+
+    <item
+        android:id="@+id/collection_delete"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/delete_collection"/>
+
 </menu>

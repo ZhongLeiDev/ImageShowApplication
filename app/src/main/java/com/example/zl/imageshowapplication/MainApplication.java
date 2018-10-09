@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
+import com.avos.avoscloud.AVAnalytics;
+import com.avos.avoscloud.AVOSCloud;
 import com.example.zl.imageshowapplication.config.UILConfig;
 import com.example.zl.service.NetworkStatusService;
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
@@ -29,6 +31,7 @@ public class MainApplication extends Application {
         super.onCreate();
         createDiskCache();
         initImageLoader(getApplicationContext());
+        initLeanCloud();
         //开启网络状态监听Service
         startService(new Intent(getApplicationContext(), NetworkStatusService.class));
     }
@@ -69,6 +72,12 @@ public class MainApplication extends Application {
         File file = ImageLoader.getInstance().getDiskCache().getDirectory();
         Log.i("MainApplication", "defaultDiskCache:" + file.getAbsolutePath());
 
+    }
+
+    private void initLeanCloud() {
+        AVOSCloud.initialize(this,"Heg0PL2TgU4vyC2LSh6mep6D-gzGzoHsz", "FTkvROAuxxXt5bVBMxn3pSj7");
+        AVOSCloud.setDebugLogEnabled(true);
+        AVAnalytics.enableCrashReport(this, true);
     }
 
     /**

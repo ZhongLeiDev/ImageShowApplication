@@ -45,7 +45,7 @@ public class HuaBanSingleImgShowActivity extends AppCompatActivity {
                 zoomImageView, NORMAL_OPTION);
 
         progressBar = findViewById(R.id.singleprogressBar);
-        progressBar.setText(String.valueOf(hbImageBean.getBoard_id()));
+        progressBar.setText("单张图片显示");
 
         btn = findViewById(R.id.singlebtndownload);
         btn.setOnClickListener(new View.OnClickListener() {

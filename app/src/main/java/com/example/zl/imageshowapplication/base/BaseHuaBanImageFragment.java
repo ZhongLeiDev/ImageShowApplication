@@ -1,15 +1,18 @@
 package com.example.zl.imageshowapplication.base;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVUser;
 import com.example.zl.enums.FooterShowType;
 import com.example.zl.enums.HuaBanFragmentType;
 import com.example.zl.imageshowapplication.R;
@@ -23,11 +26,16 @@ import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.listenerinstance.HuaBanLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
-import com.example.zl.mvp.huaban.presenter.HuaBanPresenter;
-import com.example.zl.mvp.huaban.view.HuanBanView;
+import com.example.zl.imageshowapplication.mvp.huaban.presenter.HuaBanPresenter;
+import com.example.zl.imageshowapplication.mvp.huaban.view.HuanBanView;
+import com.example.zl.leancloud.CollectionBean;
+import com.example.zl.leancloud.CollectionPresenter;
+import com.example.zl.leancloud.CollectionView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -66,6 +74,9 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
 
     /** HuaBan Image 处理逻辑 Presenter 类*/
     private HuaBanPresenter huaBanPresenter;
+
+    /**收藏处理逻辑 Presenter 类*/
+    private CollectionPresenter collectionPresenter;
 
     /**错误事件监听器*/
     private View.OnClickListener onErrorListener = new View.OnClickListener() {
@@ -106,6 +117,24 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
                 setState(FooterShowType.END);   //没有更多数据
             }
             itemCount = mAdapter.getItemCount();
+        }
+    };
+
+    /**收藏显示逻辑 View 类*/
+    private CollectionView collectionView = new CollectionView() {
+        @Override
+        public void onError(String error) {
+            Toast.makeText(getSafeActivity(), error,Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onSucceed() {
+            Toast.makeText(getSafeActivity(), "收藏成功！",Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onQueryCompleted(List<CollectionBean> beanList) {
+
         }
     };
 
@@ -180,6 +209,9 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
         huaBanPresenter = new HuaBanPresenter(getSafeActivity());
         huaBanPresenter.onCreate();
         huaBanPresenter.attachView(huanBanView);
+
+        collectionPresenter = new CollectionPresenter();
+        collectionPresenter.onAttachView(collectionView);
 
         //注册EventBus接收网络状态改变广播通知
         EventBus.getDefault().register(this);
@@ -257,15 +289,25 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
 
         PopupMenu popupMenu = new PopupMenu(getSafeActivity(),view);
         popupMenu.getMenuInflater().inflate(R.menu.huaban_menu,popupMenu.getMenu());
-        popupMenu.show();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            popupMenu.setGravity(Gravity.CENTER); //设置显示位置
+        }
 
         switch (fragmentType) { //配置在不同的 Fragment 显示不同的选项
-            case HUA_BAN_FRAGMENT_BOARD:
+            case HUABAN_FRAGMENT_BOARD:
                 popupMenu.getMenu().findItem(R.id.huaban_go_board).setVisible(false);
+                popupMenu.getMenu().findItem(R.id.bcy_collect_coser).setVisible(false);
+                popupMenu.getMenu().findItem(R.id.collection_delete).setVisible(false);
                 break;
             default:
+                popupMenu.getMenu().findItem(R.id.huaban_collect_board).setVisible(false);
+                popupMenu.getMenu().findItem(R.id.bcy_collect_coser).setVisible(false);
+                popupMenu.getMenu().findItem(R.id.collection_delete).setVisible(false);
                 break;
         }
+
+        popupMenu.show();
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
@@ -279,6 +321,21 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
                         startActivity(intent);
                         break;
                     case R.id.huaban_collect:
+                        if (AVUser.getCurrentUser() != null) {
+                            collectionPresenter.collectPins(AVUser.getCurrentUser().getObjectId(),
+                                    mAdapter.getList().get(position).getUrl());
+                        } else {
+                            Toast.makeText(getSafeActivity(),"请登录后再使用图片收藏功能！",Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case R.id.huaban_collect_board:
+                        if (AVUser.getCurrentUser() != null) {
+                            collectionPresenter.collectBoard(AVUser.getCurrentUser().getObjectId(),
+                                    String.valueOf(mAdapter.getList().get(position).getBoard_id()),
+                                    mAdapter.getList().get(position).getUrl());
+                        } else {
+                            Toast.makeText(getSafeActivity(),"请登录后再使用画板收藏功能！",Toast.LENGTH_SHORT).show();
+                        }
                         break;
                 }
                 return true;

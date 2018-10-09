@@ -1,4 +1,4 @@
-package com.example.zl.imageshowapplication.adapter.huaban;
+package com.example.zl.leancloud;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,11 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.zl.imageshowapplication.R;
-import com.example.zl.imageshowapplication.bean.huaban.transobj.HBImageBean;
 import com.example.zl.imageshowapplication.loadmorefooter.FooterHolder;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
-import com.example.zl.imageshowapplication.utils.CommonUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -26,16 +24,14 @@ import butterknife.ButterKnife;
 import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION;
 
 /**
- * Created by ZhongLeiDev on 2018/9/26.
- * HuaBan 瀑布流显示 Adapter
+ * Created by ZhongLeiDev on 2018/10/9.
+ * 收藏显示 Adapter
  */
 
-public class HuaBanImageWaterFallLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class CollectionFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private Context mContext;
-    private List<HBImageBean> mList = new ArrayList<>();
-    private int screen_width = 0;
-    private int scrren_height = 0;
+    private List<CollectionBean> mList = new ArrayList<>();
 
     private OnMyItemClickListener listener;
 
@@ -58,13 +54,11 @@ public class HuaBanImageWaterFallLoadMoreAdapter extends RecyclerView.Adapter<Re
      * @param lmListener 加载更多监听器
      * @param onErrorClickListener 错误事件监听器
      */
-    public HuaBanImageWaterFallLoadMoreAdapter(Context ctx, LoadMoreListener lmListener,
+    public CollectionFragmentAdapter(Context ctx, LoadMoreListener lmListener,
                                                View.OnClickListener onErrorClickListener) {
         mContext = ctx;
         loadMoreListener = lmListener;
         onErrorClick = onErrorClickListener;
-        screen_width = CommonUtil.getScreenSize(mContext).x;
-        scrren_height = CommonUtil.getScreenSize(mContext).y;
     }
 
     @Override
@@ -83,7 +77,7 @@ public class HuaBanImageWaterFallLoadMoreAdapter extends RecyclerView.Adapter<Re
         if (viewType == NORMALLAYOUT) {
             view = LayoutInflater.from(mContext)
                     .inflate(R.layout.item_image_text, parent, false);
-            return new HuaBanViewHolder(view);
+            return new CollectionViewHolder(view);
         } else {
             view = LayoutInflater.from(mContext)
                     .inflate(R.layout.footer_loadmore_layout, parent, false);
@@ -96,22 +90,13 @@ public class HuaBanImageWaterFallLoadMoreAdapter extends RecyclerView.Adapter<Re
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
 
-        if (holder instanceof HuaBanViewHolder) {
-            HBImageBean hbean = mList.get(position);
+        if (holder instanceof CollectionViewHolder) {
+            CollectionBean bean = mList.get(position);
+            ImageLoader.getInstance().displayImage(bean.getCover(),
+                    ((CollectionViewHolder) holder).mImageView,NORMAL_OPTION);
 
-
-            ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-            double scale = (double) hbean.getHeight()/(double)hbean.getWidth();
-            layoutParams.height = (int)(screen_width/2 * scale);
-            holder.itemView.setLayoutParams(layoutParams);
-
-
-            ImageLoader.getInstance().displayImage(hbean.getUrl(),
-                    ((HuaBanViewHolder) holder).mImageView, NORMAL_OPTION);
-
-            //----------------------------设置点击事件-------------------------------
             if (listener != null) {
-                ((HuaBanViewHolder) holder).mImageView.setOnClickListener(new View.OnClickListener() {
+                ((CollectionViewHolder) holder).mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         listener.myClick(v, position);
@@ -120,7 +105,7 @@ public class HuaBanImageWaterFallLoadMoreAdapter extends RecyclerView.Adapter<Re
 
 
                 // set LongClick
-                ((HuaBanViewHolder) holder).mImageView.setOnLongClickListener(new View.OnLongClickListener() {
+                ((CollectionViewHolder) holder).mImageView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
                         listener.mLongClick(v, position);
@@ -128,10 +113,13 @@ public class HuaBanImageWaterFallLoadMoreAdapter extends RecyclerView.Adapter<Re
                     }
                 });
             }
+
         } else if (holder instanceof FooterHolder) {
+
             StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
             p.setFullSpan(true); //设置 footer 占据整个屏幕宽度
             holder.itemView.setLayoutParams(p);
+
         }
 
     }
@@ -148,16 +136,16 @@ public class HuaBanImageWaterFallLoadMoreAdapter extends RecyclerView.Adapter<Re
         loadMoreListener.loadMoreData();
     }
 
-    public List<HBImageBean> getList() {
+    public List<CollectionBean> getList() {
         return mList;
     }
 
-    public static class HuaBanViewHolder extends RecyclerView.ViewHolder{
+    public static class CollectionViewHolder extends RecyclerView.ViewHolder{
 
         @Bind(R.id.imageview)
         ImageView mImageView;
 
-        public HuaBanViewHolder(View view){
+        public CollectionViewHolder(View view){
             //需要设置super
             super(view);
             ButterKnife.bind(this, view);

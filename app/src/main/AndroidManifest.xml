@@ -53,6 +53,12 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.HuaBanBoardItemsShowActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name="com.example.zl.leancloud.RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.example.zl.leancloud.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.collection.CollectionShowActivity"
+            android:screenOrientation="portrait"/>
 
         <service android:name="com.example.zl.service.NetworkStatusService"/>
     </application>

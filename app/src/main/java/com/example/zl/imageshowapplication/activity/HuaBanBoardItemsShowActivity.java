@@ -52,7 +52,7 @@ public class HuaBanBoardItemsShowActivity extends AppCompatActivity {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         BaseHuaBanImageFragment fragment = BaseHuaBanImageFragment.newInstance(
-                HuaBanFragmentType.HUA_BAN_FRAGMENT_BOARD,"empty",boardId);
+                HuaBanFragmentType.HUABAN_FRAGMENT_BOARD,"empty",boardId);
         transaction.add(R.id.huaban_search_container,fragment);
 
         transaction.commit();

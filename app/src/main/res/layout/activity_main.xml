@@ -16,7 +16,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header"
         app:menu="@menu/draw_view"/>
+    <!--headerLayout中的事件监听需要获取元素，只有在代码中设置header才能获取，所以这里就先不添加
+    headerLayout了，在代码中再添加-->
+    <!--app:headerLayout="@layout/nav_header"-->
 
 </android.support.v4.widget.DrawerLayout>

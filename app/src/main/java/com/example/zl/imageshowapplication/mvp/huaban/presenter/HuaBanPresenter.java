@@ -1,4 +1,4 @@
-package com.example.zl.mvp.huaban.presenter;
+package com.example.zl.imageshowapplication.mvp.huaban.presenter;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,7 +12,7 @@ import com.example.zl.imageshowapplication.bean.huaban.search.SearchPins;
 import com.example.zl.imageshowapplication.bean.huaban.transobj.HBImageBean;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
-import com.example.zl.mvp.huaban.view.HuanBanView;
+import com.example.zl.imageshowapplication.mvp.huaban.view.HuanBanView;
 
 import rx.Observable;
 import rx.Observer;
@@ -97,7 +97,7 @@ public class HuaBanPresenter {
                         }
                     });
 
-        } else if (type == HuaBanFragmentType.HUA_BAN_FRAGMENT_BOARD) {
+        } else if (type == HuaBanFragmentType.HUABAN_FRAGMENT_BOARD) {
 
             huabanService.getBoardPinsFromHuaBanWithRx(boardId, 30)
                     .flatMap(new Func1<LoadMorePins, Observable<DevidedPins>>() {
@@ -299,7 +299,7 @@ public class HuaBanPresenter {
                 case HUABAN_FRAGMENT_ILLUSTRATION:
                     observable = huabanService.getIllustrationFromHuaBanWithRx_More(30, lastPinId);
                     break;
-                case HUA_BAN_FRAGMENT_BOARD:
+                case HUABAN_FRAGMENT_BOARD:
                     observable = huabanService.getBoardPinsFromHuaBanWithRx_More(boardId, 30, lastPinId);
             }
 

@@ -1,4 +1,4 @@
-package com.example.zl.mvp.huaban.view;
+package com.example.zl.imageshowapplication.mvp.huaban.view;
 
 import com.example.zl.imageshowapplication.bean.huaban.transobj.HBImageBean;
 

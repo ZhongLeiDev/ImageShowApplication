@@ -24,19 +24,22 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.avos.avoscloud.AVUser;
 import com.example.zl.enums.AlbumFragmentType;
 import com.example.zl.enums.HuaBanFragmentType;
 import com.example.zl.enums.PictureFragmentType;
+import com.example.zl.imageshowapplication.activity.collection.CollectionShowActivity;
 import com.example.zl.imageshowapplication.activity.searchresult.HuaBanSearchResultActivity;
 import com.example.zl.imageshowapplication.activity.searchresult.SearchResultActivity;
 import com.example.zl.imageshowapplication.adapter.common.FragmentAdapter;
 import com.example.zl.imageshowapplication.base.BaseAlbumInfoFragment;
 import com.example.zl.imageshowapplication.base.BaseHuaBanImageFragment;
 import com.example.zl.imageshowapplication.base.BasePictureInfoFragment;
-import com.example.zl.imageshowapplication.fragment.bcy.BcyWorksWaterFallLoadMoreFragment;
-import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallFragment;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallLoadMoreFragment;
+import com.example.zl.leancloud.CollectionPresenter;
+import com.example.zl.leancloud.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.Serializable;
@@ -57,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private DrawerLayout mDrawerLayout;
     private FragmentAdapter mFragmentAdapter;
+    private ImageView ivAvatar;
+    private TextView tvAvatar;
 
     @Bind(R.id.main_toolbar)
     Toolbar mToolbar;
@@ -89,20 +94,82 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         ab.setHomeAsUpIndicator(R.drawable.menu3);  //设置 ActionBar 的 Home 键
         ab.setDisplayHomeAsUpEnabled(true);
 
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         if (navigationView!=null) {
             navigationView.setNavigationItemSelectedListener(
                     new NavigationView.OnNavigationItemSelectedListener() {
                         @Override
                         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                            Snackbar.make(mDrawerLayout,item.getTitle() + "pressed", Snackbar.LENGTH_LONG).show();
-                            item.setChecked(true);
-                            mDrawerLayout.closeDrawers();
+
+                            switch (item.getItemId()) {
+                                case R.id.nav_tools:
+                                    Snackbar.make(mDrawerLayout,item.getTitle() + "pressed", Snackbar.LENGTH_LONG).show();
+                                    item.setChecked(true);
+                                    mDrawerLayout.closeDrawers();
+                                    break;
+                                case R.id.nav_collection:
+                                    if (AVUser.getCurrentUser() != null) {
+                                        Intent intent = new Intent();
+                                        intent.setClass(MainActivity.this, CollectionShowActivity.class);
+                                        startActivity(intent);
+                                    } else {
+                                        Toast.makeText(MainActivity.this,"请先登陆再查看收藏！",Toast.LENGTH_SHORT).show();
+                                    }
+                                    break;
+                                case R.id.nav_feedback:
+                                    break;
+                                case R.id.nav_logout:
+                                    logout();
+                                    break;
+                            }
                             return true;
                         }
                     });
+        }
+
+        /*--------------------------添加headerLayout---------------------------------*/
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header);
+        ivAvatar = headerView.findViewById(R.id.nav_avatar);
+        tvAvatar = headerView.findViewById(R.id.nav_name);
+
+        if (AVUser.getCurrentUser() != null) {
+            tvAvatar.setText(AVUser.getCurrentUser().getUsername());
+        } else {
+            tvAvatar.setText("未登陆");
+        }
+
+        ivAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            }
+        });
+
+    }
+
+    /**
+     * 用户登出
+     */
+    private void logout() {
+        AVUser.getCurrentUser().logOut();
+        if (AVUser.getCurrentUser() == null) {
+            tvAvatar.setText("未登陆");
+            Toast.makeText(MainActivity.this,"当前用户已登出！",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(MainActivity.this,"退出失败！",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (AVUser.getCurrentUser() != null) {
+            tvAvatar.setText(AVUser.getCurrentUser().getUsername());
+        } else {
+            tvAvatar.setText("未登陆");
         }
     }
 
@@ -120,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH && mEditTextSearch.getText().toString().length()!=0) {
-                    startSearchActivity(mEditTextSearch.getText().toString());
+                    searchHandle();
                     return true;
                 }
                 return false;
@@ -222,18 +289,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         && event.getRawX() <= mEditTextSearch.getRight()
                         && event.getRawX() >= (mEditTextSearch.getRight() - drawableRight.getBounds().width())
                         && mEditTextSearch.getText().toString().length()!=0) {
-                    Log.i(TAG,"SelectedTabPosition->" + mTabLayout.getSelectedTabPosition());
-                    if (mTabLayout.getSelectedTabPosition()<3) {
-                        startSearchActivity(mEditTextSearch.getText().toString());
-                    } else {
-                        //对搜索关键字进行 URLEncode
-                        try {
-                            String key = URLEncoder.encode(mEditTextSearch.getText().toString(),"utf-8");
-                            startHuaBanSearchActivity(key);
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                    }
+//                    Log.i(TAG,"SelectedTabPosition->" + mTabLayout.getSelectedTabPosition());
+                    searchHandle();
                     v.performClick();
                     return true;
                 }
@@ -241,4 +298,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
         return false;
     }
+
+    /**
+     * 根据当前 Tab 选择适当的搜索策略
+     */
+    private void searchHandle() {
+        if (mTabLayout.getSelectedTabPosition()<3) {
+            startSearchActivity(mEditTextSearch.getText().toString());
+        } else {
+            //对搜索关键字进行 URLEncode
+            try {
+                String key = URLEncoder.encode(mEditTextSearch.getText().toString(),"utf-8");
+                startHuaBanSearchActivity(key);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

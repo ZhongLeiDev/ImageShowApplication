@@ -1,25 +1,22 @@
 package com.example.zl.imageshowapplication.myinterface.listenerinstance;
 
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
-
-import com.example.zl.imageshowapplication.adapter.huaban.HuaBanImageWaterFallLoadMoreAdapter;
+import com.example.zl.leancloud.CollectionFragmentAdapter;
 
 /**
  * Created by ZhongLeiDev on 2018/9/26.
  * StaggeredGridLayoutManager 滚动监听器，用于判断是否滚动到最后
  */
 
-public class HuaBanLoadMoreScrollListener extends RecyclerView.OnScrollListener{
+public class CollectionScrollListener extends RecyclerView.OnScrollListener{
 
     boolean isSlidingToLast = false;
 
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         final StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
-        final HuaBanImageWaterFallLoadMoreAdapter adapter = (HuaBanImageWaterFallLoadMoreAdapter) recyclerView.getAdapter();
+        final CollectionFragmentAdapter adapter = (CollectionFragmentAdapter) recyclerView.getAdapter();
 
 //        Log.i("HuaBanloadMoreListener","Scrolling...");
 
@@ -36,16 +33,11 @@ public class HuaBanLoadMoreScrollListener extends RecyclerView.OnScrollListener{
      * @param manager
      * @param adapter
      */
-    private void handle(StaggeredGridLayoutManager manager, HuaBanImageWaterFallLoadMoreAdapter adapter) {
+    private void handle(StaggeredGridLayoutManager manager, CollectionFragmentAdapter adapter) {
         //获取最后一个完全显示的ItemPosition
         int[] lastVisiblePositions = manager.findLastVisibleItemPositions(new int[manager.getSpanCount()]);
         int lastVisiblePos = getMaxElem(lastVisiblePositions);
         int totalItemCount = manager.getItemCount();
-
-        Log.i("HuaBanloadMoreListener", "spanCount->" + manager.getSpanCount() +
-                ", lastPos->" + lastVisiblePos +
-                ", totalItemCount->" + totalItemCount +
-                ", slidingToLast->" + isSlidingToLast);
 
         // 判断是否滚动到底部,[totalItemCount-3]这个值是经验值,因为最后的可见元素位置编号与元素总数量一般
         //都是不一样的
