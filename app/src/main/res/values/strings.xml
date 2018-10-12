@@ -43,4 +43,16 @@
     <string name="nav_feedback">用户反馈</string>
     <string name="nav_logout">退出当前用户</string>
 
+    <string name="base_version">ISA v1.0</string>
+    <string name="welcome_bg">欢迎页面背景</string>
+    <string name="welcome_skip">快速跳过 4 </string>
+    <string name="welcome_skip1">快速跳过 3 </string>
+    <string name="welcome_skip2">快速跳过 2 </string>
+    <string name="welcome_skip3">快速跳过 1 </string>
+    <string name="welcome_skip4">快速跳过 0 </string>
+
+    <string name="default_name">浅浅ASAKI</string>
+    <string name="login_forget_pwd">忘记密码？</string>
+    <string name="login_go_register">注册新账号 >>> </string>
+
 </resources>

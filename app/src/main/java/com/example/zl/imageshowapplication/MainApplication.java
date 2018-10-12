@@ -94,6 +94,14 @@ public class MainApplication extends Application {
         if (!f1.exists()){
             f1.mkdirs();
         }
+        File f2 = new File(UILConfig.WELCOMEPATH);
+        if (!f2.exists()) {
+            f2.mkdirs();
+        }
+        File f3 = new File(UILConfig.AVATARPATH);
+        if (!f3.exists()) {
+            f3.mkdirs();
+        }
 
     }
 }

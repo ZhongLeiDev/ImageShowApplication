@@ -1,13 +1,14 @@
 package com.example.zl.leancloud;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,21 +17,45 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.SignUpCallback;
 import com.avos.avoscloud.AVAnalytics;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.zl.imageshowapplication.MainActivity;
 import com.example.zl.imageshowapplication.R;
+import com.example.zl.imageshowapplication.config.UILConfig;
+import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
+import com.example.zl.imageshowapplication.utils.MD5Utils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import static com.example.zl.imageshowapplication.utils.AvatarSelectUtil.PHONE_CROP;
+import static com.example.zl.imageshowapplication.utils.AvatarSelectUtil.SCAN_OPEN_PHONE;
 
 public class RegisterActivity extends AppCompatActivity {
+
+  private static final String TAG = "RegisterActivity";
+  /**当前头像临时存储路径*/
+  private static final String CURRENTAVATAR = UILConfig.AVATARPATH + File.separator + "currentAvatar.png";
+  private Uri mCutUri;
+
   private AutoCompleteTextView mUsernameView;
   private EditText mPasswordView;
-  private View mProgressView;
-  private View mRegisterFormView;
+  private ImageView avatar;
+  private LottieAnimationView register_loading;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +64,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     // Set up the register form.
-    mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
+    mUsernameView = findViewById(R.id.username);
 
-    mPasswordView = (EditText) findViewById(R.id.password);
+    mPasswordView = findViewById(R.id.password);
     mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
       @Override
       public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -53,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
       }
     });
 
-    Button musernameSignInButton = (Button) findViewById(R.id.username_register_button);
+    Button musernameSignInButton = findViewById(R.id.username_register_button);
     musernameSignInButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -61,8 +86,21 @@ public class RegisterActivity extends AppCompatActivity {
       }
     });
 
-    mRegisterFormView = findViewById(R.id.register_form);
-    mProgressView = findViewById(R.id.register_progress);
+    register_loading = findViewById(R.id.register_animation_view);
+    avatar = findViewById(R.id.register_avatar);
+
+    Glide.with(this).load(R.drawable.default_user)  //圆形显示
+            .apply(RequestOptions.bitmapTransform(new CircleCrop()))
+            .into(avatar);
+
+    avatar.setOnClickListener(new OnClickListener() { //设置头像选择监听
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, SCAN_OPEN_PHONE);
+      }
+    });
+
   }
 
   private void attemptRegister() {
@@ -99,9 +137,9 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void done(AVException e) {
           if (e == null) {
-            // 注册成功，把用户对象赋值给当前用户 AVUser.getCurrentUser()
-//            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-            RegisterActivity.this.finish();
+            //注册成功，上传头像文件
+            uploadAvatar();
+
           } else {
             // 失败的原因可能有多种，常见的是用户名已经存在。
             showProgress(false);
@@ -110,6 +148,42 @@ public class RegisterActivity extends AppCompatActivity {
         }
       });
     }
+  }
+
+  /**
+   * 上传头像文件
+   */
+  private void uploadAvatar() {
+
+    if (mCutUri != null) {
+      AVFile file;
+      try {
+        file = AVFile.withAbsoluteLocalPath(
+                MD5Utils.getStringMD5(AVUser.getCurrentUser().getUsername()) + ".png",
+                mCutUri.getPath());
+        file.saveInBackground(new SaveCallback() {
+          @Override
+          public void done(AVException e) {
+            if (e == null) {
+              Log.i(TAG, "avatar upload succeed!");
+
+              if (AvatarSelectUtil.copyAvatar(CURRENTAVATAR,
+                      AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()))) {
+                RegisterActivity.this.finish();
+                startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+              }
+
+            } else {
+              e.printStackTrace();
+            }
+          }
+        });
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
+
+    }
+
   }
 
   private boolean isusernameValid(String username) {
@@ -122,37 +196,12 @@ public class RegisterActivity extends AppCompatActivity {
     return password.length() > 4;
   }
 
-  @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+  /**
+   * 加载进度条显示
+   * @param show 显示状态
+   */
   private void showProgress(final boolean show) {
-    // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-    // for very easy animations. If available, use these APIs to fade-in
-    // the progress spinner.
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-      int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-      mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-      mRegisterFormView.animate().setDuration(shortAnimTime).alpha(
-              show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-        @Override
-        public void onAnimationEnd(Animator animation) {
-          mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-      });
-
-      mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-      mProgressView.animate().setDuration(shortAnimTime).alpha(
-              show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-        @Override
-        public void onAnimationEnd(Animator animation) {
-          mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
-      });
-    } else {
-      // The ViewPropertyAnimator APIs are not available, so simply show
-      // and hide the relevant UI components.
-      mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-      mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-    }
+    register_loading.setVisibility(show ? View.VISIBLE : View.GONE);
   }
 
   @Override
@@ -174,5 +223,104 @@ public class RegisterActivity extends AppCompatActivity {
     super.onResume();
     AVAnalytics.onResume(this);
   }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (resultCode == RESULT_OK){
+      switch (requestCode){
+        case SCAN_OPEN_PHONE: //从相册图片后返回的uri
+          //启动裁剪
+          startActivityForResult(CutForPhoto(data.getData()), PHONE_CROP);
+          break;
+        case AvatarSelectUtil.PHONE_CAMERA: //相机返回的 uri
+          //启动裁剪
+          String path = this.getExternalCacheDir().getPath();
+          String name = "output.png";
+          startActivityForResult(CutForCamera(path,name),PHONE_CROP);
+          break;
+        case PHONE_CROP:
+          //获取裁剪后的图片，并显示出来
+//            Bitmap bitmap = BitmapFactory.decodeStream(
+//                    this.getContentResolver().openInputStream(mCutUri));
+
+          Glide.with(this).load(mCutUri)
+                  .apply(
+                          RequestOptions
+                                  .bitmapTransform(new CircleCrop())  //圆形显示
+                                  .skipMemoryCache(true)  //跳过内存缓存
+                                  .diskCacheStrategy(DiskCacheStrategy.NONE)  //跳过磁盘缓存
+                  )
+                  .into(avatar);
+
+          break;
+      }
+    }
+  }
+
+  /**
+   * 图片裁剪
+   * @param uri
+   * @return
+   */
+  @NonNull
+  private Intent CutForPhoto(Uri uri) {
+    try {
+      //直接裁剪
+      Intent intent = new Intent("com.android.camera.action.CROP");
+      //设置裁剪之后的图片路径文件
+//      File cutfile = new File(Environment.getExternalStorageDirectory().getPath(),
+//              "cutcamera.png"); //随便命名一个
+      File cutfile = new File(CURRENTAVATAR); //随便命名一个
+      if (cutfile.exists()){ //如果已经存在，则先删除
+        boolean delete = cutfile.delete();
+        Log.i(TAG,"File Delete Status -> " + delete);
+      }
+      cutfile.createNewFile();
+      //初始化 uri
+      Uri imageUri = uri; //返回来的 uri
+      Uri outputUri = null; //真实的 uri
+      Log.d(TAG, "CutForPhoto: "+ cutfile);
+      outputUri = Uri.fromFile(cutfile);
+      mCutUri = outputUri;
+      Log.d(TAG, "mCameraUri: "+ mCutUri);
+      // crop为true是设置在开启的intent中设置显示的view可以剪裁
+      intent.putExtra("crop",true);
+      // aspectX,aspectY 是宽高的比例，这里设置正方形
+      intent.putExtra("aspectX",1);
+      intent.putExtra("aspectY",1);
+      //设置要裁剪的宽高
+      intent.putExtra("outputX", AvatarSelectUtil.dip2px(this,200)); //200dp
+      intent.putExtra("outputY", AvatarSelectUtil.dip2px(this,200));
+      intent.putExtra("scale",true);
+      //如果图片过大，会导致oom，这里设置为false
+      intent.putExtra("return-data",false);
+      if (imageUri != null) {
+        intent.setDataAndType(imageUri, "image/*");
+      }
+      if (outputUri != null) {
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
+      }
+      intent.putExtra("noFaceDetection", true);
+      //压缩图片
+      intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+      return intent;
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  /**
+   * 相机获取图片裁剪
+   * @param path
+   * @param name
+   * @return
+   */
+  private Intent CutForCamera(String path, String name) {
+    //TODO 相机获取图片处理
+    return null;
+  }
+
 }
 

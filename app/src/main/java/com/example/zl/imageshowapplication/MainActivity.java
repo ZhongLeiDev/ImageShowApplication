@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,7 +39,7 @@ import com.example.zl.imageshowapplication.base.BaseAlbumInfoFragment;
 import com.example.zl.imageshowapplication.base.BaseHuaBanImageFragment;
 import com.example.zl.imageshowapplication.base.BasePictureInfoFragment;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallLoadMoreFragment;
-import com.example.zl.leancloud.CollectionPresenter;
+import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
 import com.example.zl.leancloud.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -58,10 +59,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private static final String TAG = "MainActivity";
 
+    //记录用户首次点击返回键的时间
+    private long firstTime = 0;
+
     private DrawerLayout mDrawerLayout;
     private FragmentAdapter mFragmentAdapter;
     private ImageView ivAvatar;
     private TextView tvAvatar;
+    private ImageView ivAvatar_bg;
 
     @Bind(R.id.main_toolbar)
     Toolbar mToolbar;
@@ -75,8 +80,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     ImageView mImageBackdrop;
 
     @Override
+    public void onBackPressed() {
+        long secondTime = System.currentTimeMillis();
+        if (secondTime - firstTime > 2000) {
+            Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            firstTime = secondTime;
+        } else {
+            System.exit(0);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);//去除标题栏
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
@@ -106,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                             switch (item.getItemId()) {
                                 case R.id.nav_tools:
                                     Snackbar.make(mDrawerLayout,item.getTitle() + "pressed", Snackbar.LENGTH_LONG).show();
-                                    item.setChecked(true);
+//                                    item.setChecked(true);
                                     mDrawerLayout.closeDrawers();
                                     break;
                                 case R.id.nav_collection:
@@ -133,12 +150,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         View headerView = navigationView.inflateHeaderView(R.layout.nav_header);
         ivAvatar = headerView.findViewById(R.id.nav_avatar);
         tvAvatar = headerView.findViewById(R.id.nav_name);
+        ivAvatar_bg = headerView.findViewById(R.id.nav_header_bg);
 
-        if (AVUser.getCurrentUser() != null) {
-            tvAvatar.setText(AVUser.getCurrentUser().getUsername());
-        } else {
-            tvAvatar.setText("未登陆");
-        }
+        setUserAvatar();
 
         ivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,27 +164,33 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     /**
+     * 设置用户图像
+     */
+    private void setUserAvatar() {
+        if (AVUser.getCurrentUser() != null) {
+            tvAvatar.setText(AVUser.getCurrentUser().getUsername());
+            AvatarSelectUtil.setAvatarWithPath(this,ivAvatar_bg,ivAvatar,
+                    AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()));
+        } else {
+            tvAvatar.setText("未登陆");
+            AvatarSelectUtil.setAvatarWithSrcId(this,ivAvatar_bg,ivAvatar,R.drawable.default_user);
+        }
+    }
+
+    /**
      * 用户登出
      */
     private void logout() {
+
         AVUser.getCurrentUser().logOut();
-        if (AVUser.getCurrentUser() == null) {
-            tvAvatar.setText("未登陆");
-            Toast.makeText(MainActivity.this,"当前用户已登出！",Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(MainActivity.this,"退出失败！",Toast.LENGTH_SHORT).show();
-        }
+        setUserAvatar();
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (AVUser.getCurrentUser() != null) {
-            tvAvatar.setText(AVUser.getCurrentUser().getUsername());
-        } else {
-            tvAvatar.setText("未登陆");
-        }
+        setUserAvatar();
     }
 
     @Override

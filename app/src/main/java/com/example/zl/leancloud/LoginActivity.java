@@ -1,10 +1,6 @@
 package com.example.zl.leancloud;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -16,20 +12,40 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.GetDataCallback;
 import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.AVAnalytics;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.zl.imageshowapplication.R;
+import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
+import com.example.zl.imageshowapplication.utils.MD5Utils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
   private AutoCompleteTextView mUsernameView;
   private EditText mPasswordView;
-  private View mProgressView;
-  private View mLoginFormView;
+  private ImageView avatar;
+  private LottieAnimationView loadingview;
+
+  private boolean isAvatarExist = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +59,9 @@ public class LoginActivity extends AppCompatActivity {
 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setTitle(getString(R.string.login));
-    mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
+    mUsernameView = findViewById(R.id.username);
 
-    mPasswordView = (EditText) findViewById(R.id.password);
+    mPasswordView = findViewById(R.id.password);
     mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
       @Override
       public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -56,8 +72,19 @@ public class LoginActivity extends AppCompatActivity {
         return false;
       }
     });
+    mPasswordView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+      @Override
+      public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+          isAvatarExist = AvatarSelectUtil.setAvatarWithPath1(
+                  LoginActivity.this,avatar,
+                  AvatarSelectUtil.buildAvatarPath(mUsernameView.getText().toString())
+          );
+        }
+      }
+    });
 
-    Button mUsernameLoginButton = (Button) findViewById(R.id.username_login_button);
+    Button mUsernameLoginButton = findViewById(R.id.username_login_button);
     mUsernameLoginButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -65,8 +92,8 @@ public class LoginActivity extends AppCompatActivity {
       }
     });
 
-    Button mUsernameRegisterButton = (Button) findViewById(R.id.username_register_button);
-    mUsernameRegisterButton.setOnClickListener(new OnClickListener() {
+    TextView tvlogin = findViewById(R.id.login_go_register);
+    tvlogin.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View view) {
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
@@ -74,8 +101,13 @@ public class LoginActivity extends AppCompatActivity {
       }
     });
 
-    mLoginFormView = findViewById(R.id.login_form);
-    mProgressView = findViewById(R.id.login_progress);
+    loadingview = findViewById(R.id.login_animation_view);
+    avatar = findViewById(R.id.login_avatar);
+
+    Glide.with(this).load(R.drawable.default_user)  //圆形显示
+            .apply(RequestOptions.bitmapTransform(new CircleCrop()))
+            .into(avatar);
+
   }
 
   private void attemptLogin() {
@@ -109,7 +141,53 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void done(AVUser avUser, AVException e) {
           if (e == null) {
-            LoginActivity.this.finish();
+            if (isAvatarExist){
+
+              showProgress(false);
+              LoginActivity.this.finish();
+
+            } else {
+
+              //下载头像文件
+              AVQuery<AVObject> query = new AVQuery<>("_File");
+              query.whereEqualTo("name",MD5Utils.getStringMD5(AVUser.getCurrentUser().getUsername()) + ".png");
+              query.findInBackground(new FindCallback<AVObject>() {
+                @Override
+                public void done(List<AVObject> list, AVException e) {
+                  if (e == null){
+
+                    AVFile file = new AVFile("test.png", list.get(0).getString("url"), new HashMap<String, Object>());
+                    file.getDataInBackground(new GetDataCallback() {
+                      @Override
+                      public void done(byte[] bytes, AVException e) {
+                        if (e == null) {
+                          File f = new File(AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()));
+                          try {
+                            f.createNewFile();
+                            FileOutputStream fos = new FileOutputStream(f);
+                            fos.write(bytes,0,bytes.length);
+                            fos.flush();
+                            fos.close();
+
+                            showProgress(false);
+                            LoginActivity.this.finish();
+
+                          } catch (IOException e1) {
+                            e1.printStackTrace();
+                          }
+                        } else {
+                          e.printStackTrace();
+                        }
+                      }
+                    });
+
+                  } else {
+                    e.printStackTrace();
+                  }
+                }
+              });
+
+            }
 //            startActivity(new Intent(LoginActivity.this, MainActivity.class));
           } else {
             showProgress(false);
@@ -126,39 +204,10 @@ public class LoginActivity extends AppCompatActivity {
   }
 
   /**
-   * Shows the progress UI and hides the login form.
+   * Shows the progress UI
    */
-  @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
   private void showProgress(final boolean show) {
-    // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-    // for very easy animations. If available, use these APIs to fade-in
-    // the progress spinner.
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-      int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-      mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-      mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-              show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-        @Override
-        public void onAnimationEnd(Animator animation) {
-          mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-      });
-
-      mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-      mProgressView.animate().setDuration(shortAnimTime).alpha(
-              show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-        @Override
-        public void onAnimationEnd(Animator animation) {
-          mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
-      });
-    } else {
-      // The ViewPropertyAnimator APIs are not available, so simply show
-      // and hide the relevant UI components.
-      mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-      mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-    }
+    loadingview.setVisibility(show ? View.VISIBLE : View.GONE);
   }
 
   @Override
