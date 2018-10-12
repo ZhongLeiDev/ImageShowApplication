@@ -169,8 +169,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private void setUserAvatar() {
         if (AVUser.getCurrentUser() != null) {
             tvAvatar.setText(AVUser.getCurrentUser().getUsername());
-            AvatarSelectUtil.setAvatarWithPath(this,ivAvatar_bg,ivAvatar,
-                    AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()));
+            if (!AvatarSelectUtil.setAvatarWithPath(this,ivAvatar_bg,ivAvatar,
+                    AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()))) {
+                AvatarSelectUtil.setAvatarWithSrcId(this,ivAvatar_bg,ivAvatar,R.drawable.default_user);
+            }
         } else {
             tvAvatar.setText("未登陆");
             AvatarSelectUtil.setAvatarWithSrcId(this,ivAvatar_bg,ivAvatar,R.drawable.default_user);

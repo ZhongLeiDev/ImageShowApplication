@@ -1,11 +1,15 @@
 package com.example.zl.imageshowapplication.activity;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -38,9 +42,10 @@ import java.util.TimerTask;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+
+import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
 
 /**
  * Created by ZhongLeiDev on 2018/10/10.
@@ -123,10 +128,50 @@ public class MainWelcomePageActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        initView();
+        requestAllPermission();
 
-        initData();
+        //初始化 View 以及初始化数据之前先动态申请权限，这里主要是 SD 卡读写权限
+//        initView();
+//        initData();
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1) {
+            boolean isAllPermissionOK = true;
+            for (int i = 0; i < permissions.length; i++) {
+                /*-------------------------不提示----------------------------
+                if (grantResults[i] == PERMISSION_GRANTED) {
+                    Toast.makeText(this, "" + "权限" + permissions[i] + "申请成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    isAllPermissionOK = false;
+                    Toast.makeText(this, "" + "权限" + permissions[i] + "申请失败", Toast.LENGTH_SHORT).show();
+                }*/
+
+                if (grantResults[i] != PERMISSION_GRANTED) {
+                    isAllPermissionOK = false;
+                }
+
+            }
+
+            if (isAllPermissionOK) { //所有权限申请完毕，则开始进行欢迎页面的渲染
+
+                Toast.makeText(this, "" + "权限申请成功!", Toast.LENGTH_SHORT).show();
+
+                initView();
+                initData();
+
+            } else {
+
+                Toast.makeText(this, "" + "权限申请失败!", Toast.LENGTH_SHORT).show();
+                MainWelcomePageActivity.this.finish();
+
+            }
+
+        }
     }
 
     private void initView() {
@@ -228,6 +273,70 @@ public class MainWelcomePageActivity extends AppCompatActivity {
                 file.delete();
             }
         }
+    }
+
+    /**
+     * 动态申请权限
+     */
+    private void requestAllPermission() {
+        //判断是否已经赋予权限
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                //这里可以写个对话框之类的项向用户解释为什么要申请权限，并在对话框的确认键后续再次申请权限
+                showPermissionRequestDialog();
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            }
+        } else {
+
+            initView();
+            initData();
+
+        }
+    }
+
+    /**
+     * 权限申请提示框
+     */
+    private void showPermissionRequestDialog() {
+        //    通过AlertDialog.Builder这个类来实例化我们的一个AlertDialog的对象
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainWelcomePageActivity.this);
+        //    设置Title的图标
+        builder.setIcon(R.drawable.errorloading);
+        //    设置Title的内容
+        builder.setTitle("权限申请");
+        //    设置Content来显示一个信息
+        builder.setMessage("需要开启SD卡读写权限,否则应用不能正常运行！");
+        //    设置一个PositiveButton
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                ActivityCompat.requestPermissions(MainWelcomePageActivity.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            }
+        });
+        //    设置一个NegativeButton
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                MainWelcomePageActivity.this.finish();
+            }
+        });
+        //    显示出该对话框
+        builder.show();
     }
 
 }
