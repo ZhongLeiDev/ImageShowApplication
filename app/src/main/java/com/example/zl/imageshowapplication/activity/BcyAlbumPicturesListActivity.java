@@ -3,15 +3,10 @@ package com.example.zl.imageshowapplication.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,22 +14,15 @@ import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.adapter.bcy.BcyAlbumPicturesListAdapter;
 import com.example.zl.imageshowapplication.bean.bcy.retro.PictureInfo;
 import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
-import com.example.zl.imageshowapplication.bean.geek.GeekImgBean;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
-import com.example.zl.imageshowapplication.widget.TounChImageView;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.example.zl.imageshowapplication.config.UILConfig.NORMAL_OPTION;
 
 /**
  * Created by ZhongLeiDev on 2018-05-17.
@@ -54,6 +42,9 @@ public class BcyAlbumPicturesListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.album_pictures_list);
+
+        //将当前 Activity 纳入管理
+        BcyActivityManager.getActivityManager().addActivity(this);
 
         albumId = (String)getIntent().getSerializableExtra("data");
 

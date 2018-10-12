@@ -11,6 +11,7 @@ import com.example.zl.commoncomponent.SimpleToolBar;
 import com.example.zl.enums.HuaBanFragmentType;
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.base.BaseHuaBanImageFragment;
+import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,6 +36,9 @@ public class HuaBanBoardItemsShowActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);//去除标题栏
         setContentView(R.layout.layout_huaban_searchresult_activity);
+
+        //将当前 Activity 纳入管理
+        BcyActivityManager.getActivityManager().addActivity(this);
 
         ButterKnife.bind(this);
 

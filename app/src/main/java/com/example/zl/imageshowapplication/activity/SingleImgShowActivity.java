@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.bean.bcy.retro.PictureInfo;
+import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.example.zl.imageshowapplication.utils.FileDownloadUtil;
 import com.example.zl.commoncomponent.TextProgressBar;
 import com.example.zl.imageshowapplication.widget.ZoomImageView;
@@ -38,6 +39,9 @@ public class SingleImgShowActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.singleimgshow_layout);
+
+        //将当前 Activity 纳入管理
+        BcyActivityManager.getActivityManager().addActivity(this);
 
         pictureInfo = (PictureInfo) getIntent().getSerializableExtra("data");
 

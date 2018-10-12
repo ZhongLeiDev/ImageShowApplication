@@ -26,6 +26,7 @@ import com.example.zl.imageshowapplication.bean.huaban.devided.DevidedJsonRootBe
 import com.example.zl.imageshowapplication.bean.huaban.devided.DevidedPins;
 import com.example.zl.imageshowapplication.config.UILConfig;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
+import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
 
@@ -125,6 +126,9 @@ public class MainWelcomePageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);//去除标题栏
         setContentView(R.layout.activity_welcome_layout);
+
+        //将当前 Activity 纳入管理
+        BcyActivityManager.getActivityManager().addActivity(this);
 
         ButterKnife.bind(this);
 

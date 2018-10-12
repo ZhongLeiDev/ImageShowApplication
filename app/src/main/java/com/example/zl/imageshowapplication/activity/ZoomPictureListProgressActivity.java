@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.bean.bcy.retro.PictureInfo;
+import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.example.zl.imageshowapplication.utils.FileDownloadUtil;
 import com.example.zl.commoncomponent.TextProgressBar;
 import com.example.zl.imageshowapplication.widget.TounChImageView;
@@ -52,6 +53,9 @@ public class ZoomPictureListProgressActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.viewpager_progress_layout);
+
+        //将当前 Activity 纳入管理
+        BcyActivityManager.getActivityManager().addActivity(this);
 
         urlList =  (ArrayList<PictureInfo>) getIntent().getSerializableExtra("data");
         currentpos = getIntent().getIntExtra("position", 0);

@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.config.UILConfig;
 
 import java.io.File;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 /**
  * Created by ZhongLeiDev on 2018/10/11.
@@ -107,11 +110,13 @@ public class AvatarSelectUtil {
      */
     public static void setAvatarWithSrcId(Context ctx, ImageView background, ImageView avatar, int resId) {
         Glide.with(ctx).load(resId)  //模糊特效
+                .transition(withCrossFade())    //渐隐特效显示
                 .apply(RequestOptions.bitmapTransform(new BlurTransformation(25))
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true))
                 .into(background);
         Glide.with(ctx).load(resId)  //圆形显示
+                .transition(withCrossFade())    //渐隐特效显示
                 .apply(RequestOptions.bitmapTransform(new CircleCrop())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true))
@@ -129,11 +134,13 @@ public class AvatarSelectUtil {
         File avatarFile = new File(filepath);
         if (avatarFile.exists()) {
             Glide.with(ctx).load(avatarFile)  //模糊特效
+                    .transition(withCrossFade())    //渐隐特效显示
                     .apply(RequestOptions.bitmapTransform(new BlurTransformation(25))
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .skipMemoryCache(true))
                     .into(background);
             Glide.with(ctx).load(avatarFile)  //圆形显示
+                    .transition(withCrossFade())    //渐隐特效显示
                     .apply(RequestOptions.bitmapTransform(new CircleCrop())
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .skipMemoryCache(true))
@@ -156,12 +163,19 @@ public class AvatarSelectUtil {
         File avatarFile = new File(filepath);
         if (avatarFile.exists()) {
             Glide.with(ctx).load(avatarFile)  //圆形显示
+                    .transition(withCrossFade())    //渐隐特效显示
                     .apply(RequestOptions.bitmapTransform(new CircleCrop())
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .skipMemoryCache(true))
                     .into(avatar);
             return true;
         } else {
+            Glide.with(ctx).load(R.drawable.default_user)  //如果头像文件不存在，则显示默认头像
+                    .transition(withCrossFade())    //渐隐特效显示
+                    .apply(RequestOptions.bitmapTransform(new CircleCrop())
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true))
+                    .into(avatar);
             return false;
         }
     }

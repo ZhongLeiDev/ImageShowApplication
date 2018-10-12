@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.bean.bcy.retro.PictureInfo;
-import com.example.zl.imageshowapplication.bean.geek.GeekImgBean;
+import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.example.zl.imageshowapplication.widget.TounChImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -38,6 +38,9 @@ public class BcyPicturesListPagerImageViewActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.viewpager_layout);
+
+        //将当前 Activity 纳入管理
+        BcyActivityManager.getActivityManager().addActivity(this);
 
         urlList =  (ArrayList<PictureInfo>) getIntent().getSerializableExtra("data");
         currentpos = getIntent().getIntExtra("position", 0);

@@ -35,6 +35,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.zl.imageshowapplication.MainActivity;
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.config.UILConfig;
+import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
 import com.example.zl.imageshowapplication.utils.MD5Utils;
 
@@ -61,6 +62,9 @@ public class RegisterActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_register);
+
+    //将当前 Activity 纳入管理
+    BcyActivityManager.getActivityManager().addActivity(this);
 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     // Set up the register form.
@@ -169,8 +173,8 @@ public class RegisterActivity extends AppCompatActivity {
 
               if (AvatarSelectUtil.copyAvatar(CURRENTAVATAR,
                       AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()))) {
-                RegisterActivity.this.finish();
                 startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                RegisterActivity.this.finish();
               }
 
             } else {
@@ -182,6 +186,9 @@ public class RegisterActivity extends AppCompatActivity {
         e.printStackTrace();
       }
 
+    } else { //如果没有选择头像文件则直接进行跳转
+      startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+      RegisterActivity.this.finish();
     }
 
   }

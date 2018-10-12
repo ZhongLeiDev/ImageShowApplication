@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.zl.imageshowapplication.R;
+import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
 import com.example.zl.imageshowapplication.utils.MD5Utils;
 
@@ -51,6 +52,9 @@ public class LoginActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
+
+    //将当前 Activity 纳入管理
+    BcyActivityManager.getActivityManager().addActivity(this);
 
     if (AVUser.getCurrentUser() != null) {
 //      startActivity(new Intent(LoginActivity.this, MainActivity.class));
@@ -155,34 +159,38 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void done(List<AVObject> list, AVException e) {
                   if (e == null){
+                    if (list.size()>0) {
+                      AVFile file = new AVFile("test.png", list.get(0).getString("url"), new HashMap<String, Object>());
+                      file.getDataInBackground(new GetDataCallback() {
+                        @Override
+                        public void done(byte[] bytes, AVException e) {
+                          if (e == null) {
+                            File f = new File(AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()));
+                            try {
+                              f.createNewFile();
+                              FileOutputStream fos = new FileOutputStream(f);
+                              fos.write(bytes, 0, bytes.length);
+                              fos.flush();
+                              fos.close();
 
-                    AVFile file = new AVFile("test.png", list.get(0).getString("url"), new HashMap<String, Object>());
-                    file.getDataInBackground(new GetDataCallback() {
-                      @Override
-                      public void done(byte[] bytes, AVException e) {
-                        if (e == null) {
-                          File f = new File(AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()));
-                          try {
-                            f.createNewFile();
-                            FileOutputStream fos = new FileOutputStream(f);
-                            fos.write(bytes,0,bytes.length);
-                            fos.flush();
-                            fos.close();
+                              showProgress(false);
+                              LoginActivity.this.finish();
 
-                            showProgress(false);
-                            LoginActivity.this.finish();
-
-                          } catch (IOException e1) {
-                            e1.printStackTrace();
+                            } catch (IOException e1) {
+                              e1.printStackTrace();
+                            }
+                          } else {
+                            e.printStackTrace();
                           }
-                        } else {
-                          e.printStackTrace();
                         }
-                      }
-                    });
-
+                      });
+                    } else { //如果没有查询到对应用户的头像文件，则使用默认头像
+                      showProgress(false);
+                      LoginActivity.this.finish();
+                    }
                   } else {
-                    e.printStackTrace();
+                    showProgress(false);
+                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                   }
                 }
               });

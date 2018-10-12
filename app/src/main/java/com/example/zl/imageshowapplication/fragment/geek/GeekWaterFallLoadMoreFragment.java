@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVUser;
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.activity.GeekListPagerImageViewActivity;
 import com.example.zl.imageshowapplication.adapter.geek.GeekWaterFallLoadMoreAdapter;
@@ -25,6 +26,9 @@ import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
 import com.example.zl.imageshowapplication.utils.FileDownloadUtil;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
+import com.example.zl.leancloud.CollectionBean;
+import com.example.zl.leancloud.CollectionPresenter;
+import com.example.zl.leancloud.CollectionView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -56,6 +60,25 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
     private GeekWaterFallLoadMoreAdapter mAdapter;
     private boolean isNetWorkConnected = false;
 
+    private CollectionPresenter collectionPresenter;
+
+    private CollectionView collectionView = new CollectionView() {
+        @Override
+        public void onError(String error) {
+            Toast.makeText(getSafeActivity(), error,Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onSucceed() {
+            Toast.makeText(getSafeActivity(), "收藏成功！",Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onQueryCompleted(List<CollectionBean> beanList) {
+
+        }
+    };
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_image_main;
@@ -71,6 +94,9 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
 
         //注册EventBus接收网络状态改变广播通知
         EventBus.getDefault().register(this);
+
+        collectionPresenter = new CollectionPresenter();
+        collectionPresenter.onAttachView(collectionView);
 
         mRecyclerView.setLayoutManager(new
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
@@ -184,6 +210,12 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
                         }
                         break;
                     case R.id.geek_collect:
+                        if (AVUser.getCurrentUser() != null) {
+                            collectionPresenter.collectPins(AVUser.getCurrentUser().getObjectId(),
+                                    mAdapter.getList().get(position).getUrl());
+                        } else {
+                            Toast.makeText(getSafeActivity(),"请登录后再使用图片收藏功能！",Toast.LENGTH_SHORT).show();
+                        }
                         break;
                 }
                 return true;

@@ -7,7 +7,7 @@ import com.example.zl.imageshowapplication.bean.huaban.transobj.HBImageBean;
  * HuaBanImage 显示接口
  */
 
-public interface HuanBanView {
+public interface HuaBanView {
 
     void onNext(HBImageBean bean);
     void onError(String error);

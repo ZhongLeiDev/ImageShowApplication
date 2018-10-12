@@ -1,21 +1,17 @@
 package com.example.zl.imageshowapplication.activity.collection;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 
-import com.avos.avoscloud.AVUser;
 import com.example.zl.commoncomponent.SimpleToolBar;
 import com.example.zl.imageshowapplication.R;
-import com.example.zl.imageshowapplication.activity.RandomSinglePictureShowActivity;
-import com.example.zl.imageshowapplication.activity.searchresult.SearchResultActivity;
 import com.example.zl.imageshowapplication.adapter.common.FragmentAdapter;
+import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.example.zl.leancloud.CollectionBaseFragment;
 import com.example.zl.leancloud.CollectionType;
 
@@ -48,6 +44,9 @@ public class CollectionShowActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);//去除标题栏
         setContentView(R.layout.layout_searchresult_activity);
+
+        //将当前 Activity 纳入管理
+        BcyActivityManager.getActivityManager().addActivity(this);
 
         ButterKnife.bind(this);
 

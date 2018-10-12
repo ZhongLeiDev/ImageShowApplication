@@ -12,7 +12,7 @@ import com.example.zl.imageshowapplication.bean.huaban.search.SearchPins;
 import com.example.zl.imageshowapplication.bean.huaban.transobj.HBImageBean;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
-import com.example.zl.imageshowapplication.mvp.huaban.view.HuanBanView;
+import com.example.zl.imageshowapplication.mvp.huaban.view.HuaBanView;
 
 import rx.Observable;
 import rx.Observer;
@@ -30,7 +30,7 @@ public class HuaBanPresenter {
     private static final String TAG = "HuaBanPresenter";
 
     private Context mContext;
-    private HuanBanView huanBanView;
+    private HuaBanView huanBanView;
     private RetrofitInfoService huabanService;
 
     public HuaBanPresenter(Context ctx) {
@@ -41,7 +41,7 @@ public class HuaBanPresenter {
         huabanService = RetrofitFactory.getHuaBanRetroSingleInstance();
     }
 
-    public void attachView(HuanBanView view) {
+    public void attachView(HuaBanView view) {
         huanBanView = view;
     }
 

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.zl.commoncomponent.GridPopupWindow;
 import com.example.zl.commoncomponent.SimpleToolBar;
 import com.example.zl.imageshowapplication.R;
+import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.example.zl.imageshowapplication.widget.ZoomImageView;
 
 import butterknife.Bind;
@@ -53,6 +54,9 @@ public class RandomSinglePictureShowActivity extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);//去除标题栏
         super.onCreate(savedInstanceState);
         setContentView(R.layout.random_picture_layout);
+
+        //将当前 Activity 纳入管理
+        BcyActivityManager.getActivityManager().addActivity(this);
 
         ButterKnife.bind(this);
 

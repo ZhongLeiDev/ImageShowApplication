@@ -18,6 +18,7 @@ import com.example.zl.imageshowapplication.activity.RandomSinglePictureShowActiv
 import com.example.zl.imageshowapplication.adapter.common.FragmentAdapter;
 import com.example.zl.imageshowapplication.base.BaseAlbumInfoFragment;
 import com.example.zl.imageshowapplication.base.BaseCoserInfoFragment;
+import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,9 @@ public class SearchResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);//去除标题栏
         setContentView(R.layout.layout_searchresult_activity);
+
+        //将当前 Activity 纳入管理
+        BcyActivityManager.getActivityManager().addActivity(this);
 
         ButterKnife.bind(this);
 

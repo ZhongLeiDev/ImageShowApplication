@@ -39,6 +39,7 @@ import com.example.zl.imageshowapplication.base.BaseAlbumInfoFragment;
 import com.example.zl.imageshowapplication.base.BaseHuaBanImageFragment;
 import com.example.zl.imageshowapplication.base.BasePictureInfoFragment;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallLoadMoreFragment;
+import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
 import com.example.zl.leancloud.LoginActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             firstTime = secondTime;
         } else {
+            BcyActivityManager.getActivityManager().finishAllActivity();//退出所有Activity
             System.exit(0);
         }
     }
@@ -95,6 +97,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);//去除标题栏
         setContentView(R.layout.activity_main);
+
+        //将当前 Activity 纳入管理
+        BcyActivityManager.getActivityManager().addActivity(this);
 
         ButterKnife.bind(this);
 
@@ -157,7 +162,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         ivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                if (AVUser.getCurrentUser() == null) { //只有当未登录时才进行跳转
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
             }
         });
 

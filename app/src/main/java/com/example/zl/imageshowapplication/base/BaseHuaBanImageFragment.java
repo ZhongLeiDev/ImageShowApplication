@@ -27,7 +27,7 @@ import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.listenerinstance.HuaBanLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
 import com.example.zl.imageshowapplication.mvp.huaban.presenter.HuaBanPresenter;
-import com.example.zl.imageshowapplication.mvp.huaban.view.HuanBanView;
+import com.example.zl.imageshowapplication.mvp.huaban.view.HuaBanView;
 import com.example.zl.leancloud.CollectionBean;
 import com.example.zl.leancloud.CollectionPresenter;
 import com.example.zl.leancloud.CollectionView;
@@ -91,7 +91,7 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
     };
 
     /** HuaBan Image 显示逻辑 View 类*/
-    private HuanBanView huanBanView = new HuanBanView() {
+    private HuaBanView huanBanView = new HuaBanView() {
         @Override
         public void onNext(HBImageBean bean) {
             mAdapter.getList().add(bean);
