@@ -27,6 +27,7 @@ import com.example.zl.imageshowapplication.bean.huaban.devided.DevidedPins;
 import com.example.zl.imageshowapplication.config.UILConfig;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.utils.BcyActivityManager;
+import com.example.zl.imageshowapplication.utils.LayoutSetUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
 
@@ -134,9 +135,8 @@ public class MainWelcomePageActivity extends AppCompatActivity {
 
         requestAllPermission();
 
-        //初始化 View 以及初始化数据之前先动态申请权限，这里主要是 SD 卡读写权限
-//        initView();
-//        initData();
+        //设置透明状态栏
+        LayoutSetUtils.setImmerseLayout(this);
 
     }
 
