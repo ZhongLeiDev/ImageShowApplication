@@ -67,10 +67,11 @@ public class RegisterActivity extends AppCompatActivity {
     BcyActivityManager.getActivityManager().addActivity(this);
 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    getSupportActionBar().setTitle(getString(R.string.register));
     // Set up the register form.
-    mUsernameView = findViewById(R.id.username);
+    mUsernameView = findViewById(R.id.register_username);
 
-    mPasswordView = findViewById(R.id.password);
+    mPasswordView = findViewById(R.id.register_password);
     mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
       @Override
       public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {

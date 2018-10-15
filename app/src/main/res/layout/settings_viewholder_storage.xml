@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rect"
+    android:layout_marginTop="@dimen/activity_top_margin"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_start_margin"
+        android:layout_marginEnd="@dimen/activity_start_margin"
+        android:text="@string/settings_cache_storage"
+        android:textColor="@color/colorLightBlack"
+        android:textSize="@dimen/settings_field_text_size"/>
+
+    <TextView
+        android:id="@+id/view_holder_storage_cache_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_start_margin"
+        android:layout_marginTop="@dimen/activity_top_margin"
+        android:layout_marginEnd="@dimen/activity_start_margin"
+        android:text="@string/default_text"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/settings_value_text_size"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_view_height"
+        android:layout_marginStart="@dimen/activity_start_margin"
+        android:layout_marginEnd="@dimen/activity_start_margin"
+        android:layout_marginTop="@dimen/activity_top_margin"
+        android:background="@color/colorLightGray"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_start_margin"
+        android:layout_marginTop="@dimen/activity_top_margin"
+        android:layout_marginEnd="@dimen/activity_start_margin"
+        android:text="@string/settings_download_storage"
+        android:textColor="@color/colorLightBlack"
+        android:textSize="@dimen/settings_field_text_size"/>
+
+    <TextView
+        android:id="@+id/view_holder_storage_disk_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_start_margin"
+        android:layout_marginTop="@dimen/activity_top_margin"
+        android:layout_marginEnd="@dimen/activity_start_margin"
+        android:text="@string/default_text"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/settings_value_text_size"/>
+
+    <Button
+        android:id="@+id/view_holder_storage_clear_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_start_margin"
+        android:layout_marginTop="@dimen/activity_top_margin"
+        android:layout_marginEnd="@dimen/activity_start_margin"
+        android:background="@color/button_color"
+        android:text="@string/settings_btn_clear_cache"
+        android:textSize="@dimen/settings_value_text_size"/>
+
+</LinearLayout>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rect"
+    android:layout_marginTop="@dimen/activity_top_margin"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_avatar_height"
+        android:layout_marginStart="@dimen/activity_start_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/settings_item_text_size"
+            android:text="@string/settings_item_avatar"/>
+
+        <ImageView
+            android:id="@+id/view_holder_account_image"
+            android:contentDescription="@string/settings_account_setting"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical|end"/>
+
+        <ImageView
+            android:contentDescription="@string/settings_go_to"
+            android:layout_width="@dimen/settings_go_to_width"
+            android:layout_height="@dimen/settings_go_to_size"
+            android:background="@drawable/go_icon"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_view_height"
+        android:layout_marginStart="@dimen/activity_start_margin"
+        android:background="@color/colorLightGray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_common_height"
+        android:layout_marginStart="@dimen/activity_start_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/settings_item_text_size"
+            android:text="@string/settings_item_account"/>
+
+        <TextView
+            android:id="@+id/view_holder_account_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:textColor="@color/colorLightBlack"
+            android:textSize="@dimen/settings_value_text_size"
+            android:text="@string/settings_default_value"/>
+
+        <ImageView
+            android:contentDescription="@string/settings_go_to"
+            android:layout_width="@dimen/settings_go_to_width"
+            android:layout_height="@dimen/settings_go_to_size"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+</LinearLayout>

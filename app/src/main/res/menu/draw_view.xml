@@ -11,10 +11,6 @@
             android:icon="@drawable/nav_setting"
             android:title="@string/nav_setting"/>
         <item
-            android:id="@+id/nav_night"
-            android:icon="@drawable/nav_night"
-            android:title="@string/nav_night"/>
-        <item
             android:id="@+id/nav_tools"
             android:icon="@drawable/nav_tools"
             android:title="@string/nav_tools"/>

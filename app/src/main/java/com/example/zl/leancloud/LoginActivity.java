@@ -63,9 +63,9 @@ public class LoginActivity extends AppCompatActivity {
 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setTitle(getString(R.string.login));
-    mUsernameView = findViewById(R.id.username);
+    mUsernameView = findViewById(R.id.login_username);
 
-    mPasswordView = findViewById(R.id.password);
+    mPasswordView = findViewById(R.id.login_password);
     mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
       @Override
       public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {

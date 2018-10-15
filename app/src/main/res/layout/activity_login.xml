@@ -23,8 +23,8 @@
         <ImageView
             android:id="@+id/login_avatar"
             android:contentDescription="@string/default_name"
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
+            android:layout_width="@dimen/avatar_size"
+            android:layout_height="@dimen/avatar_size" />
 
 
         <android.support.design.widget.TextInputLayout
@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/username"
+                    android:id="@+id/login_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/username"
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/password"
+                    android:id="@+id/login_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/login"
-                android:background="#66ffcc"
+                android:background="@color/button_color"
                 android:textStyle="bold"/>
 
             <LinearLayout

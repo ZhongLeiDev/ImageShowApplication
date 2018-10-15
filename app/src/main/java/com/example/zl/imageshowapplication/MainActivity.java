@@ -32,6 +32,7 @@ import com.example.zl.enums.AlbumFragmentType;
 import com.example.zl.enums.HuaBanFragmentType;
 import com.example.zl.enums.PictureFragmentType;
 import com.example.zl.imageshowapplication.activity.collection.CollectionShowActivity;
+import com.example.zl.imageshowapplication.activity.collection.SettingsActivity;
 import com.example.zl.imageshowapplication.activity.searchresult.HuaBanSearchResultActivity;
 import com.example.zl.imageshowapplication.activity.searchresult.SearchResultActivity;
 import com.example.zl.imageshowapplication.adapter.common.FragmentAdapter;
@@ -126,11 +127,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                             switch (item.getItemId()) {
-                                case R.id.nav_tools:
-                                    Snackbar.make(mDrawerLayout,item.getTitle() + "pressed", Snackbar.LENGTH_LONG).show();
-//                                    item.setChecked(true);
-                                    mDrawerLayout.closeDrawers();
-                                    break;
                                 case R.id.nav_collection:
                                     if (AVUser.getCurrentUser() != null) {
                                         Intent intent = new Intent();
@@ -139,6 +135,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                                     } else {
                                         Toast.makeText(MainActivity.this,"请先登陆再查看收藏！",Toast.LENGTH_SHORT).show();
                                     }
+                                    break;
+                                case R.id.nav_setting:
+                                    startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                                    break;
+                                case R.id.nav_tools:
+                                    Snackbar.make(mDrawerLayout,item.getTitle() + "pressed", Snackbar.LENGTH_LONG).show();
+//                                    item.setChecked(true);
+                                    mDrawerLayout.closeDrawers();
                                     break;
                                 case R.id.nav_feedback:
                                     break;

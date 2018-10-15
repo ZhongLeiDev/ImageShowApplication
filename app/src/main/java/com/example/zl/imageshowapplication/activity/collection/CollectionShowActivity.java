@@ -58,7 +58,7 @@ public class CollectionShowActivity extends AppCompatActivity {
 
     private void initView() {
 
-        mToolBar.setMainTitle("收藏");//设置标题
+        mToolBar.setMainTitle(getString(R.string.nav_collection));//设置标题
 
         mToolBar.setRightTitleClickListener(new View.OnClickListener() {
             @Override
