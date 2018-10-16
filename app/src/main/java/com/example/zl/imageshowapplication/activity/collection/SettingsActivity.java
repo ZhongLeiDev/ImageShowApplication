@@ -1,13 +1,17 @@
 package com.example.zl.imageshowapplication.activity.collection;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.view.Window;
+import android.view.View;
+import android.widget.Toast;
 
+import com.avos.avoscloud.AVUser;
 import com.example.zl.imageshowapplication.R;
+import com.example.zl.imageshowapplication.activity.settings.AvatarChangeActivity;
 import com.example.zl.imageshowapplication.adapter.settings.SettingsAdapter;
 import com.example.zl.imageshowapplication.adapter.settings.SettingsViewHolder;
 import com.example.zl.imageshowapplication.utils.BcyActivityManager;
@@ -24,6 +28,33 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Bind(R.id.setting_layout_recycler)
     public RecyclerView recyclerView;
+
+    private SettingsAdapter adapter;
+
+    private View.OnClickListener onAvatar = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (AVUser.getCurrentUser() != null) {
+                startActivity(new Intent(SettingsActivity.this, AvatarChangeActivity.class));
+            } else {
+                Toast.makeText(SettingsActivity.this,"登陆后才可以进行头像设置！",Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    private View.OnClickListener onVersion = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+        }
+    };
+
+    private View.OnClickListener onAbout = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+        }
+    };
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -42,7 +73,7 @@ public class SettingsActivity extends AppCompatActivity {
         layoutManager.setSmoothScrollbarEnabled(true);
 
         recyclerView.setLayoutManager(layoutManager);
-        SettingsAdapter adapter = new SettingsAdapter(this);
+        adapter = new SettingsAdapter(this,onAvatar,onVersion,onAbout);
         recyclerView.setAdapter(adapter);
         adapter.addViewHolderType(
                 SettingsViewHolder.VIEW_HOLDER_HEADER,
@@ -63,6 +94,12 @@ public class SettingsActivity extends AppCompatActivity {
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged(); //刷新界面
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.zl.imageshowapplication.adapter.settings;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import butterknife.ButterKnife;
 
 public class ViewHolderSetting extends SettingsViewHolder {
 
+    private static final String TAG = "ViewHolderSetting";
+
     @Bind(R.id.view_holder_setting_day_night_button)
     public ToggleButton daynight;
     @Bind(R.id.view_holder_setting_welcome_button)
@@ -27,34 +30,45 @@ public class ViewHolderSetting extends SettingsViewHolder {
 
         ButterKnife.bind(this,itemView);
 
+        setDaynightOnTouch();
+        setWelcomepageOnTouch();
+
     }
 
     /**
-     * 设置夜间模式开
+     * 设置夜间模式按钮点击事件监听
      */
-    public void setDaynightOn() {
-        daynight.setChooseState(true);
+    public void setDaynightOnTouch() {
+        daynight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG,"daynight clicked!");
+                daynight.setChooseState();
+                if (daynight.isChoosed()) {
+                    Log.i(TAG,"daynight is choosed!");
+                } else {
+                    Log.i(TAG,"daynight is unchoosed!");
+                }
+            }
+        });
     }
 
     /**
-     * 设置夜间模式关
+     * 设置欢迎页按钮点击事件监听
      */
-    public void setDaynightOff() {
-        daynight.setChooseState(false);
-    }
-
-    /**
-     * 设置欢迎页开
-     */
-    public void setWelcomepageOn() {
-        welcomepage.setChooseState(true);
-    }
-
-    /**
-     * 设置欢迎页关
-     */
-    public void setWelcomepageOff() {
-        welcomepage.setChooseState(false);
+    public void setWelcomepageOnTouch() {
+        welcomepage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG,"welcomepage clicked!");
+                welcomepage.setChooseState();
+                if (welcomepage.isChoosed()) {
+                    Log.i(TAG,"welcomepage is choosed!");
+                } else {
+                    Log.i(TAG,"welcomepage is unchoosed!");
+                }
+            }
+        });
     }
 
     public static ViewHolderSetting create(ViewGroup parent) {

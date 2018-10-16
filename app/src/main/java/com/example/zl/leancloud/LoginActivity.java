@@ -40,6 +40,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 public class LoginActivity extends AppCompatActivity {
   private AutoCompleteTextView mUsernameView;
   private EditText mPasswordView;
@@ -109,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
     avatar = findViewById(R.id.login_avatar);
 
     Glide.with(this).load(R.drawable.default_user)  //圆形显示
+            .transition(withCrossFade())    //渐隐特效显示
             .apply(RequestOptions.bitmapTransform(new CircleCrop()))
             .into(avatar);
 

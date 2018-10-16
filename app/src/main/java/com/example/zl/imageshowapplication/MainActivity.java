@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        /*使得 NavigationView 的图标颜色显示图标本身的颜色，而不是灰色*/
+//        navigationView.setItemIconTintList(null);
         if (navigationView!=null) {
             navigationView.setNavigationItemSelectedListener(
                     new NavigationView.OnNavigationItemSelectedListener() {

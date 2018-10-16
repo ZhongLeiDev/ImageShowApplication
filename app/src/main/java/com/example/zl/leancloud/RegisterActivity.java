@@ -43,6 +43,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 import static com.example.zl.imageshowapplication.utils.AvatarSelectUtil.PHONE_CROP;
 import static com.example.zl.imageshowapplication.utils.AvatarSelectUtil.SCAN_OPEN_PHONE;
 
@@ -253,6 +254,7 @@ public class RegisterActivity extends AppCompatActivity {
 //                    this.getContentResolver().openInputStream(mCutUri));
 
           Glide.with(this).load(mCutUri)
+                  .transition(withCrossFade())    //渐隐特效显示
                   .apply(
                           RequestOptions
                                   .bitmapTransform(new CircleCrop())  //圆形显示

@@ -65,6 +65,10 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.collection.ToolsActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.settings.AvatarChangeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.settings.AboutActivity"
+            android:screenOrientation="portrait"/>
 
         <service android:name="com.example.zl.service.NetworkStatusService"/>
     </application>

@@ -11,6 +11,7 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -48,13 +49,18 @@ public class ToggleButton extends View {
 
     /**
      * 设置选中状态
-     * @param choose
      */
-    public void setChooseState(boolean choose) {
-        choice = choose;
-        if (choice) {
+    public void setChooseState() {
+        choice=!choice;
+        if(animatorOpen.isRunning()){
+            animatorOpen.cancel();
+        }
+        if (animatorClose.isRunning()){
+            animatorClose.cancel();
+        }
+        if(choice){
             animatorOpen.start();
-        } else {
+        }else {
             animatorClose.start();
         }
     }
@@ -90,7 +96,7 @@ public class ToggleButton extends View {
         paintRoundInSelect=new Paint();
         paintRoundInSelect.setStyle(Paint.Style.FILL);
         paintRoundInSelect.setAntiAlias(true);
-        paintRoundInSelect.setColor(Color.BLUE);
+        paintRoundInSelect.setColor(Color.parseColor("#66ffcc"));
     }
 
     /**
@@ -162,7 +168,30 @@ public class ToggleButton extends View {
     }
 
     @Override
+    public boolean performClick() {
+        super.performClick();
+        return true;
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                performClick();
+                break;
+            case MotionEvent.ACTION_UP:
+//                setChooseState();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    /*
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        //Log.i("ToggleButton","onTouchEvent start!" + event.getAction());
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 dst[0]=event.getRawX();
@@ -176,6 +205,12 @@ public class ToggleButton extends View {
                 dst[1]=event.getRawY();
                 matrix.mapPoints(dst);
                 //判断手势是否离开
+
+//                Log.i("ToggleButton","inner->" + inner
+//                        + ", regionClick->" + regionClick.getBounds()
+//                        + ", dst[0]->" + dst[0]
+//                        + ", dst[1]->" + dst[1]);
+
                 if(inner&&regionClick.contains((int)dst[0],(int) dst[1])){
                     if(animatorOpen.isRunning()){
                         animatorOpen.cancel();
@@ -185,17 +220,21 @@ public class ToggleButton extends View {
                     }
                     choice=!choice;
                     if(choice){
+                        Log.i("ToggleButton","animatorOpen.start()");
                         animatorOpen.start();
                     }else {
+                        Log.i("ToggleButton","animatorClose.start()");
                         animatorClose.start();
                     }
                 }
 
                 break;
-            default:break;
+            default:
+                break;
         }
         return true;
     }
+    */
 
     /**
      * 画

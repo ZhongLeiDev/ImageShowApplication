@@ -6,7 +6,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVUser;
 import com.example.zl.imageshowapplication.R;
+import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,6 +30,14 @@ public class ViewHolderAccount extends SettingsViewHolder {
 
         ButterKnife.bind(this,itemView);
 
+    }
+
+    /**
+     * 设置头像事件监听
+     * @param listener 事件监听
+     */
+    public void setOnAvatarClick(View.OnClickListener listener) {
+        avatar.setOnClickListener(listener);
     }
 
     /**
