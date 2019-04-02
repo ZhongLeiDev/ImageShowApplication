@@ -47,6 +47,9 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 import static com.example.zl.imageshowapplication.utils.AvatarSelectUtil.PHONE_CROP;
 import static com.example.zl.imageshowapplication.utils.AvatarSelectUtil.SCAN_OPEN_PHONE;
 
+/**
+ * 自定义 Register 方法，不借助 LeanCloud
+ */
 public class LocalRegisterActivity extends AppCompatActivity {
 
   private static final String TAG = "RegisterActivity";
