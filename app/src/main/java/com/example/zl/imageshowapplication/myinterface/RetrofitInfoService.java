@@ -8,12 +8,16 @@ import com.example.zl.imageshowapplication.bean.geek.GeekResult;
 import com.example.zl.imageshowapplication.bean.huaban.devided.DevidedJsonRootBean;
 import com.example.zl.imageshowapplication.bean.huaban.loadmore.LoadMorePins;
 import com.example.zl.imageshowapplication.bean.huaban.search.SearchJsonRootBean;
+import com.example.zl.locallogin.bean.ISUser;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -309,5 +313,51 @@ public interface RetrofitInfoService {
             @Query("page") int pageCount,
             @Query("sort") String sortType
     );
+
+    /**
+     * 注册
+     * @param userName  用户名
+     * @param passWord  用户密码
+     * @param file  头像文件
+     * @param mail  邮箱
+     * @return
+     */
+    @Multipart
+    @POST("user_login_field/register")
+    Call<ResultVO<ISUser>> register(@Part("userName") String userName,
+                                    @Part("passWord") String passWord,
+                                    @Part MultipartBody.Part file,
+                                    @Part("mail") String mail);
+
+    /**
+     * 登录
+     * @param userName  用户名
+     * @param passWord  密码
+     * @param token token
+     * @return
+     */
+    @POST("user_login_field/login")
+    Call<ResultVO<ISUser>> login(@Part("userName") String userName,
+                                 @Part("passWord") String passWord,
+                                 @Part("token") String token);
+
+    /**
+     * 注销
+     * @param token token
+     * @return
+     */
+    @POST("user_login_field/logout")
+    Call<ResultVO<ISUser>> logout(@Part("token") String token);
+
+    /**
+     * 更改头像
+     * @param username  用户名
+     * @param file  头像文件
+     * @return
+     */
+    @Multipart
+    @POST("user_login_field/change_avatar")
+    Call<ResultVO<String>> uploadImageWithInfo(@Part("userName") String username,
+                                     @Part MultipartBody.Part file);
 
 }

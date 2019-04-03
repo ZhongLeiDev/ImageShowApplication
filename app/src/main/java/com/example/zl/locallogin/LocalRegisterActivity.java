@@ -34,10 +34,12 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.zl.imageshowapplication.MainActivity;
 import com.example.zl.imageshowapplication.R;
+import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.config.UILConfig;
 import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
 import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.example.zl.imageshowapplication.utils.MD5Utils;
+import com.example.zl.locallogin.bean.LocalError;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,7 +54,7 @@ import static com.example.zl.imageshowapplication.utils.AvatarSelectUtil.SCAN_OP
  */
 public class LocalRegisterActivity extends AppCompatActivity {
 
-  private static final String TAG = "RegisterActivity";
+  private static final String TAG = "LocalRegisterActivity";
   /**当前头像临时存储路径*/
   private static final String CURRENTAVATAR = UILConfig.AVATARPATH + File.separator + "currentAvatar.png";
   private Uri mCutUri;
@@ -137,63 +139,37 @@ public class LocalRegisterActivity extends AppCompatActivity {
     if (cancel) {
       focusView.requestFocus();
     } else {
-      showProgress(true);
 
-      AVUser user = new AVUser();// 新建 AVUser 对象实例
-      user.setUsername(username);// 设置用户名
-      user.setPassword(password);// 设置密码
-      user.signUpInBackground(new SignUpCallback() {
-        @Override
-        public void done(AVException e) {
-          if (e == null) {
-            //注册成功，上传头像文件
-            uploadAvatar();
+      doRegister(username, password,"sample@qq.com");
 
-          } else {
-            // 失败的原因可能有多种，常见的是用户名已经存在。
-            showProgress(false);
-            Toast.makeText(LocalRegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-          }
-        }
-      });
     }
   }
 
   /**
-   * 上传头像文件
+   * 注册
+   * @param userName  用户名
+   * @param passWord  用户密码
+   * @param mail  邮箱
    */
-  private void uploadAvatar() {
-
+  private void doRegister(String userName, String passWord, String mail) {
+    String avatarPath;
     if (mCutUri != null) {
-      AVFile file;
-      try {
-        file = AVFile.withAbsoluteLocalPath(
-                MD5Utils.getStringMD5(AVUser.getCurrentUser().getUsername()) + ".png",
-                mCutUri.getPath());
-        file.saveInBackground(new SaveCallback() {
-          @Override
-          public void done(AVException e) {
-            if (e == null) {
-              Log.i(TAG, "avatar upload succeed!");
+      showProgress(true); //开启进度条显示
+      avatarPath = mCutUri.getPath();
+      LocalUserHandle.doRegister(userName, passWord, avatarPath, mail, new LocalCallback<ResultVO>() {
 
-              if (AvatarSelectUtil.copyAvatar(CURRENTAVATAR,
-                      AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()))) {
-                startActivity(new Intent(LocalRegisterActivity.this, MainActivity.class));
-                LocalRegisterActivity.this.finish();
-              }
-
-            } else {
-              e.printStackTrace();
-            }
+        @Override
+        public void done(ResultVO resultVO, LocalError e) {
+          if (e == null) {
+            Log.i(TAG, resultVO.toString());
+          } else {
+            showProgress(false);  //隐藏进度条
+            showMessage(e.getMsg());
           }
-        });
-      } catch (FileNotFoundException e) {
-        e.printStackTrace();
-      }
-
-    } else { //如果没有选择头像文件则直接进行跳转
-      startActivity(new Intent(LocalRegisterActivity.this, MainActivity.class));
-      LocalRegisterActivity.this.finish();
+        }
+      });
+    } else {
+      showMessage("未选择图像文件！");
     }
 
   }
@@ -205,7 +181,7 @@ public class LocalRegisterActivity extends AppCompatActivity {
 
   private boolean isPasswordValid(String password) {
     //TODO: Replace this with your own logic
-    return password.length() > 4;
+    return password.length() > 6;
   }
 
   /**
@@ -252,23 +228,26 @@ public class LocalRegisterActivity extends AppCompatActivity {
           startActivityForResult(CutForCamera(path,name),PHONE_CROP);
           break;
         case PHONE_CROP:
-          //获取裁剪后的图片，并显示出来
-//            Bitmap bitmap = BitmapFactory.decodeStream(
-//                    this.getContentResolver().openInputStream(mCutUri));
-
           Glide.with(this).load(mCutUri)
-                  .transition(withCrossFade())    //渐隐特效显示
-                  .apply(
-                          RequestOptions
-                                  .bitmapTransform(new CircleCrop())  //圆形显示
-                                  .skipMemoryCache(true)  //跳过内存缓存
-                                  .diskCacheStrategy(DiskCacheStrategy.NONE)  //跳过磁盘缓存
-                  )
-                  .into(avatar);
-
+               .transition(withCrossFade())    //渐隐特效显示
+               .apply(
+                     RequestOptions
+                      .bitmapTransform(new CircleCrop())  //圆形显示
+                      .skipMemoryCache(true)  //跳过内存缓存
+                      .diskCacheStrategy(DiskCacheStrategy.NONE)  //跳过磁盘缓存
+               )
+               .into(avatar);
           break;
       }
     }
+  }
+
+  /**
+   * 显示信息
+   * @param msg
+   */
+  private void showMessage(String msg) {
+    Toast.makeText(LocalRegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
   }
 
   /**
@@ -281,9 +260,6 @@ public class LocalRegisterActivity extends AppCompatActivity {
     try {
       //直接裁剪
       Intent intent = new Intent("com.android.camera.action.CROP");
-      //设置裁剪之后的图片路径文件
-//      File cutfile = new File(Environment.getExternalStorageDirectory().getPath(),
-//              "cutcamera.png"); //随便命名一个
       File cutfile = new File(CURRENTAVATAR); //随便命名一个
       if (cutfile.exists()){ //如果已经存在，则先删除
         boolean delete = cutfile.delete();

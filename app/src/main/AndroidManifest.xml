@@ -57,6 +57,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name="com.example.zl.leancloud.RegisterActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name="com.example.zl.locallogin.LocalRegisterActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.example.zl.leancloud.LoginActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.collection.CollectionShowActivity"
