@@ -20,7 +20,7 @@
     <ScrollView
         android:id="@+id/register_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin">
 
         <LinearLayout
@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/username"
                     android:maxLines="1"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -67,9 +67,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
                 android:background="@color/button_color"
-                android:textStyle="bold"/>
+                android:text="@string/action_sign_in"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </ScrollView>

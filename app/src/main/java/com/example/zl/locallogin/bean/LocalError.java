@@ -1,5 +1,7 @@
 package com.example.zl.locallogin.bean;
 
+import com.example.zl.locallogin.localenum.LocalEnum;
+
 /**
  * Created by ZhongLeiDev on 2019/4/2.
  * 定义异常存储类
@@ -12,6 +14,11 @@ public class LocalError {
     public LocalError(int code, String msg) {
         this.code = code;
         this.msg = msg;
+    }
+
+    public LocalError(LocalEnum localEnum) {
+        this.code = localEnum.getCode();
+        this.msg = localEnum.getMsg();
     }
 
     public int getCode() {

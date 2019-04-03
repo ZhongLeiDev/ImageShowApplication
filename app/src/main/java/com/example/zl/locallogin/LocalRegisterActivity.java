@@ -78,24 +78,16 @@ public class LocalRegisterActivity extends AppCompatActivity {
     mUsernameView = findViewById(R.id.register_username);
 
     mPasswordView = findViewById(R.id.register_password);
-    mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-      @Override
-      public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-        if (id == R.id.register || id == EditorInfo.IME_NULL) {
-          attemptRegister();
-          return true;
-        }
-        return false;
+    mPasswordView.setOnEditorActionListener((textView, id, keyEvent) -> {
+      if (id == R.id.register || id == EditorInfo.IME_NULL) {
+        attemptRegister();
+        return true;
       }
+      return false;
     });
 
     Button musernameSignInButton = findViewById(R.id.username_register_button);
-    musernameSignInButton.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        attemptRegister();
-      }
-    });
+    musernameSignInButton.setOnClickListener(view -> attemptRegister());
 
     register_loading = findViewById(R.id.register_animation_view);
     avatar = findViewById(R.id.register_avatar);
@@ -104,12 +96,10 @@ public class LocalRegisterActivity extends AppCompatActivity {
             .apply(RequestOptions.bitmapTransform(new CircleCrop()))
             .into(avatar);
 
-    avatar.setOnClickListener(new OnClickListener() { //设置头像选择监听
-      @Override
-      public void onClick(View v) {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, SCAN_OPEN_PHONE);
-      }
+    //设置头像选择监听
+    avatar.setOnClickListener(v -> {
+      Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+      startActivityForResult(intent, SCAN_OPEN_PHONE);
     });
 
   }
@@ -140,6 +130,7 @@ public class LocalRegisterActivity extends AppCompatActivity {
       focusView.requestFocus();
     } else {
 
+      showProgress(true); //开启进度条显示
       doRegister(username, password,"sample@qq.com");
 
     }
@@ -154,7 +145,6 @@ public class LocalRegisterActivity extends AppCompatActivity {
   private void doRegister(String userName, String passWord, String mail) {
     String avatarPath;
     if (mCutUri != null) {
-      showProgress(true); //开启进度条显示
       avatarPath = mCutUri.getPath();
       LocalUserHandle.doRegister(userName, passWord, avatarPath, mail, new LocalCallback<ResultVO>() {
 
@@ -162,14 +152,16 @@ public class LocalRegisterActivity extends AppCompatActivity {
         public void done(ResultVO resultVO, LocalError e) {
           if (e == null) {
             Log.i(TAG, resultVO.toString());
+            showMessage("注册成功！");
           } else {
-            showProgress(false);  //隐藏进度条
             showMessage(e.getMsg());
           }
+          showProgress(false);  //隐藏进度条
         }
       });
     } else {
       showMessage("未选择图像文件！");
+      showProgress(false);  //隐藏进度条
     }
 
   }

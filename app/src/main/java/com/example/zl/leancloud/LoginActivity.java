@@ -69,43 +69,29 @@ public class LoginActivity extends AppCompatActivity {
     mUsernameView = findViewById(R.id.login_username);
 
     mPasswordView = findViewById(R.id.login_password);
-    mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-      @Override
-      public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-        if (id == R.id.login || id == EditorInfo.IME_NULL) {
-          attemptLogin();
-          return true;
-        }
-        return false;
+    mPasswordView.setOnEditorActionListener((textView, id, keyEvent) -> {
+      if (id == R.id.login || id == EditorInfo.IME_NULL) {
+        attemptLogin();
+        return true;
       }
+      return false;
     });
-    mPasswordView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-      @Override
-      public void onFocusChange(View v, boolean hasFocus) {
-        if (hasFocus) {
-          isAvatarExist = AvatarSelectUtil.setAvatarWithPath1(
-                  LoginActivity.this,avatar,
-                  AvatarSelectUtil.buildAvatarPath(mUsernameView.getText().toString())
-          );
-        }
+    mPasswordView.setOnFocusChangeListener((v, hasFocus) -> {
+      if (hasFocus) {
+        isAvatarExist = AvatarSelectUtil.setAvatarWithPath1(
+                LoginActivity.this,avatar,
+                AvatarSelectUtil.buildAvatarPath(mUsernameView.getText().toString())
+        );
       }
     });
 
     Button mUsernameLoginButton = findViewById(R.id.username_login_button);
-    mUsernameLoginButton.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        attemptLogin();
-      }
-    });
+    mUsernameLoginButton.setOnClickListener(view -> attemptLogin());
 
     TextView tvlogin = findViewById(R.id.login_go_register);
-    tvlogin.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        startActivity(new Intent(LoginActivity.this, LocalRegisterActivity.class));
-        LoginActivity.this.finish();
-      }
+    tvlogin.setOnClickListener(view -> {
+      startActivity(new Intent(LoginActivity.this, LocalRegisterActivity.class));
+      LoginActivity.this.finish();
     });
 
     loadingview = findViewById(R.id.login_animation_view);

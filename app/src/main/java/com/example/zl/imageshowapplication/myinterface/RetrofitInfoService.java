@@ -357,7 +357,7 @@ public interface RetrofitInfoService {
      */
     @Multipart
     @POST("user_login_field/change_avatar")
-    Call<ResultVO<String>> uploadImageWithInfo(@Part("userName") String username,
+    Call<ResultVO<String>> changeAvatar(@Part("userName") String username,
                                      @Part MultipartBody.Part file);
 
 }

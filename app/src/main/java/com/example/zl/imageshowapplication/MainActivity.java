@@ -104,9 +104,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         ButterKnife.bind(this);
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-
         setSupportActionBar(mToolbar);
 
         initData();
@@ -124,36 +121,32 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 //        navigationView.setItemIconTintList(null);
         if (navigationView!=null) {
             navigationView.setNavigationItemSelectedListener(
-                    new NavigationView.OnNavigationItemSelectedListener() {
-                        @Override
-                        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                            switch (item.getItemId()) {
-                                case R.id.nav_collection:
-                                    if (AVUser.getCurrentUser() != null) {
-                                        Intent intent = new Intent();
-                                        intent.setClass(MainActivity.this, CollectionShowActivity.class);
-                                        startActivity(intent);
-                                    } else {
-                                        Toast.makeText(MainActivity.this,"请先登陆再查看收藏！",Toast.LENGTH_SHORT).show();
-                                    }
-                                    break;
-                                case R.id.nav_setting:
-                                    startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-                                    break;
-                                case R.id.nav_tools:
-                                    Snackbar.make(mDrawerLayout,item.getTitle() + "pressed", Snackbar.LENGTH_LONG).show();
+                    item -> {
+                        switch (item.getItemId()) {
+                            case R.id.nav_collection:
+                                if (AVUser.getCurrentUser() != null) {
+                                    Intent intent = new Intent();
+                                    intent.setClass(MainActivity.this, CollectionShowActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(MainActivity.this,"请先登陆再查看收藏！",Toast.LENGTH_SHORT).show();
+                                }
+                                break;
+                            case R.id.nav_setting:
+                                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                                break;
+                            case R.id.nav_tools:
+                                Snackbar.make(mDrawerLayout,item.getTitle() + "pressed", Snackbar.LENGTH_LONG).show();
 //                                    item.setChecked(true);
-                                    mDrawerLayout.closeDrawers();
-                                    break;
-                                case R.id.nav_feedback:
-                                    break;
-                                case R.id.nav_logout:
-                                    logout();
-                                    break;
-                            }
-                            return true;
+                                mDrawerLayout.closeDrawers();
+                                break;
+                            case R.id.nav_feedback:
+                                break;
+                            case R.id.nav_logout:
+                                logout();
+                                break;
                         }
+                        return true;
                     });
         }
 
@@ -165,12 +158,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         setUserAvatar();
 
-        ivAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (AVUser.getCurrentUser() == null) { //只有当未登录时才进行跳转
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                }
+        ivAvatar.setOnClickListener(v -> {
+            if (AVUser.getCurrentUser() == null) { //只有当未登录时才进行跳转
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
 
