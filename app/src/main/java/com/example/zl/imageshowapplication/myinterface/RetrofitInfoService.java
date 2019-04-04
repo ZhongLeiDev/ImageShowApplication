@@ -9,6 +9,9 @@ import com.example.zl.imageshowapplication.bean.huaban.devided.DevidedJsonRootBe
 import com.example.zl.imageshowapplication.bean.huaban.loadmore.LoadMorePins;
 import com.example.zl.imageshowapplication.bean.huaban.search.SearchJsonRootBean;
 import com.example.zl.locallogin.bean.ISUser;
+import com.example.zl.locallogin.bean.PictureCollect;
+import com.example.zl.locallogin.bean.PictureRandom;
+import com.example.zl.locallogin.bean.PictureShared;
 
 import java.util.List;
 
@@ -31,8 +34,8 @@ public interface RetrofitInfoService {
 
     /**
      * 不使用 RxJava 的一般调用方法(Geekl)
-     * @param size
-     * @param page
+     * @param size  页面容量
+     * @param page  当前页面
      * @return
      */
     @GET("data/福利/{size}/{page}")
@@ -43,8 +46,8 @@ public interface RetrofitInfoService {
 
     /**
      * 使用 RxJava 返回 Observable 对象(Geekl)
-     * @param size
-     * @param page
+     * @param size  页面容量
+     * @param page  当前页面
      * @return
      */
     @GET("data/福利/{size}/{page}")
@@ -359,5 +362,122 @@ public interface RetrofitInfoService {
     @POST("user_login_field/change_avatar")
     Call<ResultVO<String>> changeAvatar(@Part("userName") String username,
                                      @Part MultipartBody.Part file);
+
+    /**
+     * 随机获取图片
+     * @param pageSize  单页显示数量
+     * @return
+     */
+    @GET("random_pictures")
+    Call<ResultVO<List<PictureRandom>>> randomPictures(
+            @Query("pageSize") int pageSize);
+
+    /**
+     * 随机获取单张图片
+     * @return
+     */
+    @GET("random_siglepic")
+    Call<ResultVO<List<PictureRandom>>> randomSinglePicture();
+
+    /**
+     * 收藏 PIN
+     * @param token 用户 token
+     * @param userId    用户 Id
+     * @param userName  用户名
+     * @param pinUrl    图片源链接
+     * @param cover   图片封面
+     * @return
+     */
+    @POST("collect_pin")
+    Call<ResultVO> collectPin(@Query("token") String token,
+                              @Query("userId") String userId,
+                              @Query("userName") String userName,
+                              @Query("pinUrl") String pinUrl,
+                              @Query("cover") String cover);
+
+    /**
+     * 收藏 Board
+     * @param token 用户 token
+     * @param userId    用户 Id
+     * @param userName  用户名
+     * @param boardUrl  画板源链接
+     * @param cover   画板封面
+     * @return
+     */
+    @POST("collect_board")
+    Call<ResultVO> collectBoard(@Query("token") String token,
+                                @Query("userId") String userId,
+                                @Query("userName") String userName,
+                                @Query("boardUrl") String boardUrl,
+                                @Query("cover") String cover);
+
+    /**
+     * 获取用户收藏的 PIN
+     * @param token 用户 token
+     * @param userName  用户名
+     * @param pageCount 查询第几页
+     * @param pageSize  每页容量
+     * @return
+     */
+    @GET("get_pins")
+    Call<ResultVO<List<PictureCollect>>> getCollectPins(
+            @Query("token") String token,
+            @Query("userName") String userName,
+            @Query("pageCount") int pageCount,
+            @Query("pageSize") int pageSize);
+
+    /**
+     * 获取用户收藏的 BOARD
+     * @param token 用户 token
+     * @param userName  用户名
+     * @param pageCount 查询第几页
+     * @param pageSize  每页容量
+     * @return
+     */
+    @GET("get_pins")
+    Call<ResultVO<List<PictureCollect>>> getCollectBoards(
+            @Query("token") String token,
+            @Query("userName") String userName,
+            @Query("pageCount") int pageCount,
+            @Query("pageSize") int pageSize);
+
+    /**
+     * 获取用户分享的图片
+     * @param token 用户 token
+     * @param userName  用户名
+     * @param pageCount 查询第几页
+     * @param pageSize  每页容量
+     * @return
+     */
+    @GET("get_shared")
+    Call<ResultVO<List<PictureShared>>> getSharedPictures(
+            @Query("token") String token,
+            @Query("userName") String userName,
+            @Query("pageCount") int pageCount,
+            @Query("pageSize") int pageSize);
+
+    /**
+     * 随机获取所有用户分享的图片
+     * @param pageSize  单页容量
+     * @return
+     */
+    @GET("random_shared")
+    Call<ResultVO<List<PictureShared>>> randomSharedPictures(
+            @Query("pageSize") int pageSize);
+
+    /**
+     * 用户图片分享操作
+     * @param token 用户 token
+     * @param userId    用户 Id
+     * @param userName  用户名
+     * @param parts 待上传的图片文件内容
+     * @return
+     */
+    @Multipart
+    @POST("share")
+    Call<ResultVO> sharePictures(@Part("token") String token,
+                                 @Part("userId") String userId,
+                                 @Part("userName") String userName,
+                                 @Part List<MultipartBody.Part> parts);
 
 }

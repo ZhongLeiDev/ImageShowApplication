@@ -5,10 +5,7 @@ import android.util.Log;
 
 import com.example.zl.enums.HuaBanFragmentType;
 import com.example.zl.imageshowapplication.bean.huaban.devided.DevidedJsonRootBean;
-import com.example.zl.imageshowapplication.bean.huaban.devided.DevidedPins;
 import com.example.zl.imageshowapplication.bean.huaban.loadmore.LoadMorePins;
-import com.example.zl.imageshowapplication.bean.huaban.search.SearchJsonRootBean;
-import com.example.zl.imageshowapplication.bean.huaban.search.SearchPins;
 import com.example.zl.imageshowapplication.bean.huaban.transobj.HBImageBean;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
@@ -17,7 +14,6 @@ import com.example.zl.imageshowapplication.mvp.huaban.view.HuaBanView;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -55,25 +51,19 @@ public class HuaBanPresenter {
         if (type == HuaBanFragmentType.HUABAN_FRAGMENT_SEARCH) {
 
             huabanService.getSearchResultFromHuaBanWithRx(keyWord, 30, 0, "created_at")
-                    .flatMap(new Func1<SearchJsonRootBean, Observable<SearchPins>>() {
-                        @Override
-                        public Observable<SearchPins> call(SearchJsonRootBean searchJsonRootBean) {
-                            Log.i(TAG,searchJsonRootBean.toString());
-                            return Observable.from(searchJsonRootBean.getPins());
-                        }
+                    .flatMap(searchJsonRootBean -> {
+                        Log.i(TAG,searchJsonRootBean.toString());
+                        return Observable.from(searchJsonRootBean.getPins());
                     })
-                    .map(new Func1<SearchPins, HBImageBean>() {
-                        @Override
-                        public HBImageBean call(SearchPins searchPins) {
-                            HBImageBean bean = new HBImageBean();
-                            bean.setPin_id(searchPins.getPin_id());
-                            bean.setBoard_id(searchPins.getBoard_id());
-                            bean.setUrl("http://img.hb.aicdn.com/" + searchPins.getFile().getKey());
-                            bean.setTheme(searchPins.getFile().getTheme());
-                            bean.setHeight(searchPins.getFile().getHeight());
-                            bean.setWidth(searchPins.getFile().getWidth());
-                            return bean;
-                        }
+                    .map(searchPins -> {
+                        HBImageBean bean = new HBImageBean();
+                        bean.setPin_id(searchPins.getPin_id());
+                        bean.setBoard_id(searchPins.getBoard_id());
+                        bean.setUrl("http://img.hb.aicdn.com/" + searchPins.getFile().getKey());
+                        bean.setTheme(searchPins.getFile().getTheme());
+                        bean.setHeight(searchPins.getFile().getHeight());
+                        bean.setWidth(searchPins.getFile().getWidth());
+                        return bean;
                     })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -100,25 +90,19 @@ public class HuaBanPresenter {
         } else if (type == HuaBanFragmentType.HUABAN_FRAGMENT_BOARD) {
 
             huabanService.getBoardPinsFromHuaBanWithRx(boardId, 30)
-                    .flatMap(new Func1<LoadMorePins, Observable<DevidedPins>>() {
-                        @Override
-                        public Observable<DevidedPins> call(LoadMorePins devidedJsonRootBean) {
-                            Log.i(TAG, devidedJsonRootBean.toString());
-                            return Observable.from(devidedJsonRootBean.getPins());
-                        }
+                    .flatMap(devidedJsonRootBean -> {
+                        Log.i(TAG, devidedJsonRootBean.toString());
+                        return Observable.from(devidedJsonRootBean.getPins());
                     })
-                    .map(new Func1<DevidedPins, HBImageBean>() {
-                        @Override
-                        public HBImageBean call(DevidedPins devidedPins) {
-                            HBImageBean bean = new HBImageBean();
-                            bean.setPin_id(devidedPins.getPin_id());
-                            bean.setBoard_id(devidedPins.getBoard_id());
-                            bean.setUrl("http://img.hb.aicdn.com/" + devidedPins.getFile().getKey());
-                            bean.setTheme(devidedPins.getFile().getTheme());
-                            bean.setHeight(devidedPins.getFile().getHeight());
-                            bean.setWidth(devidedPins.getFile().getWidth());
-                            return bean;
-                        }
+                    .map(devidedPins -> {
+                        HBImageBean bean = new HBImageBean();
+                        bean.setPin_id(devidedPins.getPin_id());
+                        bean.setBoard_id(devidedPins.getBoard_id());
+                        bean.setUrl("http://img.hb.aicdn.com/" + devidedPins.getFile().getKey());
+                        bean.setTheme(devidedPins.getFile().getTheme());
+                        bean.setHeight(devidedPins.getFile().getHeight());
+                        bean.setWidth(devidedPins.getFile().getWidth());
+                        return bean;
                     })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -170,25 +154,19 @@ public class HuaBanPresenter {
             if (observable != null) {
 
                 observable
-                        .flatMap(new Func1<DevidedJsonRootBean, Observable<DevidedPins>>() {
-                            @Override
-                            public Observable<DevidedPins> call(DevidedJsonRootBean devidedJsonRootBean) {
-                                Log.i(TAG,devidedJsonRootBean.toString());
-                                return Observable.from(devidedJsonRootBean.getPins());
-                            }
+                        .flatMap(devidedJsonRootBean -> {
+                            Log.i(TAG,devidedJsonRootBean.toString());
+                            return Observable.from(devidedJsonRootBean.getPins());
                         })
-                        .map(new Func1<DevidedPins, HBImageBean>() {
-                            @Override
-                            public HBImageBean call(DevidedPins devidedPins) {
-                                HBImageBean bean = new HBImageBean();
-                                bean.setPin_id(devidedPins.getPin_id());
-                                bean.setBoard_id(devidedPins.getBoard_id());
-                                bean.setUrl("http://img.hb.aicdn.com/" + devidedPins.getFile().getKey());
-                                bean.setTheme(devidedPins.getFile().getTheme());
-                                bean.setHeight(devidedPins.getFile().getHeight());
-                                bean.setWidth(devidedPins.getFile().getWidth());
-                                return bean;
-                            }
+                        .map(devidedPins -> {
+                            HBImageBean bean = new HBImageBean();
+                            bean.setPin_id(devidedPins.getPin_id());
+                            bean.setBoard_id(devidedPins.getBoard_id());
+                            bean.setUrl("http://img.hb.aicdn.com/" + devidedPins.getFile().getKey());
+                            bean.setTheme(devidedPins.getFile().getTheme());
+                            bean.setHeight(devidedPins.getFile().getHeight());
+                            bean.setWidth(devidedPins.getFile().getWidth());
+                            return bean;
                         })
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -234,25 +212,19 @@ public class HuaBanPresenter {
         if (type == HuaBanFragmentType.HUABAN_FRAGMENT_SEARCH) {
 
             huabanService.getSearchResultFromHuaBanWithRx(keyWord, 30, pageCount, "created_at")
-                    .flatMap(new Func1<SearchJsonRootBean, Observable<SearchPins>>() {
-                        @Override
-                        public Observable<SearchPins> call(SearchJsonRootBean searchJsonRootBean) {
-                            Log.i(TAG,searchJsonRootBean.toString());
-                            return Observable.from(searchJsonRootBean.getPins());
-                        }
+                    .flatMap(searchJsonRootBean -> {
+                        Log.i(TAG,searchJsonRootBean.toString());
+                        return Observable.from(searchJsonRootBean.getPins());
                     })
-                    .map(new Func1<SearchPins, HBImageBean>() {
-                        @Override
-                        public HBImageBean call(SearchPins searchPins) {
-                            HBImageBean bean = new HBImageBean();
-                            bean.setPin_id(searchPins.getPin_id());
-                            bean.setBoard_id(searchPins.getBoard_id());
-                            bean.setUrl("http://img.hb.aicdn.com/" + searchPins.getFile().getKey());
-                            bean.setTheme(searchPins.getFile().getTheme());
-                            bean.setHeight(searchPins.getFile().getHeight());
-                            bean.setWidth(searchPins.getFile().getWidth());
-                            return bean;
-                        }
+                    .map(searchPins -> {
+                        HBImageBean bean = new HBImageBean();
+                        bean.setPin_id(searchPins.getPin_id());
+                        bean.setBoard_id(searchPins.getBoard_id());
+                        bean.setUrl("http://img.hb.aicdn.com/" + searchPins.getFile().getKey());
+                        bean.setTheme(searchPins.getFile().getTheme());
+                        bean.setHeight(searchPins.getFile().getHeight());
+                        bean.setWidth(searchPins.getFile().getWidth());
+                        return bean;
                     })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -306,25 +278,19 @@ public class HuaBanPresenter {
             if (observable != null) {
 
                 observable
-                        .flatMap(new Func1<LoadMorePins, Observable<DevidedPins>>() {
-                            @Override
-                            public Observable<DevidedPins> call(LoadMorePins devidedJsonRootBean) {
-                                Log.i(TAG, devidedJsonRootBean.toString());
-                                return Observable.from(devidedJsonRootBean.getPins());
-                            }
+                        .flatMap(devidedJsonRootBean -> {
+                            Log.i(TAG, devidedJsonRootBean.toString());
+                            return Observable.from(devidedJsonRootBean.getPins());
                         })
-                        .map(new Func1<DevidedPins, HBImageBean>() {
-                            @Override
-                            public HBImageBean call(DevidedPins devidedPins) {
-                                HBImageBean bean = new HBImageBean();
-                                bean.setPin_id(devidedPins.getPin_id());
-                                bean.setBoard_id(devidedPins.getBoard_id());
-                                bean.setUrl("http://img.hb.aicdn.com/" + devidedPins.getFile().getKey());
-                                bean.setTheme(devidedPins.getFile().getTheme());
-                                bean.setHeight(devidedPins.getFile().getHeight());
-                                bean.setWidth(devidedPins.getFile().getWidth());
-                                return bean;
-                            }
+                        .map(devidedPins -> {
+                            HBImageBean bean = new HBImageBean();
+                            bean.setPin_id(devidedPins.getPin_id());
+                            bean.setBoard_id(devidedPins.getBoard_id());
+                            bean.setUrl("http://img.hb.aicdn.com/" + devidedPins.getFile().getKey());
+                            bean.setTheme(devidedPins.getFile().getTheme());
+                            bean.setHeight(devidedPins.getFile().getHeight());
+                            bean.setWidth(devidedPins.getFile().getWidth());
+                            return bean;
                         })
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

@@ -12,6 +12,8 @@ public class ISUser {
     private String mail;
     private String avatarUrl;
 
+    public ISUser() { }
+
     public ISUser(String token, String userId, String userName, String mail, String avatarUrl) {
         this.token = token;
         this.userId = userId;
