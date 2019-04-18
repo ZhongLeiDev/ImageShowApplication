@@ -16,27 +16,20 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.avos.avoscloud.AVAnalytics;
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVFile;
-import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
-import com.avos.avoscloud.FindCallback;
-import com.avos.avoscloud.GetDataCallback;
-import com.avos.avoscloud.LogInCallback;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.zl.imageshowapplication.R;
+import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
 import com.example.zl.imageshowapplication.utils.BcyActivityManager;
-import com.example.zl.imageshowapplication.utils.MD5Utils;
+import com.example.zl.locallogin.bean.ISUser;
+import com.example.zl.locallogin.bean.LocalError;
+import com.example.zl.locallogin.util.LocalUtil;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
@@ -127,70 +120,54 @@ public class LocalLoginActivity extends AppCompatActivity {
       focusView.requestFocus();
     } else {
       showProgress(true);
-
-      AVUser.logInInBackground(username, password, new LogInCallback<AVUser>() {
-        @Override
-        public void done(AVUser avUser, AVException e) {
-          if (e == null) {
-            if (isAvatarExist){
-
-              showProgress(false);
-              LocalLoginActivity.this.finish();
-
-            } else {
-
-              //下载头像文件
-              AVQuery<AVObject> query = new AVQuery<>("_File");
-              query.whereEqualTo("name",MD5Utils.getStringMD5(AVUser.getCurrentUser().getUsername()) + ".png");
-              query.findInBackground(new FindCallback<AVObject>() {
-                @Override
-                public void done(List<AVObject> list, AVException e) {
-                  if (e == null){
-                    if (list.size()>0) {
-                      AVFile file = new AVFile("test.png", list.get(0).getString("url"), new HashMap<String, Object>());
-                      file.getDataInBackground(new GetDataCallback() {
-                        @Override
-                        public void done(byte[] bytes, AVException e) {
-                          if (e == null) {
-                            File f = new File(AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()));
-                            try {
-                              f.createNewFile();
-                              FileOutputStream fos = new FileOutputStream(f);
-                              fos.write(bytes, 0, bytes.length);
-                              fos.flush();
-                              fos.close();
-
-                              showProgress(false);
-                              LocalLoginActivity.this.finish();
-
-                            } catch (IOException e1) {
-                              e1.printStackTrace();
-                            }
-                          } else {
-                            e.printStackTrace();
-                          }
-                        }
-                      });
-                    } else { //如果没有查询到对应用户的头像文件，则使用默认头像
-                      showProgress(false);
-                      LocalLoginActivity.this.finish();
-                    }
-                  } else {
-                    showProgress(false);
-                    Toast.makeText(LocalLoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                  }
-                }
-              });
-
-            }
-//            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-          } else {
-            showProgress(false);
-            Toast.makeText(LocalLoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-          }
-        }
-      });
+      doLogin(username, password, "");
     }
+  }
+
+  /**
+   * 登录
+   * @param userName  用户名
+   * @param passWord  用户密码
+   * @param token 用户token
+   */
+  private void doLogin(String userName, String passWord, String token) {
+    LocalUserHandle.doLogin(userName, passWord, token, new LocalCallback<ResultVO<ISUser>>() {
+      @Override
+      public void done(ResultVO<ISUser> isUserResultVO, LocalError e) {
+        if (e == null) {
+          LocalUtil.saveCurrentUser(isUserResultVO.getData(), LocalLoginActivity.this);
+          LocalUserHandle.setCurrentUser(isUserResultVO.getData());
+          if (isAvatarExist) {  //如果头像存在，则登陆成功直接返回
+            showProgress(false);
+            LocalLoginActivity.this.finish();
+          } else {  //若头像不存在，则从网络加载头像文件，并将头像文件存储在本地
+            try {
+              File file = Glide.with(LocalLoginActivity.this)
+                      .load(isUserResultVO.getData().getAvatarUrl())
+                      .downloadOnly(100,100)
+                      .get();
+              boolean isok = AvatarSelectUtil.copyAvatar(file.getPath(),
+                      AvatarSelectUtil.buildAvatarPath(
+                              isUserResultVO.getData().getUserName()));
+              if (isok) {
+                showProgress(false);
+                LocalLoginActivity.this.finish();
+              } else {
+                showProgress(false);
+                Toast.makeText(LocalLoginActivity.this, "头像文件存储失败！", Toast.LENGTH_SHORT).show();
+              }
+            } catch (InterruptedException | ExecutionException e1) {
+              e1.printStackTrace();
+              showProgress(false);
+              Toast.makeText(LocalLoginActivity.this, e1.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+          }
+        } else {
+          showProgress(false);
+          Toast.makeText(LocalLoginActivity.this, e.getMsg(), Toast.LENGTH_SHORT).show();
+        }
+      }
+    });
   }
 
   private boolean isPasswordValid(String password) {

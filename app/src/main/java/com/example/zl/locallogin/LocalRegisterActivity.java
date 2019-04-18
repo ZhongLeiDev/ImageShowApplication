@@ -39,7 +39,9 @@ import com.example.zl.imageshowapplication.config.UILConfig;
 import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
 import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.example.zl.imageshowapplication.utils.MD5Utils;
+import com.example.zl.locallogin.bean.ISUser;
 import com.example.zl.locallogin.bean.LocalError;
+import com.example.zl.locallogin.util.LocalUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -146,17 +148,32 @@ public class LocalRegisterActivity extends AppCompatActivity {
     String avatarPath;
     if (mCutUri != null) {
       avatarPath = mCutUri.getPath();
-      LocalUserHandle.doRegister(userName, passWord, avatarPath, mail, new LocalCallback<ResultVO>() {
+      LocalUserHandle.doRegister(userName, passWord, avatarPath, mail, new LocalCallback<ResultVO<ISUser>>() {
 
         @Override
-        public void done(ResultVO resultVO, LocalError e) {
+        public void done(ResultVO<ISUser> resultVO, LocalError e) {
           if (e == null) {
             Log.i(TAG, resultVO.toString());
-            showMessage("注册成功！");
+            LocalUserHandle.doLogin(userName, passWord, "",
+                    new LocalCallback<ResultVO<ISUser>>() {
+                      @Override
+                      public void done(ResultVO<ISUser> isUserResultVO, LocalError e) {
+                        if (e == null) {
+                          LocalUtil.saveCurrentUser(isUserResultVO.getData(), LocalRegisterActivity.this);
+                          LocalUserHandle.setCurrentUser(isUserResultVO.getData());
+                          showProgress(false);  //隐藏进度条
+                          showMessage("注册并登录成功！");
+                          LocalRegisterActivity.this.finish();
+                        } else {
+                          showMessage(e.getMsg());
+                          showProgress(false);  //隐藏进度条
+                        }
+                      }
+                    });
           } else {
             showMessage(e.getMsg());
+            showProgress(false);  //隐藏进度条
           }
-          showProgress(false);  //隐藏进度条
         }
       });
     } else {

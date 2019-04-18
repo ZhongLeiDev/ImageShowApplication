@@ -3,11 +3,7 @@ package com.example.zl.locallogin.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
-import com.airbnb.lottie.animation.content.Content;
 import com.example.zl.locallogin.bean.ISUser;
-
-import java.util.prefs.PreferencesFactory;
 
 /**
  * Created by ZhongLeiDev on 2019/4/4.

@@ -56,7 +56,7 @@ public class LocalUserHandle {
      * @param callback  回调实例
      */
     public static void doRegister(String userName, String passWord, String avatarPath,
-            String mail, final LocalCallback<ResultVO> callback) {
+            String mail, final LocalCallback<ResultVO<ISUser>> callback) {
        if (!userName.isEmpty() && !passWord.isEmpty() && !avatarPath.isEmpty() && !mail.isEmpty()) {
            File file = new File(avatarPath);
            RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
