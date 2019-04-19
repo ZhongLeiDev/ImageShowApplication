@@ -2,8 +2,10 @@ package com.example.zl.locallogin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -15,8 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.avos.avoscloud.AVAnalytics;
-import com.avos.avoscloud.AVUser;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
@@ -40,6 +40,7 @@ public class LocalLoginActivity extends AppCompatActivity {
   private LottieAnimationView loadingview;
 
   private boolean isAvatarExist = false;
+  private static Handler handler=new Handler(); //通过 Handler 的 POST 方法改变 UI
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class LocalLoginActivity extends AppCompatActivity {
     //将当前 Activity 纳入管理
     BcyActivityManager.getActivityManager().addActivity(this);
 
-    if (AVUser.getCurrentUser() != null) {
+    if (LocalUserHandle.currentUser() != null) {
 //      startActivity(new Intent(LoginActivity.this, MainActivity.class));
       LocalLoginActivity.this.finish();
     }
@@ -137,30 +138,40 @@ public class LocalLoginActivity extends AppCompatActivity {
         if (e == null) {
           LocalUtil.saveCurrentUser(isUserResultVO.getData(), LocalLoginActivity.this);
           LocalUserHandle.setCurrentUser(isUserResultVO.getData());
+          Log.i("LOGINActivity", "UserGet->" + isUserResultVO.getData().toString());
           if (isAvatarExist) {  //如果头像存在，则登陆成功直接返回
             showProgress(false);
             LocalLoginActivity.this.finish();
           } else {  //若头像不存在，则从网络加载头像文件，并将头像文件存储在本地
-            try {
-              File file = Glide.with(LocalLoginActivity.this)
-                      .load(isUserResultVO.getData().getAvatarUrl())
-                      .downloadOnly(100,100)
-                      .get();
-              boolean isok = AvatarSelectUtil.copyAvatar(file.getPath(),
-                      AvatarSelectUtil.buildAvatarPath(
-                              isUserResultVO.getData().getUserName()));
-              if (isok) {
-                showProgress(false);
-                LocalLoginActivity.this.finish();
-              } else {
-                showProgress(false);
-                Toast.makeText(LocalLoginActivity.this, "头像文件存储失败！", Toast.LENGTH_SHORT).show();
+            new Thread(() -> {
+              try {
+                File file = Glide.with(LocalLoginActivity.this)
+                        .load(isUserResultVO.getData().getAvatarUrl())
+                        .downloadOnly(100,100)
+                        .get();
+                boolean isok = AvatarSelectUtil.copyAvatar(file.getPath(),
+                        AvatarSelectUtil.buildAvatarPath(
+                                isUserResultVO.getData().getUserName()));
+                if (isok) {
+                  handler.post(() -> {
+                    showProgress(false);
+                    LocalLoginActivity.this.finish();
+                  });
+                } else {
+                  handler.post(() -> {
+                    showProgress(false);
+                    Toast.makeText(LocalLoginActivity.this, "头像文件存储失败！", Toast.LENGTH_SHORT).show();
+                  });
+
+                }
+              } catch (InterruptedException | ExecutionException e1) {
+                e1.printStackTrace();
+                handler.post(() -> {
+                  showProgress(false);
+                  Toast.makeText(LocalLoginActivity.this, e1.getMessage(), Toast.LENGTH_SHORT).show();
+                });
               }
-            } catch (InterruptedException | ExecutionException e1) {
-              e1.printStackTrace();
-              showProgress(false);
-              Toast.makeText(LocalLoginActivity.this, e1.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+            }).start();
           }
         } else {
           showProgress(false);
@@ -172,7 +183,7 @@ public class LocalLoginActivity extends AppCompatActivity {
 
   private boolean isPasswordValid(String password) {
     //TODO: Replace this with your own logic
-    return password.length() > 4;
+    return password.length() > 6;
   }
 
   /**
@@ -193,13 +204,11 @@ public class LocalLoginActivity extends AppCompatActivity {
   @Override
   protected void onPause() {
     super.onPause();
-    AVAnalytics.onPause(this);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    AVAnalytics.onResume(this);
   }
 }
 

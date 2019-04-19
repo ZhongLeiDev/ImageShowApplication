@@ -15,6 +15,7 @@ import com.example.zl.imageshowapplication.activity.settings.AvatarChangeActivit
 import com.example.zl.imageshowapplication.adapter.settings.SettingsAdapter;
 import com.example.zl.imageshowapplication.adapter.settings.SettingsViewHolder;
 import com.example.zl.imageshowapplication.utils.BcyActivityManager;
+import com.example.zl.locallogin.LocalUserHandle;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,7 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
     private View.OnClickListener onAvatar = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (AVUser.getCurrentUser() != null) {
+            if (LocalUserHandle.currentUser() != null) {
                 startActivity(new Intent(SettingsActivity.this, AvatarChangeActivity.class));
             } else {
                 Toast.makeText(SettingsActivity.this,"登陆后才可以进行头像设置！",Toast.LENGTH_SHORT).show();

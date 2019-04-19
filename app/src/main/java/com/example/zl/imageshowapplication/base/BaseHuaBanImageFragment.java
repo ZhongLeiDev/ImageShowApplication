@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import com.avos.avoscloud.AVUser;
 import com.example.zl.enums.FooterShowType;
 import com.example.zl.enums.HuaBanFragmentType;
 import com.example.zl.imageshowapplication.R;
@@ -22,15 +21,16 @@ import com.example.zl.imageshowapplication.adapter.huaban.HuaBanImageWaterFallLo
 import com.example.zl.imageshowapplication.bean.huaban.transobj.HBImageBean;
 import com.example.zl.imageshowapplication.message.BaseMessage;
 import com.example.zl.imageshowapplication.message.MsgEnums;
+import com.example.zl.imageshowapplication.mvp.huaban.presenter.HuaBanPresenter;
+import com.example.zl.imageshowapplication.mvp.huaban.view.HuaBanView;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.listenerinstance.HuaBanLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
-import com.example.zl.imageshowapplication.mvp.huaban.presenter.HuaBanPresenter;
-import com.example.zl.imageshowapplication.mvp.huaban.view.HuaBanView;
 import com.example.zl.locallogin.CollectionBean;
-import com.example.zl.leancloud.CollectionPresenter;
+import com.example.zl.locallogin.CollectionPresenter;
 import com.example.zl.locallogin.CollectionView;
+import com.example.zl.locallogin.LocalUserHandle;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -321,16 +321,15 @@ public class BaseHuaBanImageFragment extends BaseFragment implements LoadMoreLis
                         startActivity(intent);
                         break;
                     case R.id.huaban_collect:
-                        if (AVUser.getCurrentUser() != null) {
-                            collectionPresenter.collectPins(AVUser.getCurrentUser().getObjectId(),
-                                    mAdapter.getList().get(position).getUrl());
+                        if (LocalUserHandle.currentUser() != null) {
+                            collectionPresenter.collectPins(mAdapter.getList().get(position).getUrl());
                         } else {
                             Toast.makeText(getSafeActivity(),"请登录后再使用图片收藏功能！",Toast.LENGTH_SHORT).show();
                         }
                         break;
                     case R.id.huaban_collect_board:
-                        if (AVUser.getCurrentUser() != null) {
-                            collectionPresenter.collectBoard(AVUser.getCurrentUser().getObjectId(),
+                        if (LocalUserHandle.currentUser() != null) {
+                            collectionPresenter.collectBoard(
                                     String.valueOf(mAdapter.getList().get(position).getBoard_id()),
                                     mAdapter.getList().get(position).getUrl());
                         } else {

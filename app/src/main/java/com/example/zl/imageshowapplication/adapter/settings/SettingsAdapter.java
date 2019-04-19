@@ -1,21 +1,18 @@
 package com.example.zl.imageshowapplication.adapter.settings;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.avos.avoscloud.AVUser;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
-import com.example.zl.leancloud.LoginActivity;
+import com.example.zl.locallogin.LocalUserHandle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,11 +61,11 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsViewHolder>{
         if (holder instanceof ViewHolderHeader) {
             ((ViewHolderHeader) holder).setHeader(titleIndexs.get(position));
         } else if (holder instanceof ViewHolderAccount) {
-            if (AVUser.getCurrentUser() != null){
+            if (LocalUserHandle.currentUser() != null){
                 AvatarSelectUtil.setAvatarWithPath1(
                         mContext,((ViewHolderAccount) holder).getAvatarImageView(),
-                        AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()));
-                ((ViewHolderAccount) holder).setAccount(AVUser.getCurrentUser().getUsername());
+                        AvatarSelectUtil.buildAvatarPath(LocalUserHandle.currentUser().getUserName()));
+                ((ViewHolderAccount) holder).setAccount(LocalUserHandle.currentUser().getUserName());
             } else {
                 Glide.with(mContext).load(R.drawable.default_user)  //圆形显示
                         .transition(withCrossFade())    //渐隐特效显示

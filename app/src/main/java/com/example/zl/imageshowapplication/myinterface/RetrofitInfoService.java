@@ -17,6 +17,7 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -340,9 +341,9 @@ public interface RetrofitInfoService {
      * @return
      */
     @POST("user_login_field/login")
-    Call<ResultVO<ISUser>> login(@Part("userName") String userName,
-                                 @Part("passWord") String passWord,
-                                 @Part("token") String token);
+    Call<ResultVO<ISUser>> login(@Query("userName") String userName,
+                                 @Query("passWord") String passWord,
+                                 @Query("token") String token);
 
     /**
      * 注销
@@ -350,7 +351,7 @@ public interface RetrofitInfoService {
      * @return
      */
     @POST("user_login_field/logout")
-    Call<ResultVO<ISUser>> logout(@Part("token") String token);
+    Call<ResultVO<ISUser>> logout(@Query("token") String token);
 
     /**
      * 更改头像
@@ -368,7 +369,7 @@ public interface RetrofitInfoService {
      * @param pageSize  单页显示数量
      * @return
      */
-    @GET("random_pictures")
+    @GET("user_handle_field/random_pictures")
     Call<ResultVO<List<PictureRandom>>> randomPictures(
             @Query("pageSize") int pageSize);
 
@@ -376,7 +377,7 @@ public interface RetrofitInfoService {
      * 随机获取单张图片
      * @return
      */
-    @GET("random_siglepic")
+    @GET("user_handle_field/random_siglepic")
     Call<ResultVO<List<PictureRandom>>> randomSinglePicture();
 
     /**
@@ -388,7 +389,7 @@ public interface RetrofitInfoService {
      * @param cover   图片封面
      * @return
      */
-    @POST("collect_pin")
+    @POST("user_handle_field/collect_pin")
     Call<ResultVO> collectPin(@Query("token") String token,
                               @Query("userId") String userId,
                               @Query("userName") String userName,
@@ -404,7 +405,7 @@ public interface RetrofitInfoService {
      * @param cover   画板封面
      * @return
      */
-    @POST("collect_board")
+    @POST("user_handle_field/collect_board")
     Call<ResultVO> collectBoard(@Query("token") String token,
                                 @Query("userId") String userId,
                                 @Query("userName") String userName,
@@ -419,7 +420,7 @@ public interface RetrofitInfoService {
      * @param pageSize  每页容量
      * @return
      */
-    @GET("get_pins")
+    @GET("user_handle_field/get_pins")
     Call<ResultVO<List<PictureCollect>>> getCollectPins(
             @Query("token") String token,
             @Query("userName") String userName,
@@ -434,7 +435,7 @@ public interface RetrofitInfoService {
      * @param pageSize  每页容量
      * @return
      */
-    @GET("get_pins")
+    @GET("user_handle_field/get_boards")
     Call<ResultVO<List<PictureCollect>>> getCollectBoards(
             @Query("token") String token,
             @Query("userName") String userName,
@@ -449,7 +450,7 @@ public interface RetrofitInfoService {
      * @param pageSize  每页容量
      * @return
      */
-    @GET("get_shared")
+    @GET("user_handle_field/get_shared")
     Call<ResultVO<List<PictureShared>>> getSharedPictures(
             @Query("token") String token,
             @Query("userName") String userName,
@@ -461,7 +462,7 @@ public interface RetrofitInfoService {
      * @param pageSize  单页容量
      * @return
      */
-    @GET("random_shared")
+    @GET("user_handle_field/random_shared")
     Call<ResultVO<List<PictureShared>>> randomSharedPictures(
             @Query("pageSize") int pageSize);
 
@@ -474,7 +475,8 @@ public interface RetrofitInfoService {
      * @return
      */
     @Multipart
-    @POST("share")
+    @FormUrlEncoded
+    @POST("user_handle_field/share")
     Call<ResultVO> sharePictures(@Part("token") String token,
                                  @Part("userId") String userId,
                                  @Part("userName") String userName,

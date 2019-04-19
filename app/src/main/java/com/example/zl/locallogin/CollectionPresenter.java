@@ -78,10 +78,9 @@ public class CollectionPresenter {
     /**
      * 根据查询类型查询对应的收藏数据
      * @param type 查询的类型
-     * @param userId 用户 Id
      * @param pageCount 当前查询的页面页标
      */
-    public void queryCollections(CollectionType type, String userId, int pageCount) {
+    public void queryCollections(CollectionType type, int pageCount) {
         switch (type) {
             case COLLECTON_TYPE_PIN:
                 queryPins(pageCount);
@@ -151,17 +150,16 @@ public class CollectionPresenter {
      * @param pageCount 查询第几页的页标
      */
     private void queryAuthor(final int pageCount) {
-        //TODO
-        collectionView.onError("暂不支持此操作！");
+        //TODO  暂不支持此操作！
+
     }
 
     /**
      * 删除收藏的方法
      * @param type 当前显示的 CollectionType
-     * @param userId 用户 Id
      * @param bean 待删除的 Item
      */
-    public void deleteCollection(CollectionType type, String userId, CollectionBean bean) {
+    public void deleteCollection(CollectionType type, CollectionBean bean) {
         switch (type) {
             case COLLECTON_TYPE_PIN:
                 deletePin(bean.getUrl());

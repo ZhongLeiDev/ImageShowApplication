@@ -38,11 +38,15 @@ import com.example.zl.imageshowapplication.adapter.common.FragmentAdapter;
 import com.example.zl.imageshowapplication.base.BaseAlbumInfoFragment;
 import com.example.zl.imageshowapplication.base.BaseHuaBanImageFragment;
 import com.example.zl.imageshowapplication.base.BasePictureInfoFragment;
+import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallLoadMoreFragment;
 import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
+import com.example.zl.locallogin.LocalCallback;
 import com.example.zl.locallogin.LocalLoginActivity;
 import com.example.zl.locallogin.LocalUserHandle;
+import com.example.zl.locallogin.bean.ISUser;
+import com.example.zl.locallogin.bean.LocalError;
 import com.example.zl.locallogin.util.LocalUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -102,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         //初始化 CurrentUser
         LocalUserHandle.setCurrentUser(LocalUtil.getCurrentUser(this));
+        Log.i(TAG, "CurrentUser->" + LocalUtil.getCurrentUser(this));
 
         //将当前 Activity 纳入管理
         BcyActivityManager.getActivityManager().addActivity(this);
@@ -128,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     item -> {
                         switch (item.getItemId()) {
                             case R.id.nav_collection:
-                                if (AVUser.getCurrentUser() != null) {
+                                if (LocalUserHandle.currentUser() != null) {
                                     Intent intent = new Intent();
                                     intent.setClass(MainActivity.this, CollectionShowActivity.class);
                                     startActivity(intent);
@@ -174,10 +179,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
      * 设置用户图像
      */
     private void setUserAvatar() {
-        if (AVUser.getCurrentUser() != null) {
-            tvAvatar.setText(AVUser.getCurrentUser().getUsername());
+        if (LocalUserHandle.currentUser() != null) {
+            tvAvatar.setText(LocalUserHandle.currentUser().getUserName());
             if (!AvatarSelectUtil.setAvatarWithPath(this,ivAvatar_bg,ivAvatar,
-                    AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()))) {
+                    AvatarSelectUtil.buildAvatarPath(LocalUserHandle.currentUser().getUserName()))) {
                 AvatarSelectUtil.setAvatarWithSrcId(this,ivAvatar_bg,ivAvatar,R.drawable.default_user);
             }
         } else {
@@ -190,10 +195,19 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
      * 用户登出
      */
     private void logout() {
-
-        AVUser.getCurrentUser().logOut();
-        setUserAvatar();
-
+        LocalUserHandle.doLogout(LocalUserHandle.currentUser().getToken(), new LocalCallback<ResultVO<ISUser>>() {
+            @Override
+            public void done(ResultVO<ISUser> isUserResultVO, LocalError e) {
+                if (e == null) {
+                    Toast.makeText(MainActivity.this,"用户已退出！",Toast.LENGTH_SHORT).show();
+                    LocalUserHandle.setCurrentUser(null);
+                    LocalUtil.saveCurrentUser(new ISUser("", "", "", "", ""), MainActivity.this);
+                    setUserAvatar();
+                } else {
+                    Toast.makeText(MainActivity.this,"用户退出失败！" + e.getMsg(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override

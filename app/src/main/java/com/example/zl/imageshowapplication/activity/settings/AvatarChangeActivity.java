@@ -30,10 +30,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.zl.imageshowapplication.R;
+import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.config.UILConfig;
 import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
 import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.example.zl.imageshowapplication.utils.MD5Utils;
+import com.example.zl.locallogin.LocalCallback;
+import com.example.zl.locallogin.LocalUserHandle;
+import com.example.zl.locallogin.bean.LocalError;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -107,7 +111,7 @@ public class AvatarChangeActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 startProgress();
-                queryAvatar();
+                uploadAvatar();
             }
         });
 
@@ -153,80 +157,27 @@ public class AvatarChangeActivity extends AppCompatActivity{
     }
 
     /**
-     * 查询头像文件，若数据库已存在当前账号的头像，则先删除旧文件再上传新文件
-     */
-    private void queryAvatar() {
-
-        AVQuery<AVObject> query = new AVQuery<>("_File");
-        query.whereEqualTo("name",MD5Utils.getStringMD5(AVUser.getCurrentUser().getUsername()) + ".png");
-        query.findInBackground(new FindCallback<AVObject>() {
-            @Override
-            public void done(List<AVObject> list, AVException e) {
-                if (e == null) {
-                    if (list.size()>0) {    //旧文件已存在，则先删除后上传
-
-                        list.get(0).deleteInBackground(new DeleteCallback() {
-                            @Override
-                            public void done(AVException e) {
-                                if (e == null) {
-                                    uploadAvatar();
-                                } else {
-                                    e.printStackTrace();
-                                    stopProgress();
-                                    Toast.makeText(AvatarChangeActivity.this,"头像上传失败！",Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-
-                    } else {    //旧文件不存在，则直接上传
-                        uploadAvatar();
-                    }
-                } else {
-                    e.printStackTrace();
-                    stopProgress();
-                    Toast.makeText(AvatarChangeActivity.this,"头像上传失败,请检查网络连接！",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-    }
-
-    /**
      * 上传头像文件
      */
     private void uploadAvatar() {
-
         if (mCutUri != null) {
-            AVFile file;
-            try {
-                file = AVFile.withAbsoluteLocalPath(
-                        MD5Utils.getStringMD5(AVUser.getCurrentUser().getUsername()) + ".png",
-                        mCutUri.getPath());
-                file.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(AVException e) {
-                        if (e == null) {
-                            Log.i(TAG, "avatar upload succeed!");
+            LocalUserHandle.doAvatarChange(mCutUri.getPath(), new LocalCallback<ResultVO<String>>() {
+                @Override
+                public void done(ResultVO<String> stringResultVO, LocalError e) {
+                    if (e == null) {
+                        Log.i(TAG, "avatar upload succeed!");
 
-                            if (AvatarSelectUtil.copyAvatar(CURRENTAVATAR,
-                                    AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()))) {
-                                stopProgress();
-                                Toast.makeText(AvatarChangeActivity.this,"上传成功！",Toast.LENGTH_SHORT).show();
-                            }
-
-                        } else {
-                            e.printStackTrace();
+                        if (AvatarSelectUtil.copyAvatar(CURRENTAVATAR,
+                                AvatarSelectUtil.buildAvatarPath(LocalUserHandle.currentUser().getUserName()))) {
                             stopProgress();
-                            Toast.makeText(AvatarChangeActivity.this,"头像上传失败，请检查网络连接后重试！",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AvatarChangeActivity.this,"上传成功！",Toast.LENGTH_SHORT).show();
                         }
+                    } else {
+                        stopProgress();
+                        Toast.makeText(AvatarChangeActivity.this,e.getMsg(),Toast.LENGTH_SHORT).show();
                     }
-                });
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                stopProgress();
-                Toast.makeText(AvatarChangeActivity.this,"头像上传失败！",Toast.LENGTH_SHORT).show();
-            }
-
+                }
+            });
         } else { //如果没有选择头像文件则给出提示
             stopProgress();
             Toast.makeText(this,"还未选择头像文件！",Toast.LENGTH_SHORT).show();
@@ -314,10 +265,10 @@ public class AvatarChangeActivity extends AppCompatActivity{
     }
 
     private void setAvatar() {
-        if (AVUser.getCurrentUser() != null){
+        if (LocalUserHandle.currentUser() != null){
             AvatarSelectUtil.setAvatarWithPath1(
-                    this,avatar, AvatarSelectUtil.buildAvatarPath(AVUser.getCurrentUser().getUsername()));
-            name.setText(AVUser.getCurrentUser().getUsername());
+                    this,avatar, AvatarSelectUtil.buildAvatarPath(LocalUserHandle.currentUser().getUserName()));
+            name.setText(LocalUserHandle.currentUser().getUserName());
         } else {
             Glide.with(this).load(R.drawable.default_user)  //圆形显示
                     .transition(withCrossFade())    //渐隐特效显示

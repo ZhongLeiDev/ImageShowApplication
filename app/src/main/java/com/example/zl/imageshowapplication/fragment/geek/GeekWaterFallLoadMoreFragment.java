@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import com.avos.avoscloud.AVUser;
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.activity.GeekListPagerImageViewActivity;
 import com.example.zl.imageshowapplication.adapter.geek.GeekWaterFallLoadMoreAdapter;
@@ -21,14 +20,15 @@ import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.Retrofi
 import com.example.zl.imageshowapplication.message.BaseMessage;
 import com.example.zl.imageshowapplication.message.MsgEnums;
 import com.example.zl.imageshowapplication.myinterface.LoadMoreListener;
-import com.example.zl.imageshowapplication.myinterface.listenerinstance.GeekLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
+import com.example.zl.imageshowapplication.myinterface.listenerinstance.GeekLoadMoreScrollListener;
 import com.example.zl.imageshowapplication.utils.FileDownloadUtil;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
 import com.example.zl.locallogin.CollectionBean;
-import com.example.zl.leancloud.CollectionPresenter;
+import com.example.zl.locallogin.CollectionPresenter;
 import com.example.zl.locallogin.CollectionView;
+import com.example.zl.locallogin.LocalUserHandle;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -210,9 +210,8 @@ public class GeekWaterFallLoadMoreFragment extends BaseFragment implements LoadM
                         }
                         break;
                     case R.id.geek_collect:
-                        if (AVUser.getCurrentUser() != null) {
-                            collectionPresenter.collectPins(AVUser.getCurrentUser().getObjectId(),
-                                    mAdapter.getList().get(position).getUrl());
+                        if (LocalUserHandle.currentUser() != null) {
+                            collectionPresenter.collectPins(mAdapter.getList().get(position).getUrl());
                         } else {
                             Toast.makeText(getSafeActivity(),"请登录后再使用图片收藏功能！",Toast.LENGTH_SHORT).show();
                         }

@@ -1,6 +1,7 @@
 package com.example.zl.locallogin;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.example.zl.imageshowapplication.bean.bcy.retro.ResultVO;
 import com.example.zl.imageshowapplication.linkanalyzestrategy.retrofits.RetrofitFactory;
@@ -44,7 +45,7 @@ public class LocalUserHandle {
     }
 
     public static ISUser currentUser() {
-        return currentUser;
+       return currentUser;
     }
 
     /**
@@ -107,7 +108,9 @@ public class LocalUserHandle {
                     ResultVO<ISUser> result = response.body();
                     if (result != null) {
                         if (result.getCode() == 0) {
-                            setCurrentUser(result.getData());
+                            String token = "token_" + result.getData().getToken().replaceAll("token_", "");    //重构token
+                            result.getData().setToken(token);
+                            Log.i("LOGIN", "Result->" + result);
                             callback.done(result, null);
                         } else {
                             callback.done(null, new LocalError(result.getCode(), result.getMsg()));
@@ -141,7 +144,6 @@ public class LocalUserHandle {
                 ResultVO<ISUser> result = response.body();
                 if (result != null) {
                     if (result.getCode() == 0) {
-                        setCurrentUser(null);
                         callback.done(result, null);
                     } else {
                         callback.done(null, new LocalError(result.getCode(), result.getMsg()));

@@ -31,19 +31,13 @@ public class MainApplication extends Application {
         super.onCreate();
         createDiskCache();
         initImageLoader(getApplicationContext());
-        initLeanCloud();
         //开启网络状态监听Service
         startService(new Intent(getApplicationContext(), NetworkStatusService.class));
     }
 
 
     /**
-     *
-     * 开源Imageloder的全局配置
-     */
-    /**
      * 初始化图片加载相关
-     *
      * @param context
      */
     private void initImageLoader(Context context) {
@@ -72,12 +66,6 @@ public class MainApplication extends Application {
         File file = ImageLoader.getInstance().getDiskCache().getDirectory();
         Log.i("MainApplication", "defaultDiskCache:" + file.getAbsolutePath());
 
-    }
-
-    private void initLeanCloud() {
-        AVOSCloud.initialize(this,"Heg0PL2TgU4vyC2LSh6mep6D-gzGzoHsz", "FTkvROAuxxXt5bVBMxn3pSj7");
-        AVOSCloud.setDebugLogEnabled(true);
-        AVAnalytics.enableCrashReport(this, true);
     }
 
     /**

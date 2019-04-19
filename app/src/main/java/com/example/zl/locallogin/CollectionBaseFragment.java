@@ -223,7 +223,7 @@ public class CollectionBaseFragment extends BaseFragment implements LoadMoreList
      */
     private void dataLoad() {
         setState(FooterShowType.LOADING);   //加载更多
-        collectionPresenter.queryCollections(collectionType, AVUser.getCurrentUser().getObjectId(),currentPageIndex);
+        collectionPresenter.queryCollections(collectionType, currentPageIndex);
     }
 
     /**
@@ -276,8 +276,7 @@ public class CollectionBaseFragment extends BaseFragment implements LoadMoreList
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                collectionPresenter.deleteCollection(
-                        collectionType,AVUser.getCurrentUser().getObjectId(),
+                collectionPresenter.deleteCollection(collectionType,
                         mAdapter.getList().get(position));
                 return true;
             }
