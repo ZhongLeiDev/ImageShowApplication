@@ -2,7 +2,7 @@ package com.example.zl.imageshowapplication.myinterface.listenerinstance;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import com.example.zl.leancloud.CollectionFragmentAdapter;
+import com.example.zl.locallogin.CollectionFragmentAdapter;
 
 /**
  * Created by ZhongLeiDev on 2018/9/26.

@@ -12,8 +12,8 @@ import com.example.zl.commoncomponent.SimpleToolBar;
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.adapter.common.FragmentAdapter;
 import com.example.zl.imageshowapplication.utils.BcyActivityManager;
-import com.example.zl.leancloud.CollectionBaseFragment;
-import com.example.zl.leancloud.CollectionType;
+import com.example.zl.locallogin.CollectionBaseFragment;
+import com.example.zl.locallogin.CollectionType;
 
 import java.util.ArrayList;
 import java.util.List;

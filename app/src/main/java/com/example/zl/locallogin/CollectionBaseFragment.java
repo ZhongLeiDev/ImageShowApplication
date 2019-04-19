@@ -1,4 +1,4 @@
-package com.example.zl.leancloud;
+package com.example.zl.locallogin;
 
 import android.content.Intent;
 import android.os.Build;
@@ -17,7 +17,6 @@ import com.example.zl.enums.FooterShowType;
 import com.example.zl.imageshowapplication.R;
 import com.example.zl.imageshowapplication.activity.HuaBanBoardItemsShowActivity;
 import com.example.zl.imageshowapplication.activity.HuaBanSingleImgShowActivity;
-import com.example.zl.imageshowapplication.adapter.huaban.HuaBanImageWaterFallLoadMoreAdapter;
 import com.example.zl.imageshowapplication.base.BaseFragment;
 import com.example.zl.imageshowapplication.bean.huaban.transobj.HBImageBean;
 import com.example.zl.imageshowapplication.message.BaseMessage;

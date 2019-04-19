@@ -29,7 +29,7 @@ public class LocalUtil {
     }
 
     /**
-     * User 对象读取
+     * User 对象读取，如果用户名为空，则直接返回一个空对象
      * @param context
      * @return
      */
@@ -41,6 +41,9 @@ public class LocalUtil {
         user.setUserName(prefs.getString("userName", ""));
         user.setMail(prefs.getString("mail", ""));
         user.setAvatarUrl(prefs.getString("avatarUrl", ""));
+        if (user.getUserName().equals("")) {    //如果用户名为空，则直接返回一个空对象
+            return null;
+        }
         return user;
     }
 

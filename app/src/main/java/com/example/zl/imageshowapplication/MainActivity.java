@@ -3,7 +3,6 @@ package com.example.zl.imageshowapplication;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -42,7 +41,9 @@ import com.example.zl.imageshowapplication.base.BasePictureInfoFragment;
 import com.example.zl.imageshowapplication.fragment.geek.GeekWaterFallLoadMoreFragment;
 import com.example.zl.imageshowapplication.utils.BcyActivityManager;
 import com.example.zl.imageshowapplication.utils.AvatarSelectUtil;
-import com.example.zl.leancloud.LoginActivity;
+import com.example.zl.locallogin.LocalLoginActivity;
+import com.example.zl.locallogin.LocalUserHandle;
+import com.example.zl.locallogin.util.LocalUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.Serializable;
@@ -98,6 +99,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);//去除标题栏
         setContentView(R.layout.activity_main);
+
+        //初始化 CurrentUser
+        LocalUserHandle.setCurrentUser(LocalUtil.getCurrentUser(this));
 
         //将当前 Activity 纳入管理
         BcyActivityManager.getActivityManager().addActivity(this);
@@ -159,8 +163,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setUserAvatar();
 
         ivAvatar.setOnClickListener(v -> {
-            if (AVUser.getCurrentUser() == null) { //只有当未登录时才进行跳转
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            if (LocalUserHandle.currentUser() == null) { //只有当未登录时才进行跳转
+                startActivity(new Intent(MainActivity.this, LocalLoginActivity.class));
             }
         });
 

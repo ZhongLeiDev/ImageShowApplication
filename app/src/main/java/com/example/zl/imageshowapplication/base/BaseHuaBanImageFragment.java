@@ -28,9 +28,9 @@ import com.example.zl.imageshowapplication.myinterface.listenerinstance.HuaBanLo
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
 import com.example.zl.imageshowapplication.mvp.huaban.presenter.HuaBanPresenter;
 import com.example.zl.imageshowapplication.mvp.huaban.view.HuaBanView;
-import com.example.zl.leancloud.CollectionBean;
+import com.example.zl.locallogin.CollectionBean;
 import com.example.zl.leancloud.CollectionPresenter;
-import com.example.zl.leancloud.CollectionView;
+import com.example.zl.locallogin.CollectionView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

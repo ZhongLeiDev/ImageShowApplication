@@ -26,9 +26,9 @@ import com.example.zl.imageshowapplication.myinterface.OnMyItemClickListener;
 import com.example.zl.imageshowapplication.myinterface.RetrofitInfoService;
 import com.example.zl.imageshowapplication.utils.FileDownloadUtil;
 import com.example.zl.imageshowapplication.utils.NetWorkUtil;
-import com.example.zl.leancloud.CollectionBean;
+import com.example.zl.locallogin.CollectionBean;
 import com.example.zl.leancloud.CollectionPresenter;
-import com.example.zl.leancloud.CollectionView;
+import com.example.zl.locallogin.CollectionView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
